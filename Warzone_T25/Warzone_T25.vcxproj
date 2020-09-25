@@ -139,7 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Warzone_T25.cpp" />
+    <None Include="..\..\canada\canada.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MapLoader.cpp" />
+    <ClCompile Include="MapLoaderDriver.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
