@@ -10,7 +10,6 @@ int main()
 	map.addTerritory(2, "Canada");
 	map.addTerritory(3, "France");
 	map.addTerritory(4, "Cuba");
-	map.printTerritoryList();
 	std::vector<int> border = { 1,2,3 };
 	map.addBorder(border);
 	border = { 2,1,4 };

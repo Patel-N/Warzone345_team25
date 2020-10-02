@@ -1,6 +1,33 @@
-﻿  MapDrivercpp.cpp
+﻿  Map.cpp
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(1,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(2,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(21,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(22,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(36,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(41,11): error C2039: 'printTerritoryList': is not a member of 'Map'
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.h(27): message : see declaration of 'Map'
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(42,15): error C2065: 'territoryList': undeclared identifier
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(42,15): error C2672: 'begin': no matching overloaded function found
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(42,30): error C2893: Failed to specialize function template 'unknown-type std::begin(_Container &)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\include\xutility(1961): message : see declaration of 'std::begin'
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(42,30): message : With the following template arguments:
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(42,30): message : '_Container=unknown-type'
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(42,30): error C2784: 'const _Elem *std::begin(std::initializer_list<_Elem>) noexcept': could not deduce template argument for 'std::initializer_list<_Elem>' from 'unknown-type'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\include\initializer_list(57): message : see declaration of 'std::begin'
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(42,15): error C2672: 'end': no matching overloaded function found
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(42,30): error C2893: Failed to specialize function template 'unknown-type std::end(_Container &)'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\include\xutility(1971): message : see declaration of 'std::end'
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(42,30): message : With the following template arguments:
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(42,30): message : '_Container=unknown-type'
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(42,30): error C2784: 'const _Elem *std::end(std::initializer_list<_Elem>) noexcept': could not deduce template argument for 'std::initializer_list<_Elem>' from 'unknown-type'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\include\initializer_list(63): message : see declaration of 'std::end'
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(42,30): error C3536: '<begin>$L0': cannot be used before it is initialized
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(42,30): error C3536: '<end>$L0': cannot be used before it is initialized
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(42,28): error C2100: illegal indirection
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(43,39): error C2100: illegal indirection
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(43,84): error C2100: illegal indirection
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(47,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Map.cpp(48,21): warning C4018: '<': signed/unsigned mismatch
+  MapDrivercpp.cpp
 C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\MapDrivercpp.cpp(3,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  Warzone_T25.cpp
-C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Warzone_T25.cpp(4,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
   Generating Code...
-  Warzone_T25.vcxproj -> C:\Users\mike9\OneDrive\Desktop\Comp345\repo\Warzone_T25\Debug\Warzone_T25.exe

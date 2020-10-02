@@ -18,11 +18,6 @@ Map::Map(std::string message) {
 	std::cout << message;
 }
 Map::~Map() {
-	for (int i = 0; i < map.size(); i++) {
-		for (int j = 0; j < map[i].size(); j++) {
-			delete map[i][j];
-		}
-	}
 	std::cout << "map destroyed";
 }
 void Map::addTerritory(int id, std::string name) {
@@ -36,11 +31,6 @@ void Map::addBorder(std::vector<int> borders) {
 	for (int i = 1; i < borders.size(); i++) {
 		map.at(territoryID - 1).push_back(map.at(borders.at(i) - 1).at(0));
 	
-	}
-}
-void Map::printTerritoryList() {
-	for (auto x :territoryList) {
-		std::cout << "Territory name: " << (*x).getName() << " " << "Territory ID: " << (*x).getTerritoryID() << std::endl;
 	}
 }
 void Map::printMap() {

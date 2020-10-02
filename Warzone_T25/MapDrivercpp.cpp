@@ -11,9 +11,6 @@ namespace test {
 		map.addTerritory(2, "Canada");
 		map.addTerritory(3, "France");
 		map.addTerritory(6, "Cuba");
-		map.printTerritoryList();
 		//map.addBorder(1, 2);
-		char c;
-		cin >> c;
 	}
 }
