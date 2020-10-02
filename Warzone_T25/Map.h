@@ -32,10 +32,11 @@ public:
 
 	//methods
 	void addTerritory(int id, std::string name);
+	void addBorder(std::vector<int> borders);
 	void printMap();
 
 private:
-	std::vector<Territory*> map;
+	std::vector<std::vector<Territory*>> map;
 
 };
 
