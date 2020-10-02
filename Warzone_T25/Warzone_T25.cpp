@@ -1,11 +1,20 @@
 // Warzone_T25.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
 
 #include <iostream>
-
+#include"Map.h";
 int main()
 {
     std::cout << "Hello World!\n";
+	Map map("created map");
+	map.addTerritory(1, "Brazil");
+	map.addTerritory(2, "Canada");
+	map.addTerritory(3, "France");
+	map.addTerritory(6, "Cuba");
+	map.printMap();
+	char c;
+	std::cin >> c;
+
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

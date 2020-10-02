@@ -13,10 +13,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Part1">
+      <UniqueIdentifier>{5218db32-184d-4de5-9174-fd9c81272282}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Part1">
+      <UniqueIdentifier>{3e0817c8-9654-4f4e-b841-62123d833c40}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Warzone_T25.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files\Part1</Filter>
+    </ClCompile>
+    <ClCompile Include="MapDrivercpp.cpp">
+      <Filter>Source Files\Part1</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files\Part1</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
