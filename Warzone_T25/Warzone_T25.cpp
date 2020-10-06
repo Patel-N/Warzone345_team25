@@ -4,21 +4,59 @@
 #include"Map.h";
 int main()
 {
-    std::cout << "Hello World!\n";
+    //std::cout << "Hello World!\n";
 	Map map("created map");
 	map.addTerritory(1, "Brazil");
 	map.addTerritory(2, "Canada");
 	map.addTerritory(3, "France");
 	map.addTerritory(4, "Cuba");
-	std::vector<int> border = { 1,2,3 };
+	/*map.addTerritory(5, "Lebanon");
+	map.addTerritory(6, "Japan");
+	map.addTerritory(7, "Argentina");
+	map.addTerritory(8, "unreachable");
+	map.addTerritory(11, "Cuba");
+	map.addTerritory(13, "Cuba");
+	map.addTerritory(14, "Cuba");
+	map.addTerritory(15, "Cuba");
+	map.addTerritory(1, "Cuba");
+	map.addTerritory(6, "Cuba");
+	map.addTerritory(17, "Cuba");
+	map.addTerritory(18, "Cuba");
+	map.addTerritory(19, "Cuba");
+	map.addTerritory(21, "Cuba");
+	map.addTerritory(22, "Cuba");
+	map.addTerritory(23, "Cuba");*/
+	std::vector<int> border = { 1,2,4 };
 	map.addBorder(border);
-	border = { 2,1,4 };
+	border = { 2};
 	map.addBorder(border);
-	border = { 4,3 };
+	border = { 3 };
+	map.addBorder(border);
+	border = { 4,2};
+    map.addBorder(border);
+	map.printMap();
+	/*border = { 5,4,6 };
+	map.addBorder(border);
+	border = { 6,3,5 };
 	map.addBorder(border);
 	std::cout << std::endl;
-	map.printMap();
-
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << "map size: " << map.getSize();*/
+	
+	if (!map.isConnected()) {
+		std::cout << std::endl;
+		std::cout << std::endl;
+		std::cout << "The map is not connected. System will exit now";
+		std::cout << std::endl;
+		exit(0);
+	}
+	else {
+		std::cout << std::endl;
+		std::cout << std::endl;
+		std::cout << "the map is connected";
+		std::cout << std::endl;
+	}
 
 }
 
