@@ -15,16 +15,91 @@ std::string Territory::getName() {
 int Territory::getTerritoryID() {
 	return territoryId;
 }
+Continent::Continent(int id, std::string name, int bonus) : continentId(id), continentName(name), bonus(bonus) {
+	//left empty on purpose to demonstrate fancy constructor syntax =)
+}
+int Continent::getContinentID() {
+	return continentId;
+}
+std::string Continent::getContinentName() {
+	return continentName;
+}
+int Continent::getBonus() {
+	return bonus;
+}
+void Continent::printContinent() {
+	std::cout << "Continent Name: " << continentName << " ID# " << continentId << "bonus = " << bonus;
+	std::cout << std::endl;
+	std::cout << "Territory list: " << std::endl;
+	if (continentTerritoryList.size() > 0) {
+		for (auto x : continentTerritoryList) {
+			std::cout << x->getTerritoryID() << " ";
+		}
+		std::cout << std::endl;
+	}
+}
+void Continent::addTerritoryToContinent(Territory* territory) {
+	if (continentTerritoryList.size() == 0) {
+		std::cout << "in here";
+		continentTerritoryList.push_back(territory);
+	}
+	else {
+		int i = continentTerritoryList.size() - 1;
+		bool didLoop = false;
+		while ((*territory).getTerritoryID() < (*continentTerritoryList[i]).getTerritoryID()) {
+			didLoop = true;//this is to take care of special case where you insert a the end
+			i--;
+			if (i < 0) {
+				break;
+			}
+		}
+		if (didLoop) {
+			int increment = i + 1;
+			continentTerritoryList.insert(continentTerritoryList.begin() + increment, territory);
+		}
+		else {
+			continentTerritoryList.push_back(territory);
+		}
+	}
+}
 Map::Map(std::string message) {
 	std::cout << message;
 }
 Map::~Map() {
 	std::cout << "map destroyed";
 }
+void Map::addContinent(int id, std::string name, int bonus) {
+	Continent* continent = new Continent(id, name, bonus);
+	if (continents.size() == 0) {
+		continents.push_back(continent);
+	}
+	else {
+		int i = continents.size() - 1;
+		bool didLoop = false;
+		while (id < continents[i]->getContinentID()) {
+			didLoop = true;//this is to take care of special case where you insert a the end
+			i--;
+			if (i < 0) {
+				break;
+			}
+		}
+		if (didLoop) {
+			int increment = i + 1;
+			continents.insert(continents.begin() + increment, continent);
+		}
+		else {
+			continents.push_back(continent);
+		}
+	}
+	
+}
 /*The addTerritory method will not only add a territory but also insert it such that
 the map vector remains sorted in increasing order*/
-void Map::addTerritory(int id, std::string name) {
+void Map::addTerritory(int id, std::string name,int continentID) {
 	Territory* newTerritory = new Territory(id, name);
+	if (continents.size() >= continentID) {
+		continents[continentID - 1]->addTerritoryToContinent(newTerritory);
+	}
 	std::vector<Territory*> temp;
 	temp.push_back(newTerritory);
 	if (map.size() == 0) { 
@@ -70,6 +145,14 @@ void Map::printMap() {
 			std::cout << temp.getTerritoryID();
 		}
 		std::cout << std::endl;
+	}
+}
+void Map::printContinents() {
+	std::cout << "Continents details: " << std::endl;
+	if (continents.size() > 0) {
+		for (auto x : continents) {
+			x->printContinent();
+		}
 	}
 }
 bool Map::isConnected() {

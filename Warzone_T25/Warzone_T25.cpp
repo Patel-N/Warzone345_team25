@@ -4,10 +4,29 @@
 #include"Map.h";
 int main()
 {
-    //std::cout << "Hello World!\n";
+
 	Map map("created map");
-	map.addTerritory(1, "Brazil");
-	map.addTerritory(2, "Canada");
+	map.addContinent(1, "NA", 7);
+	map.addContinent(2, "SA", 3);
+	map.addContinent(3, "EU", 5);
+
+	
+    //std::cout << "Hello World!\n";
+	map.addTerritory(1, "Brazil",2);
+	map.addTerritory(2, "Cuba", 2);
+	map.addTerritory(3, "Venezuela", 2);
+	map.addTerritory(4, "USA", 2);
+
+	map.addTerritory(7, "france", 3);
+	map.addTerritory(5, "UK", 3);
+	map.addTerritory(6, "Belgium", 3);
+
+	map.addTerritory(8, "Canada", 1);
+	map.addTerritory(9, "Alaska", 1);
+	map.addTerritory(10, "Django", 1);
+
+	map.printContinents();
+	/*map.addTerritory(2, "Canada");
 	map.addTerritory(3, "France");
 	map.addTerritory(4, "Cuba");
 	/*map.addTerritory(5, "Lebanon");
@@ -25,14 +44,14 @@ int main()
 	map.addTerritory(19, "Cuba");
 	map.addTerritory(21, "Cuba");
 	map.addTerritory(22, "Cuba");
-	map.addTerritory(23, "Cuba");*/
+	map.addTerritory(23, "Cuba");
 	std::vector<int> border = { 1,2,4 };
 	map.addBorder(border);
 	border = { 2};
 	map.addBorder(border);
 	border = { 3 };
 	map.addBorder(border);
-	border = { 4,2};
+	border = { 4,3};
     map.addBorder(border);
 	map.printMap();
 	/*border = { 5,4,6 };
@@ -42,7 +61,7 @@ int main()
 	std::cout << std::endl;
 	std::cout << std::endl;
 	std::cout << std::endl;
-	std::cout << "map size: " << map.getSize();*/
+	std::cout << "map size: " << map.getSize();
 	
 	if (!map.isConnected()) {
 		std::cout << std::endl;
@@ -56,7 +75,7 @@ int main()
 		std::cout << std::endl;
 		std::cout << "the map is connected";
 		std::cout << std::endl;
-	}
+	}*/
 
 }
 
