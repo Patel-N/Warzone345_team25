@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include<vector>
+#include<iostream>
+using namespace std;
 class Territory {
 
 public:
@@ -17,7 +19,7 @@ public:
 	void setTerritoryID(int id);
 	void setPlayer(int&);
 	void setTerritoryName(std::string name);
-
+	friend ostream& operator<<(ostream& outs, const Territory& theObject);
 private:
 	int territoryId;
 	int* player;
@@ -39,6 +41,7 @@ public:
 	//methods
 	void addTerritoryToContinent(Territory* territory);
 	std::vector<Territory*> getContinentTerritoryList();
+	friend ostream& operator<<(ostream& outs, const Continent& theObject);
 private:
 	int bonus;
 	std::string continentName;
@@ -61,9 +64,8 @@ public:
 	void printContinents();
 	bool isConnected();
 	bool areContinentsConnected();
+	friend ostream& operator<<(ostream& outs, const Map& theObject);	
 	
-	
-
 private:
 	std::vector<std::vector<Territory*>> map;
 	std::vector<bool> visited;

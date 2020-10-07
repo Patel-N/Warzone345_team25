@@ -5,6 +5,15 @@
 int main()
 {
 
+	/*Territory* newTerritory = new Territory(1, "Brazil", 1);
+	std::cout << *newTerritory;
+	std::cout << std::endl << std::endl;
+	Continent* continent = new Continent(1, "NA", 5);
+	continent->addTerritoryToContinent(newTerritory);
+	cout << *continent;*/
+
+	
+	
 	Map map("created map");
 	map.addContinent(1, "NA", 7);
 	map.addContinent(2, "SA", 3);
@@ -17,8 +26,9 @@ int main()
 
 	map.addTerritory(3, "france", 3);
 	map.addTerritory(4, "UK", 3);
-
-	map.addTerritory(5, "Canada", 1);
+	std::cout << std::endl;
+	std::cout << map;
+	/*map.addTerritory(5, "Canada", 1);
 	map.addTerritory(6, "Alaska", 1);
 
 	std::vector<int> border = { 1,2,5 };

@@ -18,6 +18,13 @@ int Territory::getTerritoryID() {
 int Territory::getTerritoryContinentID() {
 	return territory_continentID;
 }
+ostream& operator<<(ostream& outs, const Territory& theObject) {
+		outs << "Territory name: " << theObject.territoryName << endl 
+		<< "Territory ID: " << theObject.territoryId << endl 
+		<< "Territory belongs to continent ID # " << theObject.territory_continentID << endl;
+		return outs;
+	
+}
 Continent::Continent(int id, std::string name, int bonus) : continentId(id), continentName(name), bonus(bonus) {
 	//left empty on purpose to demonstrate fancy constructor syntax =)
 }
@@ -29,6 +36,18 @@ std::string Continent::getContinentName() {
 }
 int Continent::getBonus() {
 	return bonus;
+}
+ostream& operator<<(ostream& outs, const Continent& theObject) {
+	outs << "Continent name: " << theObject.continentName << endl
+		<< "Continent ID: " << theObject.continentId << endl
+		<< "Continent Bonus: " << theObject.bonus << endl
+		<< "Continent territories:" << endl;
+	for (auto x : theObject.continentTerritoryList) {
+		outs << *x;
+	}
+		 
+	return outs;
+
 }
 void Continent::printContinent() {
 	std::cout << "Continent Name: " << continentName << " ID# " << continentId << "bonus = " << bonus;
@@ -95,6 +114,27 @@ void Map::addContinent(int id, std::string name, int bonus) {
 		}
 	}
 	
+}
+ostream& operator<<(ostream& outs, const Map& theObject) {
+	outs << "----------------------------------" << endl
+		<< "             MAP                  " << endl
+		<< "----------------------------------" << endl << endl;
+	outs << "----------------------------------" << endl
+		<< "             CONTINENTS            " << endl
+		<< "----------------------------------" << endl << endl;
+	for (auto x : theObject.continents) {
+		outs << *x << endl;
+	}
+	outs << endl;
+	outs << "----------------------------------" << endl
+		<< "             TERRITORIES           " << endl
+		<< "----------------------------------" << endl << endl;
+	for (auto x : theObject.map) {
+		for (auto y : x) {
+			outs << *y << endl;
+		}
+	}
+	return outs;
 }
 std::vector<Territory*> Continent::getContinentTerritoryList() {
 	return continentTerritoryList;
