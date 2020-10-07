@@ -5,11 +5,12 @@ class Territory {
 
 public:
 	//constructors and destructors
-	Territory(int id, std::string name);
+	Territory(int id, std::string name,int continentID);
 	Territory();
 	~Territory();
 	//getters
 	int getTerritoryID();
+	int getTerritoryContinentID();
 	int* getPlayer();
 	std::string getName();
 	//setters
@@ -21,6 +22,7 @@ private:
 	int territoryId;
 	int* player;
 	std::string territoryName;
+	int territory_continentID;
 
 };
 
@@ -36,6 +38,7 @@ public:
 	void printContinent();
 	//methods
 	void addTerritoryToContinent(Territory* territory);
+	std::vector<Territory*> getContinentTerritoryList();
 private:
 	int bonus;
 	std::string continentName;
@@ -57,13 +60,16 @@ public:
 	void printMap();
 	void printContinents();
 	bool isConnected();
+	bool areContinentsConnected();
 	
 	
 
 private:
 	std::vector<std::vector<Territory*>> map;
 	std::vector<bool> visited;
+	std::vector<bool> continentsVisited;
 	void dfs(int startNode, std::vector<std::vector<int>> adjacencyMatrix);
+	void continentDfs(int startNode, std::vector<std::vector<int>> adjacencyMatrix);
 	int size;
 	std::vector<std::vector<int>> constructUnidirectionalMatrix();
 	std::vector<Continent*> continents;

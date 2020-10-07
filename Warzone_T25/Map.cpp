@@ -3,7 +3,7 @@
 #include<iostream>;
 #include<stack>;
 
-Territory::Territory(int id, std::string newName) : territoryId(id), territoryName(newName) {
+Territory::Territory(int id, std::string newName,int continentID) : territoryId(id), territoryName(newName),territory_continentID(continentID) {
 	//left empty on purpose to demonstrate fancy constructor syntax =)
 }
 Territory::~Territory() {
@@ -14,6 +14,9 @@ std::string Territory::getName() {
 }
 int Territory::getTerritoryID() {
 	return territoryId;
+}
+int Territory::getTerritoryContinentID() {
+	return territory_continentID;
 }
 Continent::Continent(int id, std::string name, int bonus) : continentId(id), continentName(name), bonus(bonus) {
 	//left empty on purpose to demonstrate fancy constructor syntax =)
@@ -93,10 +96,13 @@ void Map::addContinent(int id, std::string name, int bonus) {
 	}
 	
 }
+std::vector<Territory*> Continent::getContinentTerritoryList() {
+	return continentTerritoryList;
+}
 /*The addTerritory method will not only add a territory but also insert it such that
 the map vector remains sorted in increasing order*/
 void Map::addTerritory(int id, std::string name,int continentID) {
-	Territory* newTerritory = new Territory(id, name);
+	Territory* newTerritory = new Territory(id, name,continentID);
 	if (continents.size() >= continentID) {
 		continents[continentID - 1]->addTerritoryToContinent(newTerritory);
 	}
@@ -248,6 +254,57 @@ void Map::dfs(int start, std::vector<std::vector<int>> adjacencyMatrix) {
 				if (adjacencyMatrix[id_index_visited][i] == 1) {
 					stack.push(i);
 					visited[i] = true;
+				}
+			}
+		}
+	}
+}
+bool Map::areContinentsConnected() {
+	std::vector<std::vector<int>> adjacencyMatrix = constructUnidirectionalMatrix();
+	for (int i = 0; i < continents.size(); i++) {
+		
+		continentsVisited.push_back(0);
+	}
+	for (int k = 0; k < continents.size(); k++) {
+		continentDfs(k,adjacencyMatrix);
+
+		for (int j = 0; j < continentsVisited.size(); j++) {
+			if (!continentsVisited[j]) {
+				return false;
+			}
+		}
+		for (int z = 0; z < continentsVisited.size(); z++) {
+			continentsVisited[z] = 0;
+		}
+	}
+	return true;
+}
+void Map::continentDfs(int start, std::vector<std::vector<int>> adjacencyMatrix) {	
+	std::stack<int> stack;
+	int continentID = continents[start]->getContinentID();
+	stack.push(continentID);
+	continentsVisited[start] = true;
+	while (!stack.empty()) {	
+		int continentIndexInStack = stack.top() - 1;	
+		stack.pop();
+		std::vector<Territory*> territoriesInContinent = continents[continentIndexInStack]->getContinentTerritoryList();
+		for (int i = 0; i < territoriesInContinent.size(); i++) {			
+			int territoryID = territoriesInContinent[i]->getTerritoryID();
+			int territoryIndex = territoryID - 1;//we are looking at the neighbours of that index
+			std::vector<int> territoryNeighbours = adjacencyMatrix[territoryIndex]; //here we get the unidirectional neighbours of the territory of continent[i]
+			for (int j = 0; j < territoryNeighbours.size(); j++) {
+				if (j == territoryIndex) { continue; }//we are continuing if the index in question is the same as the territory since a territory
+				//cannot be a neighbour of itself
+				else {
+					if (territoryNeighbours[j] == 1) {
+						Territory* adjacentTerritory = map[j][0];
+						int continentIndex = (*adjacentTerritory).getTerritoryContinentID() - 1;
+						std::cout << "continentIndex = " << continentIndex << std::endl;
+						if (!continentsVisited[continentIndex]) {
+							stack.push((*adjacentTerritory).getTerritoryContinentID());
+							continentsVisited[continentIndex] = true;
+						}
+					}
 				}
 			}
 		}

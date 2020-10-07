@@ -14,18 +14,38 @@ int main()
     //std::cout << "Hello World!\n";
 	map.addTerritory(1, "Brazil",2);
 	map.addTerritory(2, "Cuba", 2);
-	map.addTerritory(3, "Venezuela", 2);
-	map.addTerritory(4, "USA", 2);
 
-	map.addTerritory(7, "france", 3);
-	map.addTerritory(5, "UK", 3);
-	map.addTerritory(6, "Belgium", 3);
+	map.addTerritory(3, "france", 3);
+	map.addTerritory(4, "UK", 3);
 
-	map.addTerritory(8, "Canada", 1);
-	map.addTerritory(9, "Alaska", 1);
-	map.addTerritory(10, "Django", 1);
+	map.addTerritory(5, "Canada", 1);
+	map.addTerritory(6, "Alaska", 1);
+
+	std::vector<int> border = { 1,2,5 };
+	map.addBorder(border);
+	border = { 2,6 };
+	map.addBorder(border);
+	border = { 3 };
+	map.addBorder(border);
+	border = { 4,3 };
+	map.addBorder(border);
+	border = { 5,1 };
+	map.addBorder(border);
+	border = { 6};
+	map.addBorder(border);
 
 	map.printContinents();
+	if (map.areContinentsConnected()) {
+		std::cout << std::endl;
+		std::cout << "continents are connected";
+		std::cout << std::endl;
+	}
+	else {
+		std::cout << std::endl;
+		std::cout << "**continents are not connected**";
+		std::cout << std::endl;
+	}
+	
 	/*map.addTerritory(2, "Canada");
 	map.addTerritory(3, "France");
 	map.addTerritory(4, "Cuba");
