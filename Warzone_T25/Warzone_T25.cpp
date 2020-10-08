@@ -161,12 +161,18 @@ int main()
 	std::cout << std::endl;
 	map2.getContinents()[0]->setContinentName("updated_NA");
 	map2.getContinents()[0]->getContinentTerritoryList()[0]->setTerritoryName("Updated_Canada");
+	Map map3 = map2;
+	map3.getContinents()[0]->getContinentTerritoryList()[0]->setTerritoryName("Updated__Updated_Canada");
 	std::cout << "the original map: " << endl;
 	std::cout << map;
 	std::cout << std::endl;
 	std::cout << std::endl;
 	std::cout << "the updated  map: " << endl;
 	std::cout << map2;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << "the updated  map from map2: " << endl;
+	std::cout << map3;
 	std::cout << std::endl;
 	std::cout << std::endl;
 }

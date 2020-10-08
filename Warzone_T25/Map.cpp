@@ -24,7 +24,7 @@ Territory::Territory() {
 
 }
 Territory::~Territory() {
-	//std::cout << "territory destroyed";
+	std::cout << "territory destroyed." << std::endl;
 }
 std::string Territory::getName() {
 	return territoryName;
@@ -60,7 +60,7 @@ Continent::Continent(const Continent& continent) {
 	*this = continent;
 }
 Continent::~Continent() {
-	std::cout << "Continent destroyed";
+	std::cout << "Continent destroyed" << endl;
 }
 int Continent::getContinentID() {
 	return continentId;
@@ -139,7 +139,23 @@ Map::Map(const Map& map) {
 	}
 }
 Map::~Map() {
-	std::cout << "map destroyed";
+	for (int i = 0; i < map.size(); i++) {
+		for (int j = 0; j < map[i].size(); j++) {
+			if (map[i][j]) {
+				//std::cout << map[i][j] << std::endl;
+				delete map[i][j];
+				map[i][j] = NULL;
+			}
+		}
+		map[i].clear();
+	}
+	std::cout << endl;
+	std::cout << endl;
+	for (int i = 0; i < continents.size(); i++) {
+		delete continents[i];
+		continents[i] = NULL;
+	}
+	
 }
 std::vector<Continent*> Map::getContinents() {
 	return continents;
