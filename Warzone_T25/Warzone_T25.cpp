@@ -5,15 +5,52 @@
 int main()
 {
 
-	/*Territory* newTerritory = new Territory(1, "Brazil", 1);
-	std::cout << *newTerritory;
+	//Territory* t1_pt = new Territory(1, "Brazil", 1);
+	//std::cout << *t1_pt;
+	//std::cout << std::endl << std::endl;
+	//Territory* t2_pt;
+	//t2_pt = new Territory(2, "France", 2);
+	/*std::cout << *t2_pt;
 	std::cout << std::endl << std::endl;
-	Continent* continent = new Continent(1, "NA", 5);
-	continent->addTerritoryToContinent(newTerritory);
-	cout << *continent;*/
+	*t2_pt = *t1_pt;
+	std::cout << *t2_pt;
+	std::cout << std::endl << std::endl;
+	std::cout << std::endl << std::endl;
+	t2_pt->setTerritoryName("baloom");
+	std::cout << *t1_pt;
+	std::cout << std::endl << std::endl;
+	//Territory* newTerritory2 = newTerritory;
+	//t1 = t2;
+	//std::cout << *newTerritory2;
+	std::cout << std::endl << std::endl;
+	//newTerritory2->setTerritoryName("Congo");
+	//std::cout << *newTerritory2;
+	std::cout << std::endl << std::endl;
+	//std::cout << newTerritory;
+	std::cout << std::endl << std::endl;*/
 
 	
+
 	
+	/*Continent *continent = new Continent(1, "NA", 5);
+	continent->addTerritoryToContinent(newTerritory);
+	cout << *continent;*/
+	/*Continent continent(1, "NA", 5);
+	continent.addTerritoryToContinent(t1_pt);
+	continent.addTerritoryToContinent(t2_pt);
+	std::cout << continent;
+	std::cout << std::endl << std::endl;
+	Continent continentTwo = continent;
+	std::cout << continentTwo;
+	std::cout << std::endl << std::endl;
+	continentTwo.getContinentTerritoryList()[0]->setTerritoryName("updated_Brazil");
+	std::cout << "Here is the original continent after updating its copy: " << std::endl;
+	std::cout << continent;
+	std::cout << std::endl << std::endl;
+	std::cout << "Here is the copy continent after updating: " << std::endl;
+	std::cout << continentTwo;
+	std::cout << std::endl << std::endl;*/
+	/*
 	Map map("created map");
 	map.addContinent(1, "NA", 7);
 	map.addContinent(2, "SA", 3);
@@ -106,7 +143,32 @@ int main()
 		std::cout << "the map is connected";
 		std::cout << std::endl;
 	}*/
-
+	Map map("created map");
+	map.addContinent(1, "NA", 7);
+	map.addContinent(2, "SA", 3);
+	map.addContinent(3, "EU", 5);
+	map.addTerritory(1, "Brazil", 2);
+	map.addTerritory(2, "Cuba", 2);
+	map.addTerritory(3, "Canada", 1);
+	map.addTerritory(4, "France", 3);
+	std::cout << map;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	Map map2("created map 2");
+	map2 = map;
+	std::cout << map2;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	map2.getContinents()[0]->setContinentName("updated_NA");
+	map2.getContinents()[0]->getContinentTerritoryList()[0]->setTerritoryName("Updated_Canada");
+	std::cout << "the original map: " << endl;
+	std::cout << map;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << "the updated  map: " << endl;
+	std::cout << map2;
+	std::cout << std::endl;
+	std::cout << std::endl;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

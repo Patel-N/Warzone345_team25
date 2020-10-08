@@ -5,6 +5,23 @@
 
 Territory::Territory(int id, std::string newName,int continentID) : territoryId(id), territoryName(newName),territory_continentID(continentID) {
 	//left empty on purpose to demonstrate fancy constructor syntax =)
+	std::cout << "calling parameter constructor";
+	std::cout << std::endl << std::endl;
+}
+
+Territory::Territory(const Territory& territory) {
+	std::cout << "calling copy constructor of Territory";
+	std::cout << std::endl << std::endl;
+	*this = territory;
+}
+Territory::Territory() {
+	std::cout << "No argument constructor called";
+	std::cout << std::endl << std::endl;
+	territoryId = 1;
+	territoryName = "random";
+	territory_continentID = 0;
+
+
 }
 Territory::~Territory() {
 	//std::cout << "territory destroyed";
@@ -18,6 +35,9 @@ int Territory::getTerritoryID() {
 int Territory::getTerritoryContinentID() {
 	return territory_continentID;
 }
+void Territory::setTerritoryName(std::string newName) {
+	territoryName = newName;
+}
 ostream& operator<<(ostream& outs, const Territory& theObject) {
 		outs << "Territory name: " << theObject.territoryName << endl 
 		<< "Territory ID: " << theObject.territoryId << endl 
@@ -25,8 +45,22 @@ ostream& operator<<(ostream& outs, const Territory& theObject) {
 		return outs;
 	
 }
+Territory& Territory::operator=(const Territory& territory) {
+	if (this != &territory) {
+		territoryId = territory.territoryId;
+		territoryName = territory.territoryName;
+		territory_continentID = territory.territory_continentID;
+	}
+	return *this;
+}
 Continent::Continent(int id, std::string name, int bonus) : continentId(id), continentName(name), bonus(bonus) {
 	//left empty on purpose to demonstrate fancy constructor syntax =)
+}
+Continent::Continent(const Continent& continent) {
+	*this = continent;
+}
+Continent::~Continent() {
+	std::cout << "Continent destroyed";
 }
 int Continent::getContinentID() {
 	return continentId;
@@ -37,17 +71,29 @@ std::string Continent::getContinentName() {
 int Continent::getBonus() {
 	return bonus;
 }
+void Continent::setContinentName(std::string newName) {
+	continentName = newName;
+}
 ostream& operator<<(ostream& outs, const Continent& theObject) {
 	outs << "Continent name: " << theObject.continentName << endl
 		<< "Continent ID: " << theObject.continentId << endl
 		<< "Continent Bonus: " << theObject.bonus << endl
 		<< "Continent territories:" << endl;
 	for (auto x : theObject.continentTerritoryList) {
-		outs << *x;
+		outs << *x << endl;
 	}
+	outs << endl << endl;
 		 
 	return outs;
 
+}
+Continent& Continent::operator=(const Continent& continent) {
+	if (this != &continent) {
+		bonus = continent.bonus;
+		continentName = continent.continentName;
+		continentId = continent.continentId;
+	}
+	return *this;
 }
 void Continent::printContinent() {
 	std::cout << "Continent Name: " << continentName << " ID# " << continentId << "bonus = " << bonus;
@@ -87,8 +133,34 @@ void Continent::addTerritoryToContinent(Territory* territory) {
 Map::Map(std::string message) {
 	std::cout << message;
 }
+Map::Map(const Map& map) {
+	if (this != &map) {
+		*this = map;
+	}
+}
 Map::~Map() {
 	std::cout << "map destroyed";
+}
+std::vector<Continent*> Map::getContinents() {
+	return continents;
+}
+Map& Map::operator=(const Map& originalMap) {
+	for (int i = 0; i < originalMap.continents.size(); i++) {
+		Continent* continent = new Continent(*originalMap.continents[i]);
+		continents.push_back(continent);	
+	}
+	for (int j = 0; j < originalMap.map.size(); j++) {
+		std::vector<Territory*> tempVector;
+		std::cout << "In HEREEEEEEE";
+		for (int z = 0; z < originalMap.map[j].size(); z++) {
+			std::cout << "In HEREEEEEEE";
+			Territory* territory = new Territory(*originalMap.map[j][z]);
+			tempVector.push_back(territory);
+			continents[territory->getTerritoryContinentID() - 1]->addTerritoryToContinent(territory);
+		}
+		map.push_back(tempVector);
+	}
+	return *this;
 }
 void Map::addContinent(int id, std::string name, int bonus) {
 	Continent* continent = new Continent(id, name, bonus);
