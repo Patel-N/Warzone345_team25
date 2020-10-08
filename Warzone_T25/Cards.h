@@ -1,10 +1,12 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <unordered_set>
+
 #include <ctime>
 #include <iostream>
 
-enum type {bomb = 1, airlift = 2, reinforcement = 3};
+enum type {bomb = 1, reinforcement = 2, blockade = 3, airlift = 4, diplomacy = 5};
 
 // Forward declaration in order to avoid a circular dependency of pointers between classes.
 class Card;
@@ -13,19 +15,27 @@ class Hand;
 
 class Card {
 
+public:
+	Card();
+	~Card();
+	Card(int kind ,Deck* deck);
+
+	void set_type(int new_kind);
+	int get_type();
+
+	void setDeck(Deck* deck);
+	void play();
+
 private:
 	Deck* deck;
 	type t;
 	int kind;
-public:
-	Card();
-	Card(int kind ,Deck* deck);
-	~Card();
-	void set_type(int new_kind);
-	int get_type();
+
+
 };
 
 class Deck {
+
 public:
 	Deck();
 	~Deck();
@@ -33,55 +43,22 @@ public:
 	Card* draw();
 
 private:
-	vector<Card*> deck;
-
+	std::vector<Card*> deck;
 
 };
 
 class Hand {
+
 public:
 	Hand();
 	~Hand();
-	
+
+	void addCardToHand(Card* card);
+	void play(Card* playCard, Deck* deck);
+
+
+private:
+	std::vector<Card*> handCards;
+	//vector<Card*> playCards;
 
 };
-
-//class Bomb : public Card {
-//	int type;
-//
-//public:
-//	void set_type(int new_type);
-//	int get_type();
-//};
-//
-//class Reinforcement : public Card {
-//	int type;
-//
-//public:
-//	void set_type(int new_type);
-//	int get_type();
-//};
-//
-//class Blockade : public Card {
-//	int type;
-//
-//public:
-//	void set_type(int new_type);
-//	int get_type();
-//};
-//
-//class Airlift : public Card {
-//	int type;
-//
-//public:
-//	void set_type(int new_type);
-//	int get_type();
-//};
-//
-//class Diplomacy : public Card {
-//	int type;
-//
-//public:
-//	void set_type(int new_type);
-//	int get_type();
-//};
