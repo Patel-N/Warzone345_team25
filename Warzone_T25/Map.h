@@ -62,6 +62,7 @@ public:
 	//getters
 	int getSize();
 	std::vector<Continent*> getContinents();
+	bool validate();
 
 	//methods
 	void addTerritory(int id, std::string name, int continentID);
@@ -69,8 +70,6 @@ public:
 	void addBorder(std::vector<int> borders);
 	void printMap();
 	void printContinents();
-	bool isConnected();
-	bool areContinentsConnected();
 	friend ostream& operator<<(ostream& outs, const Map& theObject);
 	Map& operator= (const Map& continent);
 
@@ -84,5 +83,8 @@ private:
 	void dfs(int startNode, std::vector<std::vector<int>> adjacencyMatrix);
 	void continentDfs(int startNode, std::vector<std::vector<int>> adjacencyMatrix);	
 	std::vector<std::vector<int>> constructUnidirectionalMatrix();
+	bool uniqueTerritory();
+	bool isConnected();
+	bool areContinentsConnected();
 };
 

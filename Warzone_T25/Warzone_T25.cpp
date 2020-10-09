@@ -50,8 +50,8 @@ int main()
 	std::cout << "Here is the copy continent after updating: " << std::endl;
 	std::cout << continentTwo;
 	std::cout << std::endl << std::endl;*/
-	/*
-	Map map("created map");
+	
+	/*Map map("created map");
 	map.addContinent(1, "NA", 7);
 	map.addContinent(2, "SA", 3);
 	map.addContinent(3, "EU", 5);
@@ -64,8 +64,8 @@ int main()
 	map.addTerritory(3, "france", 3);
 	map.addTerritory(4, "UK", 3);
 	std::cout << std::endl;
-	std::cout << map;
-	/*map.addTerritory(5, "Canada", 1);
+	//std::cout << map;
+	map.addTerritory(5, "Canada", 1);
 	map.addTerritory(6, "Alaska", 1);
 
 	std::vector<int> border = { 1,2,5 };
@@ -80,7 +80,8 @@ int main()
 	map.addBorder(border);
 	border = { 6};
 	map.addBorder(border);
-
+	map.printMap();*/
+/*
 	map.printContinents();
 	if (map.areContinentsConnected()) {
 		std::cout << std::endl;
@@ -143,7 +144,7 @@ int main()
 		std::cout << "the map is connected";
 		std::cout << std::endl;
 	}*/
-	Map map("created map");
+	/*Map map("created map");
 	map.addContinent(1, "NA", 7);
 	map.addContinent(2, "SA", 3);
 	map.addContinent(3, "EU", 5);
@@ -174,7 +175,56 @@ int main()
 	std::cout << "the updated  map from map2: " << endl;
 	std::cout << map3;
 	std::cout << std::endl;
-	std::cout << std::endl;
+	std::cout << std::endl;*/
+	/*Map map("created map");
+	map.addContinent(1, "NA", 7);
+	map.addContinent(2, "SA", 3);
+	map.addContinent(3, "EU", 5);
+
+	map.addTerritory(1, "Canada", 1);
+
+	map.addTerritory(2, "Brazil", 2);
+	map.addTerritory(3, "Cuba", 2);
+	map.addTerritory(4, "Mexico", 2);
+	
+	map.addTerritory(5, "France", 3);
+	map.addTerritory(6, "Germany", 3);
+	map.addTerritory(7, "England", 3);*/
+	/*case where territories are connected but not continents*/
+	Map map("created map");
+	map.addContinent(1, "NA", 7);
+	map.addContinent(2, "SA", 3);
+	map.addContinent(3, "EU", 5);
+
+
+	map.addTerritory(1, "Brazil", 2);
+	map.addTerritory(2, "Cuba", 2);
+	map.addTerritory(3, "Mexico", 2);
+
+	map.addTerritory(4, "France", 3);
+	map.addTerritory(5, "Germany", 3);
+	map.addTerritory(6, "England", 3);
+	map.addTerritory(7, "Canada", 1);
+	std::vector<int> border = { 1,2,4 };
+	map.addBorder(border);
+	border = { 2,3 };
+	map.addBorder(border);
+	border = { 3 };
+	map.addBorder(border);
+	border = { 4};
+	map.addBorder(border);
+	border = {5};
+	map.addBorder(border);
+	border = { 6,3,5};
+	map.addBorder(border);
+	border = { 7,1};
+	map.addBorder(border);
+	cout << endl;
+	map.printMap();
+	if (map.validate()) {
+		cout << ">>SUCCESS, THE MAP IS VALID";
+	}
+	
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

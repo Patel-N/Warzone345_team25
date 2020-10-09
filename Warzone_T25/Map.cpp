@@ -4,27 +4,19 @@
 #include<stack>;
 
 Territory::Territory(int id, std::string newName,int continentID) : territoryId(id), territoryName(newName),territory_continentID(continentID) {
-	//left empty on purpose to demonstrate fancy constructor syntax =)
-	std::cout << "calling parameter constructor";
-	std::cout << std::endl << std::endl;
+	//left empty on purpose to demonstrate fancy constructor syntax =)	
 }
 
 Territory::Territory(const Territory& territory) {
-	std::cout << "calling copy constructor of Territory";
-	std::cout << std::endl << std::endl;
 	*this = territory;
 }
 Territory::Territory() {
-	std::cout << "No argument constructor called";
-	std::cout << std::endl << std::endl;
 	territoryId = 1;
 	territoryName = "random";
 	territory_continentID = 0;
-
-
 }
 Territory::~Territory() {
-	std::cout << "territory destroyed." << std::endl;
+	
 }
 std::string Territory::getName() {
 	return territoryName;
@@ -60,7 +52,6 @@ Continent::Continent(const Continent& continent) {
 	*this = continent;
 }
 Continent::~Continent() {
-	std::cout << "Continent destroyed" << endl;
 }
 int Continent::getContinentID() {
 	return continentId;
@@ -139,23 +130,14 @@ Map::Map(const Map& map) {
 	}
 }
 Map::~Map() {
-	for (int i = 0; i < map.size(); i++) {
-		for (int j = 0; j < map[i].size(); j++) {
-			if (map[i][j]) {
-				//std::cout << map[i][j] << std::endl;
-				delete map[i][j];
-				map[i][j] = NULL;
-			}
-		}
+	for (int i = map.size() - 1; i > 0; i--) {
+		delete map[i][0];
 		map[i].clear();
 	}
-	std::cout << endl;
-	std::cout << endl;
 	for (int i = 0; i < continents.size(); i++) {
 		delete continents[i];
 		continents[i] = NULL;
-	}
-	
+	}	
 }
 std::vector<Continent*> Map::getContinents() {
 	return continents;
@@ -407,6 +389,28 @@ bool Map::areContinentsConnected() {
 	}
 	return true;
 }
+bool Map::uniqueTerritory() {
+
+	for (int i = 0; i < map.size(); i++) {
+		for (int j = 0; j < map[i].size(); j++) {
+			int number_of_reps = 0;
+			int canditateID = map[i][j]->getTerritoryID();
+			std::string candidateName = map[i][j]->getName();
+			for (int k = 0; k < continents.size(); k++) {
+				for (int z = 0; z < continents[k]->getContinentTerritoryList().size(); z++) {
+					if (z == i) { continue; }
+					else {
+						if (canditateID == continents[k]->getContinentTerritoryList()[z]->getTerritoryID()) {
+							number_of_reps++;
+						}
+					}
+				}
+			}
+			if (number_of_reps > 1) { return false; }//a unique territory cannot repeat more than one time
+		}
+	}
+	return true;
+}
 void Map::continentDfs(int start, std::vector<std::vector<int>> adjacencyMatrix) {	
 	std::stack<int> stack;
 	int continentID = continents[start]->getContinentID();
@@ -436,5 +440,36 @@ void Map::continentDfs(int start, std::vector<std::vector<int>> adjacencyMatrix)
 				}
 			}
 		}
+	}
+}
+bool Map::validate() {
+	cout << "--------------Welcome to Validate--------------------" << endl;
+	cout << ">>step 1: calling is Territory unique verrification..." << endl;
+	bool isUnique = uniqueTerritory();
+	if (isUnique) {
+		cout << ">>step 1 complete: Territory is unique." << endl;
+	}
+	else {
+		cout << "Step 1 FAILED: Territory not unique. There exits a duplicate in T-ID: ";
+	}
+	bool is_connected = isConnected();
+	if (is_connected) {
+		cout << ">>step 2 SUCCESS: The entire map is connected." << endl;
+	}
+	else {
+		cout << "Step 2 FAILED: The map is not connected ";
+	}
+	bool are_continents_connected = areContinentsConnected();
+	if (are_continents_connected) {
+		cout << ">>step 3 SUCCESS: Continents are also connected" << endl;
+	}
+	else {
+		cout << "Step 3 FAILED: The continents are not connected";
+	}
+	if (isUnique && is_connected && are_continents_connected) {
+		return true;
+	}
+	else {
+		return false;
 	}
 }
