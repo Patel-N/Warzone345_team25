@@ -16,12 +16,6 @@
     <Filter Include="Source Files\MapLoader">
       <UniqueIdentifier>{607540b1-ad8a-41cf-94d7-20a94e85ad1f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\MapLoader_TempClasses">
-      <UniqueIdentifier>{6f0e0aa1-23b6-4485-af58-2770a6c5578d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\MapLoader_TempClasses">
-      <UniqueIdentifier>{97923a8a-78d8-4cbe-be98-c44f45d36f6b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MapFiles">
       <UniqueIdentifier>{d5294d56-ab7f-4b26-9dd6-e073124db92e}</UniqueIdentifier>
     </Filter>
@@ -38,5 +32,16 @@
     <ClCompile Include="MapLoaderDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MapLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

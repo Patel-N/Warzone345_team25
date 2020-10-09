@@ -5,5 +5,6 @@ int main()
 {
 	MapLoader mp;
 
-	mp.readFile("yerr");
+	mp.generateMap("./MapFiles/canada.exe");
 }
+
