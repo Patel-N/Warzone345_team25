@@ -13,10 +13,35 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\MapLoader">
+      <UniqueIdentifier>{607540b1-ad8a-41cf-94d7-20a94e85ad1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MapFiles">
+      <UniqueIdentifier>{d5294d56-ab7f-4b26-9dd6-e073124db92e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Warzone_T25.cpp">
+    <None Include="..\..\canada\canada.map">
+      <Filter>MapFiles</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MapLoader.cpp">
+      <Filter>Source Files\MapLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="MapLoaderDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MapLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
