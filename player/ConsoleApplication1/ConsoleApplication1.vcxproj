@@ -153,6 +153,7 @@
     <ClInclude Include="Order.h" />
     <ClInclude Include="OrderList.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerDriver.h" />
     <ClInclude Include="Territory.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

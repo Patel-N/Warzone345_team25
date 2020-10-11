@@ -1,4 +1,5 @@
-#include "Hand.h"
+#pragma once
+
 #include "list"
 #include "Card.h"
 using namespace std;
