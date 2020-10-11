@@ -95,3 +95,6 @@ private:
 	bool isConnected();
 	bool areContinentsConnected();
 };
+namespace part_1{
+	void start();
+}
