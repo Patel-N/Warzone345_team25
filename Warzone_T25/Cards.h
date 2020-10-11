@@ -95,3 +95,7 @@ private:
 	//vector<Card*> playCards;
 
 };
+
+namespace part_5 {
+	void start();
+}

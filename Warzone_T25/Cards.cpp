@@ -43,11 +43,11 @@ ostream& operator << (ostream& out, const Card& c)
 void Card::set_type(int new_kind) {
 
 	switch (new_kind) {
-	case 1: std::cout << "Bomb card set.\n" << endl;
-	case 2: std::cout << "Reinforcement card set.\n" << endl;
-	case 3: std::cout << "Blockade card set.\n" << endl;
-	case 4: std::cout << "Airlift card set.\n" << endl;
-	case 5: std::cout << "Diplomacy card set.\n" << endl;
+	case 1: std::cout << "Bomb card set.\n";
+	case 2: std::cout << "Reinforcement card set.\n";
+	case 3: std::cout << "Blockade card set.\n";
+	case 4: std::cout << "Airlift card set.\n";
+	case 5: std::cout << "Diplomacy card set.\n";
 
 	}
 }
@@ -105,13 +105,13 @@ ostream& operator << (ostream& out, const Deck& d)
 Card* Deck::draw()
 {
 	int randCard = rand() % deckVec.size();
-	cout << "Deck size: " << deckVec.size() << endl;
+	cout << "Deck size before draw: " << deckVec.size() << endl;
 	Card* c = deckVec[randCard];
 	cout << "ADDRESS OF CARD " << deckVec[randCard] << endl;
 	deckVec.erase(deckVec.begin() + randCard);
 	cout << "ADDRESS OF NEW CARD " << c << endl;
-	cout << c->get_type() << "\n";
-	cout << deckVec.size() << "SIZE\n";
+	//cout << c->get_type() << "\n";
+	cout << "Deck size after draw: " << deckVec.size() << endl;
 
 	return c;
 }
