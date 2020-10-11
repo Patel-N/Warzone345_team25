@@ -3,6 +3,12 @@
 #include<vector>
 #include<iostream>
 using namespace std;
+class DummyPlayer {
+public:
+	DummyPlayer();
+	int playerId;
+};
+
 class Territory {
 
 public:
@@ -23,6 +29,8 @@ public:
 	Territory& operator= (const Territory& territory);
 private:
 	int territoryId;
+	DummyPlayer* player;
+	int numArmies;
 	std::string territoryName;
 	int territory_continentID;
 
@@ -87,4 +95,3 @@ private:
 	bool isConnected();
 	bool areContinentsConnected();
 };
-
