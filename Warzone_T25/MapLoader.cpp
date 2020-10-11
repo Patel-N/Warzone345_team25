@@ -30,7 +30,35 @@ void MapLoader::setFileName(std::string fn) {
 	fileName = fn;
 }
 
+//Assignment Operator Overload
+MapLoader& MapLoader::operator=(const MapLoader& mlObj)
+{
+	if (this != &mlObj) {
+		fileName = mlObj.fileName;
+	}
 
+	return *this;
+}
+
+//Insertion Operator overload
+ostream& operator<<(ostream& outs, const MapLoader& mapLoaderObject)
+{
+	if (mapLoaderObject.fileName.empty()) {
+		outs << "Map hasn't been selected yet.";
+	}
+	else {
+		std::string fileNameExtension = mapLoaderObject.fileName.substr(mapLoaderObject.fileName.find_last_of("/") + 1);
+		outs << "Loaded map is: " << fileNameExtension.substr(0, fileNameExtension.find_last_of(".")) << endl;
+	}
+
+	return outs;
+}
+
+/*
+* 
+* Responsible of parsing the map when all elements of a map are found.
+* 
+*/
 Map MapLoader::generateMap(string fn)
 {
 
@@ -88,6 +116,7 @@ Map MapLoader::generateMap(string fn)
 				}
 
 				if (territoriesCheck) {
+					//Marks end of territories info
 					if (line == "") {
 						break;
 					}
@@ -110,6 +139,7 @@ Map MapLoader::generateMap(string fn)
 				}
 
 				if (bordersCheck) {
+					//Marks end of borders info
 					if (line == "") {
 						break;
 					}
@@ -143,6 +173,9 @@ Map MapLoader::generateMap(string fn)
 		if (!gameMap.isConnected()) { //TODO => change it to validate()
 			throw DisconnectedMapException();
 		}
+		else {
+			cout << "Map successfully generated!" << endl;
+		}
 
 	}
 	catch (IncorrectFileException ife){
@@ -172,6 +205,3 @@ std::vector<std::string> MapLoader::splitLine(std::string line)
 
 	return splitLine;
 }
-
-
-

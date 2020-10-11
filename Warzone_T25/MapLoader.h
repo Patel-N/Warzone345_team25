@@ -26,6 +26,12 @@ public:
 	//Getter
 	std::string getFileName();
 
+	//Insertion Operator
+	friend ostream& operator<<(ostream& outs, const MapLoader& mapLoaderObject);
+
+	//Assignment Operator
+	MapLoader& operator= (const MapLoader& mlObj);
+
 	Map generateMap(std::string fn);
 
 
