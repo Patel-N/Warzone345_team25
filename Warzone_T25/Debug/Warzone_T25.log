@@ -1,5 +1,0 @@
-﻿  Cards.cpp
-C:\Users\visha\Documents\Concordia\Fall2020\COMP345\Project\Warzone345_team25\Warzone_T25\Cards.cpp(99,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\visha\Documents\Concordia\Fall2020\COMP345\Project\Warzone345_team25\Warzone_T25\Cards.cpp(139,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\visha\Documents\Concordia\Fall2020\COMP345\Project\Warzone345_team25\Warzone_T25\Cards.cpp(168,20): warning C4018: '<': signed/unsigned mismatch
-  Warzone_T25.vcxproj -> C:\Users\visha\Documents\Concordia\Fall2020\COMP345\Project\Warzone345_team25\Warzone_T25\Debug\Warzone_T25.exe
