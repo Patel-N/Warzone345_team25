@@ -59,6 +59,7 @@ int Card::get_type() {
 
 // This will be used to implement different card play methods.
 void Card::play() {
+	cout << "Special order created." << endl;
 	cout << "Card played." << endl;
 }
 
@@ -141,7 +142,7 @@ void Hand::play(Card* playCard, Deck* deck) {
 			handCards[i]->play();
 			handCards.erase(handCards.begin() + i);
 			deck->addCardToDeck(ptr);
-
+			
 		}
 
 
