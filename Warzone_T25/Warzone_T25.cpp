@@ -287,7 +287,22 @@ int main()
 	if (map.validate()) {
 	cout << ">>SUCCESS, THE MAP IS VALID";
 	}
+	cout << "STREAM INSERTION OPERATOR DEMO: " << endl;
 	cout << map;
+	std::cout << endl << endl;
+	cout << "COPY CONSTRUCTOR AND ASSIGNMENT OPERATOR DEMO: " << endl;
+	Map map2("created map 2");
+	map2 = map;
+	std::cout << "This is map2";
+	std::cout << map2 << endl << endl;
+	map2.getContinents()[0]->getContinentTerritoryList()[0]->setTerritoryName("**MAP UPDATE**");
+	cout << map;
+	std::cout << endl << endl;
+	cout << "---------------------------------" << endl;
+	cout << "           UPDATED MAP:          " << endl;
+	cout << "---------------------------------" << endl;
+	std::cout << map2 << endl << endl;
+
 
 }
 

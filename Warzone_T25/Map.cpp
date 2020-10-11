@@ -49,9 +49,11 @@ Territory& Territory::operator=(const Territory& territory) {
 		territoryId = territory.territoryId;
 		territoryName = territory.territoryName;
 		territory_continentID = territory.territory_continentID;
-		//numArmies = territory.numArmies;
-		//DummyPlayer* player = new DummyPlayer;
-		//player->playerId = territory.player->playerId;
+		numArmies = territory.numArmies;
+		DummyPlayer* tempPlayer = new DummyPlayer;
+		player = tempPlayer;
+		player->playerId = territory.player->playerId;
+		
 	}
 	return *this;
 }
@@ -286,21 +288,15 @@ bool Map::isConnected() {
 		visited.push_back(0);
 	}
 	//we traverse every node with all possible start points by calling dfs on every node i. 
-	for (int i = 0; i < adjacencyMatrix.size(); i++) {
-		std::cout << "start node: " << i + 1 << std::endl;
-		dfs(i,adjacencyMatrix);
-		//once dfs is complete, we should have been able to visit all nodes in G if graph is connected. is not, then one entry in visited will be false and hence the method
-		//will return false;
-		for (int i = 0; i < visited.size(); i++) {
-			if (!visited[i]) {
-				return false;
-			}
+	std::cout << "start node: " << 0<< std::endl;
+	dfs(0,adjacencyMatrix);
+	//once dfs is complete, we should have been able to visit all nodes in G if graph is connected. is not, then one entry in visited will be false and hence the method
+	//will return false;
+	//we set visited back to false and prepare for the next iteration over a different start point
+	for (int i = 0; i < visited.size(); i++) {
+		if (visited[i] == false) {
+			return false;
 		}
-		//we set visited back to false and prepare for the next iteration over a different start point
-		for (int i = 0; i < visited.size(); i++) {
-			visited[i] = false;
-		}
-
 	}
 	std::cout << std::endl;
 	for (int i = 0; i < adjacencyMatrix.size();i++) {
@@ -459,6 +455,8 @@ bool Map::validate() {
 	else {
 		cout << ">>Step 1 FAILED: Territory not unique. There exits a duplicate in T-ID: ";
 	}
+	std::cout << endl;
+	cout << ">>step 2: calling isConnected to verify if map is a connected graph" << endl;
 	bool is_connected = isConnected();
 	if (is_connected) {
 		cout << ">>step 2 SUCCESS: The entire map is connected." << endl;
@@ -467,6 +465,8 @@ bool Map::validate() {
 		cout << ">>Step 2 FAILED: The map is not connected ";
 	}
 	bool are_continents_connected = areContinentsConnected();
+	std::cout << endl;
+	cout << ">>step 3: calling areContinentsConnected to verify if continents are a connected subgraphs" << endl;
 	if (are_continents_connected) {
 		cout << ">>step 3 SUCCESS: Continents are also connected" << endl;
 	}
