@@ -3,11 +3,13 @@
 #include <iostream>
 #include"Cards.h";
 #include"Map.h";
+#include "MapLoader.h";
 #include"Player.h";
 int main()
 {
-	part_1::start();
-
+	part_1::start();  
+	part_2::start();
 	part_3::start();
 	part_5::start();
+  
 }
