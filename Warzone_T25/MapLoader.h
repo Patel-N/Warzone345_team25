@@ -51,3 +51,7 @@ class MissingElementException {
 
 class DisconnectedMapException {
 };
+
+namespace part_2 {
+	void start();
+}
