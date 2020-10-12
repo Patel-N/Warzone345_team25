@@ -41,9 +41,11 @@ Deploy::Deploy() {
 	cout << "Deploy Constructed: " << endl;
 }
 
+
 Deploy::~Deploy() {
 	cout << "Deploy De-constructed: " << endl;
 }
+
 
 // Advance
 bool Advance::validate() {
@@ -68,7 +70,7 @@ Advance::~Advance() {
 
 // Bomb
 bool Bomb::validate() {
-		return true;
+	return true;
 }
 void Bomb::execute(int playerIndex) {
 	if (validate()) {
@@ -111,7 +113,7 @@ Blockade::~Blockade() {
 
 // Airlift
 bool Airlift::validate() {
-		return true;
+	return true;
 }
 void Airlift::execute(int playerIndex) {
 	if (validate()) {
@@ -151,70 +153,132 @@ Negotiate::~Negotiate() {
 	cout << "Negotiate De-constructed: " << endl;
 }
 
-ostream& operator << (ostream& output, Order& order) {
-	output << "The order name is: " << order.getorderName() << "and the state of the order is :" << order.getorderState() << endl;
+ostream& operator << (ostream& output, Order* order) {
+	if (order->getorderState() == false) {
+		output << "The order name is: " << order->getorderName() << " and the order has not been exectuted yet. " << endl;
+	}
+	if (order->getorderState() == true) {
+		output << "The order name is: " << order->getorderName() << " and the order has been exectuted." << endl;
+	}
 	return output;
 }
- 
+
 // OrderList
-void OrderList::add(const Order& order) {
-	if (numSize == 10) {
-		cout << "Max capacity of orders reached" << endl;
-	}
-	else {
-		allOrders[numSize + 1] = order;
-		numSize++;
-	}
+void OrderList::add(Order* order) {
+	allOrders.push_back(order);
+	numSize++;
 }
 void OrderList::print() {
 	for (int i = 0; i < numSize; i++) {
-		cout << allOrders[i].getorderName() << endl;
+		cout << allOrders[i]->getorderName() << endl;
 	}
 }
 void OrderList::move(int fromPos, int toPos) {
-	Order* temp = &allOrders[fromPos];
-	allOrders[fromPos] = allOrders[toPos];
-	allOrders[toPos] = *temp;
+	allOrders.insert(allOrders.begin() + (toPos - 1), allOrders[fromPos -1]);
+	allOrders.erase(allOrders.begin() + fromPos);
+
 }
 void OrderList::remove(int numRem) {
-	for (int i = numRem; i < numSize; i++) {
-		allOrders[numRem] = allOrders[numRem + 1];
-	}
+	delete(allOrders[numRem-1]);
+	allOrders.erase(allOrders.begin() + (numRem-1));
 	numSize--;
 }
 // Constructor
 OrderList::OrderList() {
-	allOrders = new Order[10]; // max number of commands allowed right now...
+	// max number of commands allowed right now...
 	numSize = 0;
 }
-// Copy Constructor
+// Copy Constructor- deep copy
 OrderList::OrderList(const OrderList& orderlist) {
-	cout << "Copy Constructor: " << endl;
-	this->numSize = orderlist.numSize;
-	this->allOrders = new Order[10];
-	copy(orderlist.allOrders, orderlist.allOrders + numSize, this->allOrders);
-}
-//OverLoaded Assignment Operator
-OrderList& OrderList::operator=(const OrderList& orderlist) {
-	cout << "OverLoaded Assignment Called: " << endl;
-	if (this == &orderlist) {
-		return *this;
+	cout << "Copy Constructor (deep copy): " << endl;
+	numSize = orderlist.numSize;
+	for (int i = 0; i < numSize; i++) {
+		if (orderlist.allOrders[i]->getorderName() == "deploy") {
+			allOrders.push_back(new Deploy());
+			//allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+		}
+		if (orderlist.allOrders[i]->getorderName() == "advance") {
+			allOrders.push_back(new Advance);
+			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+		}
+		if (orderlist.allOrders[i]->getorderName() == "bomb") {
+			allOrders.push_back(new Bomb);
+			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+		}
+		if (orderlist.allOrders[i]->getorderName() == "negotiate") {
+			allOrders.push_back(new Negotiate);
+			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+		}
+		if (orderlist.allOrders[i]->getorderName() == "blockade") {
+			allOrders.push_back(new Blockade);
+			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+		}
+		if (orderlist.allOrders[i]->getorderName() == "airlift") {
+			allOrders.push_back(new Airlift);
+			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+		}
 	}
-	this->numSize = orderlist.numSize;
-	copy(orderlist.allOrders, orderlist.allOrders + numSize, this->allOrders);
+}
+////OverLoaded Assignment Operator
+//OrderList& OrderList::operator=(const OrderList& orderlist) {
+//	cout << "OverLoaded Assignment Called: " << endl;
+//	if (this == &orderlist) {
+//		return *this;
+//	}
+//	this->numSize = orderlist.numSize;
+//	for (int i = 0; i < numSize; i++) {
+//		Order* copy(orderlist.allOrders[i]);
+//		allOrders[i] = copy;
+//	}
+//	return *this;
+//}
+
+////OverLoaded Assignment Operator
+OrderList& OrderList::operator=(const OrderList& orderlist) {
+	cout << "Copy Constructor (deep copy): " << endl;
+	numSize = orderlist.numSize;
+	for (int i = 0; i < numSize; i++) {
+		if (orderlist.allOrders[i]->getorderName() == "deploy") {
+			allOrders.push_back(new Deploy);
+			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+		}
+		if (orderlist.allOrders[i]->getorderName() == "advance") {
+			allOrders.push_back(new Advance);
+			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+		}
+		if (orderlist.allOrders[i]->getorderName() == "bomb") {
+			allOrders.push_back(new Bomb);
+			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+		}
+		if (orderlist.allOrders[i]->getorderName() == "negotiate") {
+			allOrders.push_back(new Negotiate);
+			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+		}
+		if (orderlist.allOrders[i]->getorderName() == "blockade") {
+			allOrders.push_back(new Blockade);
+			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+		}
+		if (orderlist.allOrders[i]->getorderName() == "airlift") {
+			allOrders.push_back(new Airlift);
+			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+		}
+		
+	}
 	return *this;
 }
 
-// Destructor`
+// Destructor
 OrderList::~OrderList() {
 	cout << "Destructor Called for OrderList." << endl;
-	delete[] allOrders;
+	for (unsigned int i = 0; i < allOrders.size(); i++) {
+ 		delete(allOrders[i]);
+	}
 }
 
 ostream& operator << (ostream& output, OrderList& orderlist) {
-	output << "Order-list has following orders: " << endl <<"| ";
-	for (int i = 0; i < orderlist.numSize; i++) {
-		output << orderlist.allOrders[i].getorderName()<< " | ";
+	output << "Order-list has following orders: " << endl << "| "; 
+	for (unsigned int i = 0; i < orderlist.allOrders.size(); i++) {
+		output << orderlist.allOrders[i]->getorderName() << " | ";
 	}
 	output << endl;
 	return output;

@@ -4,7 +4,7 @@
 #include<vector>
 using namespace std;
 
-class Order {
+class Order { // abstract class- no instantiation. // no pointer or objects so no requirement of assignment operator and copy constructor
 private:
 	string orderName;
 	bool orderState;
@@ -13,13 +13,14 @@ public:
 	bool getorderState();
 	void setorderName(string name);
 	void setorderState(bool flag);
-	virtual bool validate() { return false; };
-	virtual void execute(int playerIndex) {};
-	friend ostream& operator << (ostream& output, Order& order);
+	virtual bool validate() = 0 ;
+	virtual void execute(int playerIndex) = 0;
+	friend ostream& operator << (ostream& output, Order* order);
 	//Constructor
 	Order();
 	//Deconstructor
-	virtual ~Order(){cout<<"Order Deconstructed "<<endl;};
+	virtual ~Order() { cout << "Order Deconstructed " << endl; };
+
 };
 
 class Deploy : public Order {
@@ -31,6 +32,7 @@ public:
 	Deploy();
 	//Deconstructor
 	~Deploy();
+
 };
 
 class Advance : public Order {
@@ -83,11 +85,11 @@ public:
 
 class OrderList {
 public:
-	Order* allOrders; 
+	vector<Order*> allOrders;
 	int numSize;
 
 	// Insert a new order
-	void add(const Order& order);
+	void add(Order* order);
 	void print();
 	void move(int fromPos, int toPos);
 	void remove(int numRem);
@@ -106,5 +108,5 @@ public:
 
 	friend ostream& operator << (ostream& output, OrderList& orderlist);
 };
-ostream& operator << (ostream& output, Order& order);
+ostream& operator << (ostream& output, Order* order);
 ostream& operator << (ostream& output, OrderList& orderlist);
