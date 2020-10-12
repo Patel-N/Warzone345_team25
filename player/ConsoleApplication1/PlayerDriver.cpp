@@ -12,7 +12,7 @@ using namespace std;
 
 	int main() {
 		
-		
+		cout << "***PLAYER PART***" << endl;
 
 		//territory part--------------
 		Player player1; // create new player
@@ -44,13 +44,13 @@ using namespace std;
 		//to defend to defend method part ---------
 		player1.Territoryptr = { t1 }; //ressting list of player
 		cout << "Player1 is attacking:" << endl;
-		for (auto& elm : player1.Territoryptr) {//spitting out elements from the list of territories from player to defend
+		for (auto& elm : player1.toDefend()) {//spitting out elements from the list of territories from player to defend
 			cout << elm->name << endl;
 		}
 		//to defend to attack method part --------
 		player1.Territoryptr = { t2 }; //ressting list of player
 		cout << "Player1 is attacking:" << endl;
-		for (auto& elm : player1.Territoryptr) {//spitting out elements from the list of territories from player to attack
+		for (auto& elm : player1.toAttack()) {//spitting out elements from the list of territories from player to attack
 			cout << elm->name << endl;
 		}
 		
@@ -79,17 +79,36 @@ using namespace std;
 			cout << elm->name << endl;
 		}
 
-		//stream insertion part--------
-		cout << "" << endl;
+		//stream insertion part--------	
+		cout << "" << endl; //cout part
+		cout << "stream insertion part: " << endl;
 		cout << player1;
 		cout << "please enter a territory: " << endl;
-		cin >> player1;
+		cin >> player1; //cin part
 		cout << "player1 has territory: " << endl;
 		for (auto& elm : player1.Territoryptr) {//spitting out elements from the list of territories from player	
 			cout << elm->name << endl;
 		}
 
-
+		//assignment operater overloading part--------
+		cout << "" << endl;
+		cout << "assignment operater overloading part:" << endl;
+		Player player3 ;
+		player3 = player1;	
+		cout << "player 3 has territories:" << endl;
+		for (auto& elm : player3.Territoryptr) {//spitting out elements from the list of territories from player to defend
+			cout << elm->name << endl;
+		}
+		cout << "Player3 holds cards:" << endl;
+		for (auto& elm : player3.Handptr->Cardptr) {//spitting out elements from the list of cards from player	
+			cout << elm->name << endl;
+		}
+		cout << "Player3 has orders:" << endl;
+		for (auto& elm : player3.Orderptr) {//spitting out orders from the list of orders from player list of orders
+			cout << elm->name << endl;
+		}
+		
+		cout << "**END OF PLAYER PART**" << endl;
 		return 0;
 	}
 

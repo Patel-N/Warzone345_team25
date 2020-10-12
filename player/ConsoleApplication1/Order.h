@@ -4,6 +4,6 @@ using namespace std;
 class Order
 {
 public:
-	string name = "default order";
+	string name = "advance";
 };
 
