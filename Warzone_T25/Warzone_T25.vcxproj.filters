@@ -21,6 +21,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Cards.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CardsDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Warzone_T25.cpp">
     <None Include="..\..\canada\canada.map">
       <Filter>MapFiles</Filter>
     </None>
@@ -41,6 +48,11 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Cards.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

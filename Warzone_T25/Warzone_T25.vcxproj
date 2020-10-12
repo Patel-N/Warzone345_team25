@@ -139,6 +139,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Cards.cpp" />
+    <ClCompile Include="CardsDriver.cpp" />
+    <ClCompile Include="Warzone_T25.cpp" />
     <None Include="..\..\canada\canada.map" />
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +152,9 @@
   <ItemGroup>
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLoader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Cards.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
