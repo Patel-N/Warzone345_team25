@@ -142,6 +142,16 @@
     <ClCompile Include="Cards.cpp" />
     <ClCompile Include="CardsDriver.cpp" />
     <ClCompile Include="Warzone_T25.cpp" />
+    <None Include="..\..\canada\canada.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapLoader.cpp" />
+    <ClCompile Include="MapLoaderDriver.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="MapLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cards.h" />
