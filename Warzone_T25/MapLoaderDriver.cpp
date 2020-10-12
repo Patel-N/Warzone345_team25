@@ -1,7 +1,7 @@
 #include <iostream>
 #include "MapLoader.h"
 
-int main()
+int main2()
 {
 	MapLoader mp;
 
@@ -30,6 +30,6 @@ int main()
 	cout << mp;
 	cout << endl;
 
-
+	return 0;
 }
 

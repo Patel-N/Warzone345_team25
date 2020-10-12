@@ -2,10 +2,11 @@
 
 #include <iostream>
 #include"Cards.h";
+#include"Map.h";
 int main()
 {
+	part_1::start();
+
+
 	part_5::start();
-
-
-
 }
