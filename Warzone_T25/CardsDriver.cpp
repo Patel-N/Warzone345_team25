@@ -59,6 +59,10 @@ void part_5::start()
 	
 	cout << "\nPlaying cards." << endl;
 	hand->play(hand->hand_getCard(), cardDeck);
+
+	delete cardDeck;
+	delete hand;
+	delete hand1;
 	
 
 

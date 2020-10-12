@@ -16,7 +16,7 @@ Card::Card(int type) {
 
 //Destructor
 Card::~Card() {
-
+	cout << "Card destroyed." << endl;
 }
 
 // Copy constructor to create deep copy when object is declared.
@@ -69,11 +69,15 @@ Deck::Deck() {
 	cout << "Deck created with default constructor.\n" << endl;;
 }
 
-// Destructor
+// Destructor and memory leak prevention
 Deck::~Deck() {
+	for (int i = 0; i < deckVec.size(); i++) {
+		delete deckVec[i];
+	}
 
+	deckVec.clear();
+	cout << "Deck destroyed." << endl;
 }
-
 // Card pointer points to memory in vector.
 void Deck::addCardToDeck(Card* card) {
 	deckVec.push_back(card);
@@ -123,7 +127,12 @@ Hand::Hand() {
 }
 
 Hand::~Hand() {
+	for (int i = 0; i < handCards.size(); i++) {
+		delete handCards[i];
+	}
 
+	handCards.clear();
+	cout << "Hand destroyed." << endl;
 }
 
 void Hand::addCardToHand(Card* card) {
