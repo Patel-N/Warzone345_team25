@@ -5,8 +5,11 @@ using namespace std;
 void part_2::start()
 {
 	MapLoader mp;
-	cout << "Testing valid map." << endl;;
-	cout << mp.generateMap("./MapFiles/canada.map");
+	cout << "Testing valid map." << endl;
+	//Map* map = new Map("Created map");
+	//map = &mp.generateMap("./MapFiles/canada.map");
+	////cout << *map;
+	//cout << mp.generateMap("./MapFiles/canada.map");
 	cout << endl;
 	
 	/*cout << "Testing incorrect file exception" << endl;

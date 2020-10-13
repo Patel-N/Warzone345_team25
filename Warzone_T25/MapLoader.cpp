@@ -162,7 +162,7 @@ Map MapLoader::generateMap(string fn)
 
 				}
 			}
-			gameMap.printMap();
+			//gameMap.printMap();
 			mapFile.close();
 		}
 		else {
@@ -191,8 +191,9 @@ Map MapLoader::generateMap(string fn)
 	catch (DisconnectedMapException dme) {
 		cout << "ERROR: The map has disconnected territories or continent." << endl << endl;
 	}
-		
+	//cout << gameMap;
 	return gameMap;
+
 }
 
 /*
