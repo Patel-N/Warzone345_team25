@@ -172,19 +172,6 @@
   <ItemGroup>
     <ClInclude Include="Map.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="MapLoader.cpp" />
-    <ClCompile Include="MapLoaderDriver.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="MapLoader.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Cards.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Map.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
