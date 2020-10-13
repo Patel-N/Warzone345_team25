@@ -18,7 +18,6 @@ void part_2::start()
 	mp.generateMap("./MapFiles/InvalidFiles/canadaNoConts.map");
 	cout << endl;
 	
-	
 
 	cout << "Testing disconnected map exception" << endl;
 	mp.generateMap("./MapFiles/InvalidFiles/canadaDisconnected.map");

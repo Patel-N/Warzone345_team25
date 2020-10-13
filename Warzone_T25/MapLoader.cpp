@@ -170,7 +170,7 @@ Map MapLoader::generateMap(string fn)
 			throw MissingElementException();
 		}
 		//Throw error if map is disconnected
-		if (!gameMap.validate()) { 
+		if (!gameMap.validate()) {
 			throw DisconnectedMapException();
 		}
 		else {

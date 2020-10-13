@@ -139,18 +139,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CardDUMMY.cpp" />
+    <ClCompile Include="HandDUMMY.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapDrivercpp.cpp" />
     <ClCompile Include="Cards.cpp" />
     <ClCompile Include="CardsDriver.cpp" />
+    <ClCompile Include="OrderDUMMY.cpp" />
+    <ClCompile Include="OrderListDUMMY.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerDriver.cpp" />
+    <ClCompile Include="TerritoryDUMMY.cpp" />
     <ClCompile Include="Warzone_T25.cpp" />
+    <None Include="..\..\canada\canada.map" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MapLoader.cpp" />
     <ClCompile Include="MapLoaderDriver.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CardDUMMY.h" />
+    <ClInclude Include="HandDUMMY.h" />
     <ClInclude Include="MapLoader.h" />
+    <ClInclude Include="OrderDUMMY.h" />
+    <ClInclude Include="OrderListDUMMY.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="TerritoryDUMMY.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cards.h" />
