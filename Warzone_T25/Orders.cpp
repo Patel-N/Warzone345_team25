@@ -19,6 +19,18 @@ Order::Order() {
 	setorderState(false);
 	cout << "Order Constructed: " << endl;
 }
+Order::Order(const Order& order) {
+	(*this).setorderState(order.orderState);
+	(*this).setorderName(order.orderName);
+}
+
+//OverLoaded Assignment Operator
+Order& Order::operator=(const Order& order) {
+	(*this).setorderState(order.orderState);
+	(*this).setorderName(order.orderName);
+	return *this;
+}
+
 
 
 //Deploy
@@ -46,6 +58,20 @@ Deploy::~Deploy() {
 	cout << "Deploy De-constructed: " << endl;
 }
 
+Deploy::Deploy(Order& order) {
+	(*this).setorderState(order.getorderState());
+	(*this).setorderName(order.getorderName());
+}
+//OverLoaded Assignment Operator
+Deploy& Deploy::operator=(Deploy& deploy) {
+	if (this == &deploy) {
+		return *this;
+	}
+	(*this).setorderState(deploy.getorderState());
+	(*this).setorderName(deploy.getorderName());
+	return *this;
+}
+
 
 // Advance
 bool Advance::validate() {
@@ -67,6 +93,20 @@ Advance::Advance() {
 Advance::~Advance() {
 	cout << "Advance De-constructed: " << endl;
 }
+Advance::Advance(Order& order) {
+	(*this).setorderState(order.getorderState());
+	(*this).setorderName(order.getorderName());
+}
+//OverLoaded Assignment Operator
+Advance& Advance::operator=(Advance& advance) {
+	if (this == &advance) {
+		return *this;
+	}
+	(*this).setorderState(advance.getorderState());
+	(*this).setorderName(advance.getorderName());
+	return *this;
+}
+
 
 // Bomb
 bool Bomb::validate() {
@@ -88,6 +128,20 @@ Bomb::Bomb() {
 Bomb::~Bomb() {
 	cout << "Bomb De-constructed: " << endl;
 }
+Bomb::Bomb(Order& order) {
+	(*this).setorderState(order.getorderState());
+	(*this).setorderName(order.getorderName());
+}
+//OverLoaded Assignment Operator
+Bomb& Bomb::operator=(Bomb& bomb) {
+	if (this == &bomb) {
+		return *this;
+	}
+	(*this).setorderState(bomb.getorderState());
+	(*this).setorderName(bomb.getorderName());
+	return *this;
+}
+
 
 //Blockade
 bool Blockade::validate() {
@@ -108,6 +162,19 @@ Blockade::Blockade() {
 //De-constructor 
 Blockade::~Blockade() {
 	cout << "Blockade De-constructed: " << endl;
+}
+Blockade::Blockade(Order& order) {
+	(*this).setorderState(order.getorderState());
+	(*this).setorderName(order.getorderName());
+}
+//OverLoaded Assignment Operator
+Blockade& Blockade::operator=(Blockade& blockade) {
+	if (this == &blockade) {
+		return *this;
+	}
+	(*this).setorderState(blockade.getorderState());
+	(*this).setorderName(blockade.getorderName());
+	return *this;
 }
 
 
@@ -131,6 +198,20 @@ Airlift::Airlift() {
 Airlift::~Airlift() {
 	cout << "Airlift De-constructed: " << endl;
 }
+Airlift::Airlift(Order& order) {
+	(*this).setorderState(order.getorderState());
+	(*this).setorderName(order.getorderName());
+}
+//OverLoaded Assignment Operator
+Airlift& Airlift::operator=(Airlift& airlift) {
+	if (this == &airlift) {
+		return *this;
+	}
+	(*this).setorderState(airlift.getorderState());
+	(*this).setorderName(airlift.getorderName());
+	return *this;
+}
+
 
 // Negotiate
 bool Negotiate::validate() {
@@ -152,13 +233,26 @@ Negotiate::Negotiate() {
 Negotiate::~Negotiate() {
 	cout << "Negotiate De-constructed: " << endl;
 }
-
-ostream& operator << (ostream& output, Order* order) {
-	if (order->getorderState() == false) {
-		output << "The order name is: " << order->getorderName() << " and the order has not been exectuted yet. " << endl;
+Negotiate::Negotiate(Order& order) {
+	(*this).setorderState(order.getorderState());
+	(*this).setorderName(order.getorderName());
+}
+//OverLoaded Assignment Operator
+Negotiate& Negotiate::operator=(Negotiate& negotiate) {
+	if (this == &negotiate) {
+		return *this;
 	}
-	if (order->getorderState() == true) {
-		output << "The order name is: " << order->getorderName() << " and the order has been exectuted." << endl;
+	(*this).setorderState(negotiate.getorderState());
+	(*this).setorderName(negotiate.getorderName());
+	return *this;
+}
+
+ostream& operator << (ostream& output, Order& order) {
+	if (order.getorderState() == false) {
+		output << "The order name is: " << order.getorderName() << " and the order has not been exectuted yet. " << endl;
+	}
+	if (order.getorderState() == true) {
+		output << "The order name is: " << order.getorderName() << " and the order has been exectuted." << endl;
 	}
 	return output;
 }
@@ -194,28 +288,23 @@ OrderList::OrderList(const OrderList& orderlist) {
 	numSize = orderlist.numSize;
 	for (int i = 0; i < numSize; i++) {
 		if (orderlist.allOrders[i]->getorderName() == "deploy") {
-			allOrders.push_back(new Deploy());
+			allOrders.push_back(new Deploy(*orderlist.allOrders[i]));
 			//allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
 		}
 		if (orderlist.allOrders[i]->getorderName() == "advance") {
-			allOrders.push_back(new Advance);
-			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+			allOrders.push_back(new Advance(*orderlist.allOrders[i]));
 		}
 		if (orderlist.allOrders[i]->getorderName() == "bomb") {
-			allOrders.push_back(new Bomb);
-			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+			allOrders.push_back(new Bomb(*orderlist.allOrders[i]));
 		}
 		if (orderlist.allOrders[i]->getorderName() == "negotiate") {
-			allOrders.push_back(new Negotiate);
-			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+			allOrders.push_back(new Negotiate(*orderlist.allOrders[i]));
 		}
 		if (orderlist.allOrders[i]->getorderName() == "blockade") {
-			allOrders.push_back(new Blockade);
-			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+			allOrders.push_back(new Blockade(*orderlist.allOrders[i]));
 		}
 		if (orderlist.allOrders[i]->getorderName() == "airlift") {
-			allOrders.push_back(new Airlift);
-			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+			allOrders.push_back(new Airlift(*orderlist.allOrders[i]));
 		}
 	}
 }
@@ -235,7 +324,10 @@ OrderList::OrderList(const OrderList& orderlist) {
 
 ////OverLoaded Assignment Operator
 OrderList& OrderList::operator=(const OrderList& orderlist) {
-	cout << "Assignment Operator (deep copy): " << endl;
+	cout << "Overloaded Assignment Operator (deep copy): " << endl;
+	if (this == &orderlist) {
+		return *this;
+	}
 	numSize = orderlist.numSize;
 	for (int i = 0; i < numSize; i++) {
 		if (orderlist.allOrders[i]->getorderName() == "deploy") {

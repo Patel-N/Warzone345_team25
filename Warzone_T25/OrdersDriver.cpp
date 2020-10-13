@@ -37,7 +37,7 @@ void part_4::start() {
 
 	OrderList* orderlist2 = new OrderList(*orderlist1);
 	cout << "New OrderList is orderlist2: " << endl;
-	cout << orderlist2 << endl;
+	cout << *orderlist2 << endl;
 	cout << "Chaniging orderlist 2 to demonstrate deep copy." << endl;
 	orderlist2->move(3, 1);
 	orderlist2->remove(4);

@@ -8,7 +8,7 @@ void part_2::start()
 	cout << "Testing valid map." << endl;;
 	cout << mp.generateMap("./MapFiles/canada.map");
 	cout << endl;
-	
+	/*
 	cout << "Testing incorrect file exception" << endl;
 	mp.generateMap("./MapFiles/InvalidFiles/invalidExt.exe");
 	cout << endl;
@@ -28,6 +28,6 @@ void part_2::start()
 	cout << "Expected output:" << endl << "Loaded map is: canada" << endl << "Output:" << endl;
 	cout << mp;
 	cout << endl;
-
+	*/
 }
 
