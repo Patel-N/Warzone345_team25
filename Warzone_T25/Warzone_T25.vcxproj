@@ -139,7 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Orders.cpp" />
+    <ClCompile Include="OrdersDriver.cpp" />
     <ClCompile Include="Warzone_T25.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Orders.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
