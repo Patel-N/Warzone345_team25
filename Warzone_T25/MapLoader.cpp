@@ -125,11 +125,15 @@ Map MapLoader::generateMap(string fn)
 
 						//Create new territories and add them to the Map
 						gameMap.addTerritory(stoi(sepInfo[0]), sepInfo[1], stoi(sepInfo[2]));
+						//cout << "adding: " << stoi(sepInfo[0]) << " " << sepInfo[1] << " " << stoi(sepInfo[2]);
+						//cout << endl;
 					}
 
 				}
 			}
-
+			cout << endl << endl;
+			//gameMap.printMap();
+			cout << endl << endl;
 			//Populate borders
 			while (getline(mapFile, line)) {
 
@@ -158,7 +162,7 @@ Map MapLoader::generateMap(string fn)
 
 				}
 			}
-
+			gameMap.printMap();
 			mapFile.close();
 		}
 		else {

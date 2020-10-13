@@ -110,7 +110,7 @@ void Continent::printContinent() {
 	}
 }
 void Continent::addTerritoryToContinent(Territory* territory) {
-	if (continentTerritoryList.size() == 0) {
+	/*if (continentTerritoryList.size() == 0) {
 		continentTerritoryList.push_back(territory);
 	}
 	else {
@@ -130,6 +130,11 @@ void Continent::addTerritoryToContinent(Territory* territory) {
 		else {
 			continentTerritoryList.push_back(territory);
 		}
+	}*/
+	//cout << "TERRITORY ID" << territory->getTerritoryID() << " " << "CID " << territory->getTerritoryContinentID() << endl;
+	continentTerritoryList.push_back(territory);
+	if (territory->getTerritoryContinentID() == 1) {
+		cout <<"Adding " << territory->getTerritoryID() << endl;
 	}
 }
 Map::Map(std::string message) {
@@ -201,6 +206,7 @@ ostream& operator<<(ostream& outs, const Map& theObject) {
 	outs << "----------------------------------" << endl
 		<< "             CONTINENTS            " << endl
 		<< "----------------------------------" << endl << endl;
+	cout << "CONTINENT SIZE " << theObject.continents.size();
 	for (auto x : theObject.continents) {
 		outs << *x << endl;
 	}
@@ -208,10 +214,8 @@ ostream& operator<<(ostream& outs, const Map& theObject) {
 	outs << "----------------------------------" << endl
 		<< "             TERRITORIES           " << endl
 		<< "----------------------------------" << endl << endl;
-	for (auto x : theObject.map) {
-		for (auto y : x) {
-			outs << *y << endl;
-		}
+	for (int i = 0; i < theObject.map.size();i++) {
+		outs << *theObject.map[i][0] << endl;
 	}
 	return outs;
 }
@@ -224,10 +228,11 @@ void Map::addTerritory(int id, std::string name,int continentID) {
 	Territory* newTerritory = new Territory(id, name,continentID);
 	if (continents.size() >= continentID) {
 		continents[continentID - 1]->addTerritoryToContinent(newTerritory);
+		
 	}
 	std::vector<Territory*> temp;
 	temp.push_back(newTerritory);
-	if (map.size() == 0) { 
+	/*if (map.size() == 0) { 
 		map.push_back(temp); 
 	}
 	else {
@@ -249,18 +254,24 @@ void Map::addTerritory(int id, std::string name,int continentID) {
 		else {
 			map.push_back(temp);
 		}
-	}
+	}*/
+	map.push_back(temp);
 	size++;
 }
 int Map::getSize() {
 	return size;
 }
 void Map::addBorder(std::vector<int> borders) {
-	int territoryID = borders.at(0);
+	int territoryID = borders[0];
 	for (int i = 1; i < borders.size(); i++) {
-		map.at(territoryID - 1).push_back(map.at(borders.at(i) - 1).at(0));
-	
+		cout << endl << endl;
+		map[territoryID - 1].push_back(map[borders[i] - 1][0]);
 	}
+	for (int i = 0; i < map[territoryID - 1].size(); i++) {
+		cout << map[territoryID-1][i]->getTerritoryID() << "->";
+	}
+	cout << endl << endl;
+
 }
 void Map::printMap() {
 	for (int i = 0; i < map.size(); i++) {
@@ -299,12 +310,12 @@ bool Map::isConnected() {
 		}
 	}
 	std::cout << std::endl;
-	for (int i = 0; i < adjacencyMatrix.size();i++) {
+	/*for (int i = 0; i < adjacencyMatrix.size();i++) {
 		for (int j = 0; j < adjacencyMatrix[i].size(); j++) {
 			std::cout << adjacencyMatrix[i][j] << " ";
 		}
 		std::cout << std::endl;
-	}
+	}*/
 	return true;
 }
 std::vector<std::vector<int>> Map::constructUnidirectionalMatrix() {
@@ -360,7 +371,7 @@ void Map::dfs(int start, std::vector<std::vector<int>> adjacencyMatrix) {
 	while (!stack.empty()) {
 		int id_index_visited = stack.top();
 		stack.pop();
-		std::cout << "visited = " << id_index_visited + 1 << std::endl;
+		//std::cout << "visited = " << id_index_visited + 1 << std::endl;
 		for (int i = 0; i < adjacencyMatrix[id_index_visited].size(); i++) {
 			if (!visited[i]) {
 				if (adjacencyMatrix[id_index_visited][i] == 1) {
@@ -378,8 +389,8 @@ bool Map::areContinentsConnected() {
 		continentsVisited.push_back(0);
 	}
 	for (int k = 0; k < continents.size(); k++) {
-		std::cout << "start node: " << k;
-		std::cout << endl;
+		//std::cout << "start node: " << k;
+		//std::cout << endl;
 		continentDfs(k,adjacencyMatrix);
 		for (int j = 0; j < continentsVisited.size(); j++) {
 			if (!continentsVisited[j]) {
@@ -422,7 +433,7 @@ void Map::continentDfs(int start, std::vector<std::vector<int>> adjacencyMatrix)
 	while (!stack.empty()) {	
 		int continentIndexInStack = stack.top() - 1;	
 		stack.pop();
-		std::cout << "visited: " << continentIndexInStack << endl;
+		//std::cout << "visited: " << continentIndexInStack << endl;
 		std::vector<Territory*> territoriesInContinent = continents[continentIndexInStack]->getContinentTerritoryList();
 		for (int i = 0; i < territoriesInContinent.size(); i++) {			
 			int territoryID = territoriesInContinent[i]->getTerritoryID();
