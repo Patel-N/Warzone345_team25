@@ -17,6 +17,18 @@
     <ClCompile Include="TerritoryDUMMY.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Warzone_T25.cpp">
+      <Filter>Source Files</Filter>
+    <ClCompile Include="Orders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OrdersDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter>Header Files</Filter>
+    <ClInclude Include="Orders.h">
     <ClInclude Include="MapLoader.h" />
     <ClInclude Include="Cards.h" />
     <ClInclude Include="Map.h" />

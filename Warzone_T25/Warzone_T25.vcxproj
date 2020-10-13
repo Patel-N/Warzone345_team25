@@ -151,26 +151,22 @@
     <ClCompile Include="PlayerDriver.cpp" />
     <ClCompile Include="TerritoryDUMMY.cpp" />
     <ClCompile Include="Warzone_T25.cpp" />
-    <None Include="..\..\canada\canada.map" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="Orders.cpp" />
+    <ClCompile Include="OrdersDriver.cpp" />
     <ClCompile Include="MapLoader.cpp" />
     <ClCompile Include="MapLoaderDriver.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CardDUMMY.h" />
+	<ClInclude Include="CardDUMMY.h" />
     <ClInclude Include="HandDUMMY.h" />
     <ClInclude Include="MapLoader.h" />
     <ClInclude Include="OrderDUMMY.h" />
     <ClInclude Include="OrderListDUMMY.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="TerritoryDUMMY.h" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="Orders.h" />
+	<ClInclude Include="Map.h" />
     <ClInclude Include="Cards.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Map.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
