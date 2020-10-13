@@ -14,7 +14,7 @@ void part_4::start() {
 	orderlist1->add(new Negotiate());
 
 	// checking execution status and order stream overload operator
-	cout << orderlist1->allOrders[0] << endl;
+	cout << *orderlist1->allOrders[0] << endl;
 
 	//toString, move, remove testing
 	//cout << orderlist1;
@@ -31,7 +31,7 @@ void part_4::start() {
 
 	// checking execution status and order stream overload operator
 	cout << endl;
-	cout << orderlist1->allOrders[0] << endl;
+	cout << *orderlist1->allOrders[0] << endl;
 
 	// Check copy constructor- deep copy on new objects
 
