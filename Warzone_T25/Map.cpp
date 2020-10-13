@@ -161,7 +161,6 @@ Map& Map::operator=(const Map& originalMap) {
 	for (int j = 0; j < originalMap.map.size(); j++) {
 		std::vector<Territory*> tempVector;
 		Territory* territory = new Territory(*originalMap.map[j][0]);
-		cout << "adding territory " << territory->getTerritoryID() << " to continent" << territory->getTerritoryContinentID() << endl;
 		tempVector.push_back(territory);
 		continents[territory->getTerritoryContinentID() - 1]->addTerritoryToContinent(territory);
 		map.push_back(tempVector);
@@ -178,8 +177,7 @@ Map& Map::operator=(const Map& originalMap) {
 				}
 			}
 		}
-	}
-	
+	}	
 	return *this;
 }
 void Map::addContinent(int id, std::string name, int bonus) {
