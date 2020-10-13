@@ -6,7 +6,6 @@
 #include "MapLoader.h";
 #include"Player.h";
 #include "Orders.h";
-
 int main()
 {
 	part_1::start();  
