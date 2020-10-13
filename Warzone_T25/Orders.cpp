@@ -235,7 +235,7 @@ OrderList::OrderList(const OrderList& orderlist) {
 
 ////OverLoaded Assignment Operator
 OrderList& OrderList::operator=(const OrderList& orderlist) {
-	cout << "Copy Constructor (deep copy): " << endl;
+	cout << "Assignment Operator (deep copy): " << endl;
 	numSize = orderlist.numSize;
 	for (int i = 0; i < numSize; i++) {
 		if (orderlist.allOrders[i]->getorderName() == "deploy") {
@@ -283,5 +283,3 @@ ostream& operator << (ostream& output, OrderList& orderlist) {
 	output << endl;
 	return output;
 }
-
-

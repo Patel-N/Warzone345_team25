@@ -110,3 +110,7 @@ public:
 };
 ostream& operator << (ostream& output, Order* order);
 ostream& operator << (ostream& output, OrderList& orderlist);
+
+namespace part_4 {
+	void start();
+}
