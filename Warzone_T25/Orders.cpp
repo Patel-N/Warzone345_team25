@@ -195,7 +195,7 @@ OrderList::OrderList(const OrderList& orderlist) {
 	for (int i = 0; i < numSize; i++) {
 		if (orderlist.allOrders[i]->getorderName() == "deploy") {
 			allOrders.push_back(new Deploy());
-			//allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
+			allOrders[i]->setorderState(orderlist.allOrders[i]->getorderState());
 		}
 		if (orderlist.allOrders[i]->getorderName() == "advance") {
 			allOrders.push_back(new Advance);
