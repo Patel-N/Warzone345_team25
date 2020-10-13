@@ -160,13 +160,26 @@ Map& Map::operator=(const Map& originalMap) {
 	}
 	for (int j = 0; j < originalMap.map.size(); j++) {
 		std::vector<Territory*> tempVector;
-		for (int z = 0; z < originalMap.map[j].size(); z++) {
-			Territory* territory = new Territory(*originalMap.map[j][z]);
-			tempVector.push_back(territory);
-			continents[territory->getTerritoryContinentID() - 1]->addTerritoryToContinent(territory);
-		}
+		Territory* territory = new Territory(*originalMap.map[j][0]);
+		cout << "adding territory " << territory->getTerritoryID() << " to continent" << territory->getTerritoryContinentID() << endl;
+		tempVector.push_back(territory);
+		continents[territory->getTerritoryContinentID() - 1]->addTerritoryToContinent(territory);
 		map.push_back(tempVector);
 	}
+	for (int i = 0; i < originalMap.map.size(); i++) {
+		std::vector<int> borders;
+		if (originalMap.map[i].size() > 1) {			
+			for (int j = 1; j < originalMap.map[i].size(); j++) {
+				borders.push_back(originalMap.map[i][j]->getTerritoryID());
+			}
+			if (borders.size() > 0) {				
+				for (int z = 0; z < borders.size(); z++) {
+					this->map[i].push_back(this->map[borders[z] - 1][0]);
+				}
+			}
+		}
+	}
+	
 	return *this;
 }
 void Map::addContinent(int id, std::string name, int bonus) {
@@ -209,9 +222,7 @@ ostream& operator<<(ostream& outs, const Map& theObject) {
 		<< "             TERRITORIES           " << endl
 		<< "----------------------------------" << endl << endl;
 	for (auto x : theObject.map) {
-		for (auto y : x) {
-			outs << *y << endl;
-		}
+		cout << *x[0] << endl;
 	}
 	return outs;
 }
