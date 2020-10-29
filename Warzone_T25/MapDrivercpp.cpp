@@ -8,18 +8,18 @@ void part_1::start() {
 		map->addContinent(2, "Westeuropa", 5);
 		map->addContinent(3, "Mittelmeer", 3);
 		map->addContinent(4, "Mitteleuropa", 4);
-		/*ap.addContinent(5, "Balkan", 3);
+		/*map.addContinent(5, "Balkan", 3);
 		map.addContinent(6, "Kleinasien", 3);
 		map.addContinent(7, "Russland", 7);*/
-
 		map->addTerritory(1, "Reykjavik", 1);
 		map->addTerritory(2, "Ostisland", 1);
-		map->addTerritory(3, "Aberdeen", 2);
-
+		map->addTerritory(3, "Glasgow", 2);
 		map->addTerritory(4, "Glasgow", 2);
 		map->addTerritory(5, "Nordirland", 2);
 		map->addTerritory(6, "Dublin", 2);
 		map->addTerritory(7, "Suedirland", 2);
+		//map->addTerritory(7, "Suedirland", 3);
+		//map->addTerritory(7, "Suedirland", 2);
 		map->addTerritory(8, "Leeds", 2);
 		map->addTerritory(9, "wales", 2);
 		map->addTerritory(10, "England", 2);
@@ -34,7 +34,7 @@ void part_1::start() {
 		//std::cout << map;
 		std::vector<int> border = { 1 };
 		map->addBorder(border);
-		border = { 2,1 };
+		border = {2};
 		map->addBorder(border);
 		border = { 3,7 };
 		map->addBorder(border);
@@ -64,14 +64,17 @@ void part_1::start() {
 		map->addBorder(border);
 		map->printMap();
 		if (map->validate()) {
-			cout << ">>SUCCESS, THE MAP IS VALID";
+			cout << ">>SUCCESS, THE MAP IS VALID" << endl;
+		}
+		else {
+			cout << ">>FAILES, THE MAP IS INVALID" << endl;
 		}
 		cout << "STREAM INSERTION OPERATOR DEMO: " << endl;
-		cout << map;
+		cout << *map;
 		std::cout << endl << endl;
 		cout << "COPY CONSTRUCTOR AND ASSIGNMENT OPERATOR DEMO: " << endl;
-		Map* map2 = new Map("created map2");
-		*map2 = *map;
+		Map* map2 = new Map(*map);
+		//*map2 = *map;
 		std::cout << "This is address of map ";
 		std::cout << map << endl << endl;
 		std::cout << "This is address of map2 ";
@@ -82,5 +85,10 @@ void part_1::start() {
 		cout << "---------------------------------" << endl;
 		cout << "           UPDATED MAP:          " << endl;
 		cout << "---------------------------------" << endl;
-		std::cout << *map2 << endl << endl;
+		std::cout << *map2 << endl;
+
+
+	cout << "hello world";
+	char x;
+	cin >> x;
 }
