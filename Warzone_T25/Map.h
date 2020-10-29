@@ -2,12 +2,8 @@
 #include <string>
 #include<vector>
 #include<iostream>
+#include"Player.h"
 using namespace std;
-class DummyPlayer {
-public:
-	DummyPlayer();
-	int playerId;
-};
 
 class Territory {
 
@@ -29,7 +25,7 @@ public:
 	Territory& operator= (const Territory& territory);
 private:
 	int territoryId;
-	DummyPlayer* player;
+	Player* player;
 	int numArmies;
 	std::string territoryName;
 	int territory_continentID;
@@ -86,8 +82,10 @@ private:
 	std::vector<std::vector<Territory*>> map;
 	std::vector<Continent*> continents;
 	int size;
+	//helper vectors
 	std::vector<bool> visited;
 	std::vector<bool> continentsVisited;
+	//helper functions
 	void dfs(int startNode, std::vector<std::vector<int>> adjacencyMatrix);
 	void continentDfs(int startNode, std::vector<std::vector<int>> adjacencyMatrix);	
 	std::vector<std::vector<int>> constructUnidirectionalMatrix();
