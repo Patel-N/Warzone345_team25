@@ -72,11 +72,15 @@ class Hand {
 
 public:
 	// Contructors
+
 	Hand();
 	~Hand();
 
 	// Copy Constructor
 	Hand(const Hand& hand);
+
+	//Getters
+	vector<Card*> getCardsInHand();
 
 	// Assignment Operator
 	Hand& operator = (const Hand& hand);
@@ -89,6 +93,8 @@ public:
 	// Gets card from hand, plays it and returns it to deck.
 	void play(Card* playCard, Deck* deck);
 	Card* hand_getCard();
+
+
 
 private:
 	std::vector<Card*> handCards;

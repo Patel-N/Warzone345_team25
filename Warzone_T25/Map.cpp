@@ -1,11 +1,10 @@
-#include "Map.h";
-#include "Player.h"
-#include "string";
-#include<iostream>;
-#include<stack>;
+#include "Map.h"
+#include <string>
+#include<iostream>
+#include<stack>
 
 Territory::Territory(int id, std::string newName, int continentID) : territoryId(id), territoryName(newName), territory_continentID(continentID){
-	player = new Player();
+	player = NULL;
 	numArmies = 0;
 }
 
@@ -14,6 +13,8 @@ Territory::Territory(const Territory& territory) {
 }
 
 Territory::Territory() {
+	//PRINTING FROM MO'S TERRITORY CLASS
+	cout << "Creating a new territory";
 	territoryId = 1;
 	territoryName = "random";
 	territory_continentID = 0;

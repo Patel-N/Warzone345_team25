@@ -1,8 +1,9 @@
 #pragma once
+#include"Player.h"
 #include <string>
 #include<vector>
 #include<iostream>
-#include"Player.h"
+
 using namespace std;
 
 class Territory {

@@ -164,6 +164,11 @@ Hand::Hand(const Hand& hand) {
 	handCards = hand.handCards;
 }
 
+vector<Card*> Hand::getCardsInHand()
+{
+	return handCards;
+}
+
 // Assignment Operator
 Hand& Hand::operator= (const Hand& hand) {
 	cout << "Assignemnt operator called." << endl;
