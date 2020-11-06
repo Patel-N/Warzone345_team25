@@ -269,9 +269,18 @@ void OrderList::print() {
 	}
 }
 void OrderList::move(int fromPos, int toPos) {
-	allOrders.insert(allOrders.begin() + (toPos - 1), allOrders[fromPos - 1]);
-	allOrders.erase(allOrders.begin() + fromPos);
-
+	if (fromPos > toPos) {
+		allOrders.insert(allOrders.begin() + (toPos - 1), allOrders[fromPos - 1]); // inserts the element from old position to new position
+		allOrders.erase(allOrders.begin() + fromPos); // erase the element from original position.
+	}
+	else if (toPos > fromPos) {
+		Order* temp = allOrders[fromPos - 1];
+		allOrders.insert(allOrders.begin() + (toPos), temp); // inserts the element from old position to new position
+		allOrders.erase(allOrders.begin() + fromPos - 1); // erase the element from original position.
+	}
+	else {
+		return;
+	}
 }
 void OrderList::remove(int numRem) {
 	delete(allOrders[numRem - 1]);
