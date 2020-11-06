@@ -5,9 +5,10 @@
 #include"Map.h"
 #include "MapLoader.h"
 #include"Player.h"
-
+#include"GameEngine.h"
 int main()
 {
+	GameEngine* engine = new GameEngine();
 	//part_1::start();  
 	//part_2::start();
 	//part_3::start();

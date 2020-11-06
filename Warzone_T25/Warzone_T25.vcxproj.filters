@@ -12,6 +12,7 @@
     <ClCompile Include="OrdersDriver.cpp" />
     <ClCompile Include="MapLoader.cpp" />
     <ClCompile Include="MapLoaderDriver.cpp" />
+    <ClCompile Include="GameEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MapLoader.h" />
@@ -19,5 +20,6 @@
     <ClInclude Include="Orders.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Cards.h" />
+    <ClInclude Include="GameEngine.h" />
   </ItemGroup>
 </Project>
