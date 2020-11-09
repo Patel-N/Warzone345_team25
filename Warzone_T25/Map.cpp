@@ -40,16 +40,25 @@ int Territory::getTerritoryContinentID() {
 void Territory::setTerritoryName(std::string newName) {
 	territoryName = newName;
 }
+void Territory::setTerritoryOccupant(Player* newPlayer) {
+	player = newPlayer;
+}
 
 ostream& operator<<(ostream& outs, const Territory& theObject) {
 	outs << "Territory name: " << theObject.territoryName << endl
 		<< "Territory ID: " << theObject.territoryId << endl
-		<< "Territory belongs to continent ID # " << theObject.territory_continentID << endl
-		<< "Territory belongs to player # " << theObject.player<< endl
-		<< "# of armies " << theObject.numArmies << endl;
+		<< "Territory belongs to continent ID # " << theObject.territory_continentID << endl;
+		if (theObject.player != NULL) {
+			outs << "Territory occupant: " << theObject.player->getPlayerId()<<endl
+			     << theObject.player->getPlayerName() << endl;
+				
+		}
+		else {
+			outs << "Territory occupant: VACANT " << endl;
+		}
+		outs << "# of armies " << theObject.numArmies << endl;
 
-		return outs;
-	
+		return outs;	
 }
 
 Territory& Territory::operator=(const Territory& territory) {
@@ -58,8 +67,13 @@ Territory& Territory::operator=(const Territory& territory) {
 		territoryName = territory.territoryName;
 		territory_continentID = territory.territory_continentID;
 		numArmies = territory.numArmies;
-		Player* tempPlayer = new Player;
-		player = tempPlayer;
+		/*if (territory.player != NULL) {
+			Player* tempPlayer = new Player(territory.player->getPlayerId(), territory.player->getPlayerName());
+			player = tempPlayer;
+		}
+		else {
+			player = NULL;
+		}*/
 		
 	}
 	return *this;
@@ -288,11 +302,31 @@ void Map::addTerritory(int id, std::string name,int continentID) {
 	}
 	size++;
 }
-
+Territory* Map::getTerritory(int id) {
+	return map[id - 1][0];
+}
 int Map::getSize() {
 	return size;
 }
+int Map::assignOccupantToTerritory(int territoryId,Player* player) {
+	int index = search(territoryId);
+	if (index == -1) {
+		return -1;
+	}
+	else {
+		map[index][0]->setTerritoryOccupant(player);
+	}
 
+}
+int Map::search(int id) {
+	//todo: binary search
+	for (int i = 0; i < map.size(); i++) {
+		if (map[i][0]->getTerritoryID() == id) {
+			return i;
+		}
+	}
+	return -1;
+}
 void Map::addBorder(std::vector<int> borders) {
 	int territoryID = borders.at(0);
 	for (int i = 1; i < borders.size(); i++) {
