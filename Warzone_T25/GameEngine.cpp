@@ -12,3 +12,7 @@ void GameEngine::reinforcementPhase(){}
 void GameEngine::issueOrdersPhase(){}
 
 void GameEngine::executeOrdersPhase(){}
+
+void GameEngine::addPlayer(Player* player) {
+	players.push_back(player);
+}

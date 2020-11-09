@@ -20,7 +20,7 @@ public:
 	std::string getName();
 	//setters
 	void setTerritoryID(int id);
-	void setPlayer(int&);
+	void setTerritoryOccupant(Player*);
 	void setTerritoryName(std::string name);
 	friend ostream& operator<<(ostream& outs, const Territory& theObject);
 	Territory& operator= (const Territory& territory);
@@ -67,12 +67,14 @@ public:
 	//getters
 	int getSize();
 	std::vector<Continent*> getContinents();
+	Territory* getTerritory(int);
 	bool validate();
 
 	//methods
 	void addTerritory(int id, std::string name, int continentID);
 	void addContinent(int id, std::string name, int bonus);
 	void addBorder(std::vector<int> borders);
+	int assignOccupantToTerritory(int, Player*);
 	void printMap();
 	void printContinents();
 	friend ostream& operator<<(ostream& outs, const Map& theObject);
@@ -93,6 +95,7 @@ private:
 	bool uniqueTerritory();
 	bool isConnected();
 	bool areContinentsConnected();
+	int search(int);
 };
 namespace part_1{
 	void start();

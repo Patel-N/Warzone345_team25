@@ -8,7 +8,17 @@
 #include"GameEngine.h"
 int main()
 {
-	GameEngine* engine = new GameEngine();
+	MapLoader* loader = new MapLoader();
+	Map* map;
+	map = new Map(loader->generateMap("./MapFiles/canada.map"));
+	//cout << *map;
+	//GameEngine* engine = new GameEngine();
+	Player* player1 = new Player(1,"Yasser");
+	map->assignOccupantToTerritory(1, player1);
+	//cout << *map;
+	Territory* territory = map->getTerritory(1);
+	player1->assignTerritoryToPlayer(territory);
+	cout << *player1;
 	//part_1::start();  
 	//part_2::start();
 	//part_3::start();
