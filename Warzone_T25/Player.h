@@ -3,6 +3,7 @@
 #include <list>
 #include "Cards.h"
 #include "Orders.h"
+#include <string>
 
 using namespace std;
 
@@ -14,11 +15,14 @@ private:
 	vector<Territory*> territoryPtr; //BUG** TO DO
 	Hand* handPtr;
 	vector<Order*> orderPtr;
+	int playerId;
+	string playerName;
 
 public:
 	void issueOrder() ;
 	
 	//Ctors
+	Player(int,string);
 	Player();
 	
 	//Copy Ctor
@@ -33,6 +37,8 @@ public:
 	inline vector<Territory*> getPlayerTerritories() { return territoryPtr; }
 	inline Hand* getPlayerHand() { return handPtr; };
 	inline vector<Order*> getPlayerOrders() { return orderPtr; }
+	inline int getPlayerId() { return playerId; }
+	inline string getPlayerName() { return playerName; }
 
 	vector<Territory*> toDefend(); // returns list of territory pointers to defend
 

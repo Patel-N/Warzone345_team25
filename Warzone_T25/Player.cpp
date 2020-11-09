@@ -14,7 +14,12 @@ using namespace std;
 
 
 // player classs is in chard of attac
-Player::Player() {};
+Player::Player(int id,string name) : playerId(id),playerName(name){};
+
+Player::Player() {
+    playerId = -1;
+    playerName = "nullPlayer";
+}
 
 //copy constructor
 Player::Player(const Player& input) {
@@ -110,9 +115,23 @@ istream& operator >> (istream& input, Player& obj) {
 
 
 ostream &operator << (ostream& output, Player& obj) { // ostream, outputs name of territory of player
-    Territory*ter = obj.territoryPtr.front();// accessing territory
-    string tername = ter->getName();//save name of that territory
-    output << "player has territory: "<< tername << endl;//save that name into output
+    output
+        << "Player name = " << obj.getPlayerName() << endl
+        << "Player id = " << obj.getPlayerId() << endl;
+    if (obj.getPlayerTerritories().size() > 0) {
+        output
+        << "===========================" << endl
+        << "    Player territory list   " << endl
+        << "============================" << endl;
+        vector<Territory*> territoryList = obj.getPlayerTerritories();
+        for (int i = 0; i < territoryList.size(); i++) {
+            output << *territoryList[i] << endl;
+        }
+    }
+    else {
+        output
+            << "Player does not own territory" << endl;
+    }
     return output;
 }
 
