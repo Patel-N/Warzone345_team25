@@ -37,11 +37,28 @@ int Territory::getTerritoryContinentID() {
 	return territory_continentID;
 }
 
+int Territory::getNumArmies() {
+	return numArmies;
+}
+
+Player* Territory::getTerritoryOccupant() {
+	return player;
+}
+
+void Territory::setNumArmies(int armies) {
+	numArmies = armies;
+}
+
 void Territory::setTerritoryName(std::string newName) {
 	territoryName = newName;
 }
+
 void Territory::setTerritoryOccupant(Player* newPlayer) {
 	player = newPlayer;
+}
+
+void Territory::addNumArmies(int extraArmies) {
+	numArmies += extraArmies;
 }
 
 ostream& operator<<(ostream& outs, const Territory& theObject) {
@@ -215,7 +232,17 @@ Map& Map::operator=(const Map& originalMap) {
 				}
 			}
 		}
-	}	
+	}
+	/*
+	 for(int i = 0; i< this->map.size();i++){
+		for(int j=1;j<this->map[i].size();j++){
+			this->map[i][0].addAdjacentTerritory(this->map[i][j].getTerritoryID() -1)
+		}
+
+	 }
+	
+	
+	*/
 	return *this;
 }
 

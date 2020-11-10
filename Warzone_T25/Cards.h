@@ -5,6 +5,12 @@
 #include <ctime>
 #include <iostream>
 using namespace std;
+/*CARD TYPES:
+1: AIRLIFT
+2: BOMB
+3: BLOCKADE
+4: DIPLOMACY
+*/
 
 // Forward declaration in order to avoid a circular dependency of pointers between classes.
 class Card;
@@ -89,9 +95,9 @@ public:
 	friend ostream& operator << (ostream& out, const Hand& h);
 
 	void addCardToHand(Card* card);
-
+	bool isCardInHand(int);
 	// Gets card from hand, plays it and returns it to deck.
-	void play(Card* playCard, Deck* deck);
+	void play(int, Deck*);
 	Card* hand_getCard();
 
 

@@ -14,20 +14,17 @@
 
 #include <string>
 
+Deck* Player::common_deck = NULL; // initializing static class member. 
 
 using namespace std;
 
-// constructors
-Player::Player(int id, string name) : playerId(id), playerName(name) {};
+
+// player classs is in chard of attac
+Player::Player(int id,string name,int initialArmyAmount) : playerId(id),playerName(name),armyToBePlaced(initialArmyAmount){};
 
 Player::Player() {
     playerId = -1;
     playerName = "nullPlayer";
-}
-
-//destructor
-Player::~Player() {
-    // IMPORTANT: none of the objects player could be holding are deleted
 }
 
 //copy constructor
@@ -54,9 +51,9 @@ istream& operator >> (istream& input, Player& obj) {
 //stream output
 ostream& operator << (ostream& output, Player& obj) { // ostream, outputs name of territory of player
     output
-        <<
-        "Player name = " << obj.getPlayerName() << endl <<
-        "Player id = " << obj.getPlayerId() << endl;
+        << "Player name = " << obj.getPlayerName() << endl
+        << "Player id = " << obj.getPlayerId() << endl
+        << "Player has " <<obj.getArmyToBePlaced()<<" in his army pool" << endl;
     if (obj.getPlayerTerritories().size() > 0) {
         output
             <<
@@ -72,6 +69,20 @@ ostream& operator << (ostream& output, Player& obj) { // ostream, outputs name o
         output
             <<
             "Player does not own territory" << endl;
+    }
+    if (obj.getPlayerOrders().size() > 0) {
+        output
+            << "===========================" << endl
+            << "    Player issued orders   " << endl
+            << "============================" << endl;
+        vector<Order*> orderList = obj.getPlayerOrders();
+        for (int i = 0; i < orderList.size(); i++) {
+            output << *orderList[i] << endl;
+        }
+    }
+    else {
+        output
+            << "Player does not have any issued orders" << endl;
     }
     return output;
 }
@@ -93,29 +104,53 @@ void Player::setArmyToBePlaced(int count) {
     armyToBePlaced = count;
 }
 
-vector < Territory* > Player::toDefend() { // returns list of territory pointers to defend
-  //todo
-    return {
-      territoryPtr
-    };
+vector<Territory*> Player::toDefend() {// returns list of territory pointers to defend
+    //DO PROPER IMPLEMENTATION
+    return  { territoryPtr };
 };
 
-vector < Territory* > Player::toAttack() { // returns list of territory pointers to defend
-
-    Node* head = NULL;
-
-    //todo
-
-    return {
-      territoryPtr
-    };
+void Player::removeTerritoryFromList(int territoryIndex) {
+    territoryPtr.erase(territoryPtr.begin() + territoryIndex);
+}
+//method to add players on the diplomacy list of a player
+void Player::declareDiplomacy(int playerId) {
+    diplomacy.push_back(playerId);
 }
 
-void Player::assignTerritoryToPlayer(Territory* newTerritory) {
+//method to clear the diplomacy list
+void::Player::clearDiplomacy() {
+    diplomacy.clear();
+}
+vector<int> Player::getDiplomacies() {
+    return diplomacy;
+}
+void Player::assignTerritoryToPlayer(Territory* newTerritory)
+{
     territoryPtr.push_back(newTerritory);
 };
 
-void Player::issueOrder() {
-
-    //todo
+void Player::issueOrder(Order* order) {
+    orderPtr.push_back(order);
+   
+    /*
+    Order* neworder= new Order(); // creating new order and pointer
+    list<OrderDUMMY*> temp = { neworder }; //temporary place pointer into a list
+    Orderptr.merge(temp);// merg pointer into list of pointer
+    */
 };
+Order* Player::getNextOrder() {
+    Order* orderToReturn;
+    if (orderPtr.size() > 0) {
+        Order* orderToReturn = orderPtr.front();
+        orderPtr.erase(orderPtr.begin());//iterator starts at the first element and erases the first element since no increment
+        return orderToReturn;
+    }
+    else {
+        return NULL;
+    }
+    
+}
+
+void Player::setPlayerHand(Hand* newHand) {
+    handPtr = newHand;
+}

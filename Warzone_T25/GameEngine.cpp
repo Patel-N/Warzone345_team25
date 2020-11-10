@@ -17,6 +17,7 @@ void GameEngine::setGameMap(Map* map)
 	game_map = map;
 }
 
+
 Map* GameEngine::getGameMap()
 {
 	return game_map;
@@ -91,8 +92,57 @@ void GameEngine::issueOrdersPhase(){
 
 }
 
-void GameEngine::executeOrdersPhase(){}
+void GameEngine::executeOrdersPhase(){
+	vector<int> allOrdersFinished;
+	for (int i = 0; i < players.size(); i++) {
+		allOrdersFinished.push_back(1);
+	}
+	bool terminateExecution = false;
+	while (!terminateExecution) {
+		terminateExecution = true;
+		for (int i = 0; i < players.size(); i++) {
+			if (allOrdersFinished[i] == 1) { terminateExecution = false; }
+		}
+		for (int i = 0; i < players.size(); i++) {
+			//when all payers have no more orders to execute, areAllOrdersExecuted will become true. if only one 
+			//player still has orders, it will set the variable to false 
+			if (players[i]->getPlayerOrders().size() == 0) {
+				allOrdersFinished[i] = 0;
+			}
+			else {
+				Order* candidateOrder = players[i]->getNextOrder();
+				candidateOrder->execute(i);
+			}
+		}
+	}
+	for (int i = 0; i < players.size(); i++) {
+		players[i]->clearDiplomacy();
+	}
+}
 
 void GameEngine::addPlayer(Player* player) {
 	players.push_back(player);
+}
+
+ostream& operator<<(ostream& outs, const GameEngine& theObject) {
+	outs
+		<< "==================================" << endl
+		<< "        WELCOME TO WARZONE        " << endl
+		<< "==================================" << endl;
+	if (theObject.players.size() > 0) {
+		outs
+			<< "=======================" << endl
+			<< "      Game Players     " << endl
+			<< "=======================" << endl;
+		for (int i = 0; i < theObject.players.size(); i++) {
+			outs
+				<< *theObject.players[i] << endl;
+		}
+	}
+	else {
+		outs
+			<< "There are no players in the game yet" << endl;
+	}
+
+	return outs;
 }

@@ -8,6 +8,7 @@
 #include "Orders.h"
 #include <string>
 
+
 using namespace std;
 
 class Territory;// forward declaration
@@ -21,17 +22,21 @@ private:
 	int playerId;
 	string playerName;
 	int armyToBePlaced;
+	vector<int> diplomacy;//this member variable serves to add target players for the negotiate order
 
 
 public:
-	//constructor
-	Player();
-	Player(int,string);
-	
-	//destructor
-	~Player();
+	static Deck* common_deck;//static because the deck is a shared object among all players in game
 
-	//Copy constructor
+	void issueOrder(Order* order) ;
+	
+	//Ctors
+	Player(int,string,int);
+	Player();
+	//Dtors
+	~Player();
+	
+	//Copy Ctor
 	Player(const Player& input);
 	
 	//stream input
@@ -53,15 +58,23 @@ public:
 
 	//Setters
 	void setArmyToBePlaced(int count);
-
+	void addToArmiesToBePlaced(int);
+	vector<Territory*> toDefend(); // returns list of territory pointers to defend
+	vector<Territory*> toAttack();// returns list of territory pointers to defend
+	void setPlayerHand(Hand*);
+	void removeTerritoryFromList(int playerIndex);
+	Order* getNextOrder();
 	//functions
 	vector<Territory*> toDefend(); // todo
 	vector<Territory*> toAttack();// todo
+	void declareDiplomacy(int);
+	void clearDiplomacy();
+	vector<int> getDiplomacies();
+
 	void assignTerritoryToPlayer(Territory* newTerritory);
 	void issueOrder();// todo
 
 };
-
 
 namespace part_3 {
 

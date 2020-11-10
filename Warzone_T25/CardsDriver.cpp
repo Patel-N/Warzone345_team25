@@ -58,7 +58,7 @@ void part_5::start()
 	hand-> addCardToHand(cardDeck->draw());
 	
 	cout << "\nPlaying cards." << endl;
-	hand->play(hand->hand_getCard(), cardDeck);
+	hand->play(hand->hand_getCard()->get_type(), cardDeck);
 
 	delete cardDeck;
 	delete hand;
