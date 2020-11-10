@@ -21,6 +21,7 @@ Player::Player() {
     playerName = "nullPlayer";
 }
 
+
 //copy constructor
 Player::Player(const Player& input) {
 
@@ -136,15 +137,25 @@ ostream &operator << (ostream& output, Player& obj) { // ostream, outputs name o
 }
 
 
+void Player::setArmyToBePlaced(int count)
+{
+    armyToBePlaced = count;
+}
+
+vector<Territory*>Player::toAttack() {// returns list of territory pointers to defend
+    
+    Node* head = NULL;
+
+    //Get List of adjacent territories
+    
+    return  { territoryPtr };
+}
+
 vector<Territory*> Player::toDefend() {// returns list of territory pointers to defend
     //DO PROPER IMPLEMENTATION
     return  { territoryPtr };
 };
 
-vector<Territory*>Player::toAttack() {// returns list of territory pointers to defend
-    //DO PROPER IMPLEMENTATION
-    return  { territoryPtr };
-}
 void Player::assignTerritoryToPlayer(Territory* newTerritory)
 {
     territoryPtr.push_back(newTerritory);
