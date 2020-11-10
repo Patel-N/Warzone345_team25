@@ -66,6 +66,8 @@ Map MapLoader::generateMap(string fn)
 	bool continentCheck = false;
 	bool territoriesCheck = false;
 	bool bordersCheck = false;
+	
+	Player* p = new Player();
 
 	try {
 

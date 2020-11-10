@@ -183,6 +183,7 @@ Map::~Map() {
 		delete continents[i];
 		continents[i] = NULL;
 	}	
+	cout << endl << "Map dtor" << endl;
 }
 
 std::vector<Continent*> Map::getContinents() {
@@ -560,4 +561,39 @@ bool Map::validate() {
 	else {
 		return false;
 	}
+}
+
+
+
+Node::Node() {}
+
+Node::Node(Territory* t)
+{
+	data = t;
+}
+
+void Node::addBefore(Territory* t, Node* n)
+{
+	//Create new Node
+	Node* newNode = new Node(t);
+	newNode->prev = n->prev;
+	newNode->next = n;
+
+	n->prev->next = newNode;
+	n->prev = newNode;
+	
+	incrementSize();
+}
+
+void Node::addAfter(Territory* t, Node* n)
+{
+	//Create new Node
+	Node* newNode = new Node(t);
+	newNode->prev = n;
+	newNode->next = n->next;
+
+	n->next->prev = newNode;
+	n->next = newNode;
+	
+	incrementSize();
 }

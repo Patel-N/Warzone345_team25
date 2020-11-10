@@ -12,11 +12,13 @@ class Territory;
 class Player
 {
 private:
-	vector<Territory*> territoryPtr; //BUG** TO DO
+	vector<Territory*> territoryPtr; 
 	Hand* handPtr;
 	vector<Order*> orderPtr;
 	int playerId;
 	string playerName;
+	int armyToBePlaced;
+
 
 public:
 	void issueOrder() ;
@@ -25,6 +27,9 @@ public:
 	Player(int,string);
 	Player();
 	
+	//Dtors
+	~Player();
+
 	//Copy Ctor
 	Player(const Player& input);
 	
@@ -39,6 +44,10 @@ public:
 	inline vector<Order*> getPlayerOrders() { return orderPtr; }
 	inline int getPlayerId() { return playerId; }
 	inline string getPlayerName() { return playerName; }
+	inline int getArmyToBePlaced() { return armyToBePlaced; };
+
+	//Setters
+	void setArmyToBePlaced(int count);
 
 	vector<Territory*> toDefend(); // returns list of territory pointers to defend
 
