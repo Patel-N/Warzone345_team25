@@ -10,7 +10,8 @@ class Territory {
 
 public:
 	//constructors and destructors
-	Territory(int id, std::string name,int continentID);
+	Territory(int id, std::string name, int continentID);
+	Territory(int id, std::string name, int continentID, Map* map);
 	Territory(const Territory &territory);
 	Territory();
 	~Territory();
@@ -24,13 +25,15 @@ public:
 	void setTerritoryName(std::string name);
 	friend ostream& operator<<(ostream& outs, const Territory& theObject);
 	Territory& operator= (const Territory& territory);
+
+	vector<Territory*> getAdjacentTerritories();
 private:
 	int territoryId;
 	Player* player;
 	int numArmies;
 	std::string territoryName;
 	int territory_continentID;
-
+	Map* map;
 };
 
 class Continent {

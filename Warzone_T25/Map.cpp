@@ -3,6 +3,12 @@
 #include<iostream>
 #include<stack>
 
+
+Territory::Territory(int id, std::string newName, int continentID) : territoryId(id), territoryName(newName), territory_continentID(continentID) {
+	player = NULL;
+	numArmies = 0;
+}
+
 Territory::Territory(int id, std::string newName, int continentID) : territoryId(id), territoryName(newName), territory_continentID(continentID){
 	player = NULL;
 	numArmies = 0;
@@ -77,6 +83,14 @@ Territory& Territory::operator=(const Territory& territory) {
 		
 	}
 	return *this;
+}
+
+
+vector<Territory*> Territory::getAdjacentTerritories() {
+	
+	vector<Territory*> adjacentTerroties = map[this->getTerritoryID];
+
+	return null;
 }
 
 Continent::Continent(int id, std::string name, int bonus) : continentId(id), continentName(name), bonus(bonus) {
