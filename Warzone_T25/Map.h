@@ -10,7 +10,8 @@ class Territory {
 
 public:
 	//constructors and destructors
-	Territory(int id, std::string name, int continentID);\
+	Territory(Territory* t);
+	Territory(int id, std::string name, int continentID);
 	Territory(const Territory &territory);
 	Territory();
 	~Territory();

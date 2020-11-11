@@ -76,6 +76,12 @@ Territory& Territory::operator=(const Territory& territory) {
 		else {
 			player = NULL;
 		}*/
+		for (int i = 0; i < territory.adjacentTerritories.size(); i++) {
+			cout << territory.adjacentTerritories[i]->getName() << endl;
+			Territory* adjT = territory.adjacentTerritories[i];
+			addAdjacentTerritory(territory.adjacentTerritories[i]);
+		}
+		cout << endl;
 		
 	}
 	return *this;
@@ -200,7 +206,7 @@ std::vector<Continent*> Map::getContinents() {
 }
 
 Map& Map::operator=(const Map& originalMap) {
-	//cout << "****IN ASSIGNMENT OPERATOR*****" << endl;
+	cout << "****IN ASSIGNMENT OPERATOR*****" << endl;
 	for (int i = 0; i < originalMap.continents.size(); i++) {
 		Continent* continent = new Continent(*originalMap.continents[i]);
 		continents.push_back(continent);	
@@ -342,15 +348,13 @@ int Map::search(int id) {
 }
 void Map::addBorder(std::vector<int> borders) {
 	int territoryID = borders.at(0);
-	Territory* t = map[territoryID - 1][0];
-	if (territoryID == 9) {
-		cout << "TERRITORY ADDRESS IN BORDER => " << &t;
-	}
+	Territory* t = getTerritory(territoryID);
 	for (int i = 1; i < borders.size(); i++) {
 		map.at(territoryID - 1).push_back(map.at(borders.at(i) - 1).at(0));
-		Territory* adjTerritoryToSelectedT =  map[territoryID - 1][i];
+		Territory* adjTerritoryToSelectedT = map[territoryID - 1][i];
 		t->addAdjacentTerritory(adjTerritoryToSelectedT);
 	}
+	//cout << "Territory -> " << t->getName() << " has #borders => " << t->getAdjacentTerritories().size() << endl;
 }
 
 void Map::printMap() {

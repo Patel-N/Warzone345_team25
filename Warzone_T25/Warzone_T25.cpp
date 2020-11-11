@@ -47,7 +47,7 @@ int main()
 	map->assignOccupantToTerritory(9, player1);
 	Territory* territory9 = map->getTerritory(9);
 	player1->assignTerritoryToPlayer(territory9);
-	cout << "TERRITORY IM GETTING WITH GETTERRITORY(9) => " << &territory9 << endl << endl;
+	//cout << "TERRITORY IM GETTING WITH GETTERRITORY(9) => " << territory9 << endl << endl;
 	cout << "REINFORCEMENT PHASE:" << endl;
 	engine->reinforcementPhase();
 	cout << endl << endl;
@@ -62,6 +62,8 @@ int main()
 }
 
 /*
+* 
+* 
 	Player:
 		Go through everything with Martin
 		Outputstream needs to be updated
