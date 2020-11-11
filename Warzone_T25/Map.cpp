@@ -3,13 +3,9 @@
 #include<iostream>
 #include<stack>
 
+using namespace std;
 
 Territory::Territory(int id, std::string newName, int continentID) : territoryId(id), territoryName(newName), territory_continentID(continentID) {
-	player = NULL;
-	numArmies = 0;
-}
-
-Territory::Territory(int id, std::string newName, int continentID) : territoryId(id), territoryName(newName), territory_continentID(continentID){
 	player = NULL;
 	numArmies = 0;
 }
@@ -20,7 +16,7 @@ Territory::Territory(const Territory& territory) {
 
 Territory::Territory() {
 	//PRINTING FROM MO'S TERRITORY CLASS
-	cout << "Creating a new territory";
+	//cout << "Creating a new territory";
 	territoryId = 1;
 	territoryName = "random";
 	territory_continentID = 0;
@@ -85,12 +81,12 @@ Territory& Territory::operator=(const Territory& territory) {
 	return *this;
 }
 
+void Territory::addAdjacentTerritory(Territory* adjT) {
+	adjacentTerritories.push_back(adjT);
+}
 
 vector<Territory*> Territory::getAdjacentTerritories() {
-	
-	vector<Territory*> adjacentTerroties = map[this->getTerritoryID];
-
-	return null;
+	return adjacentTerritories;
 }
 
 Continent::Continent(int id, std::string name, int bonus) : continentId(id), continentName(name), bonus(bonus) {
@@ -144,14 +140,14 @@ Continent& Continent::operator=(const Continent& continent) {
 }
 
 void Continent::printContinent() {
-	std::cout << "Continent Name: " << continentName << " ID# " << continentId << "bonus = " << bonus;
-	std::cout << std::endl;
-	std::cout << "Territory list: " << std::endl;
+	cout << "Continent Name: " << continentName << " ID# " << continentId << "bonus = " << bonus;
+	cout << endl;
+	cout << "Territory list: " << endl;
 	if (continentTerritoryList.size() > 0) {
 		for (auto x : continentTerritoryList) {
-			std::cout << x->getTerritoryID() << " ";
+			cout << x->getTerritoryID() << " ";
 		}
-		std::cout << std::endl;
+		cout << endl;
 	}
 }
 
@@ -179,10 +175,10 @@ void Continent::addTerritoryToContinent(Territory* territory) {
 	}
 }
 Map::Map(std::string message) {
-	std::cout << message << endl;
+	cout << message << endl;
 }
 Map::Map(const Map& map) {
-	cout << "**** IN COPY CONSTRUCTOR*****" << endl;
+	//cout << "**** IN COPY CONSTRUCTOR*****" << endl;
 	if (this != &map) {
 		*this = map; 
 	}
@@ -197,7 +193,6 @@ Map::~Map() {
 		delete continents[i];
 		continents[i] = NULL;
 	}	
-	cout << endl << "Map dtor" << endl;
 }
 
 std::vector<Continent*> Map::getContinents() {
@@ -205,7 +200,7 @@ std::vector<Continent*> Map::getContinents() {
 }
 
 Map& Map::operator=(const Map& originalMap) {
-	cout << "****IN ASSIGNMENT OPERATOR*****" << endl;
+	//cout << "****IN ASSIGNMENT OPERATOR*****" << endl;
 	for (int i = 0; i < originalMap.continents.size(); i++) {
 		Continent* continent = new Continent(*originalMap.continents[i]);
 		continents.push_back(continent);	
@@ -291,6 +286,9 @@ void Map::addTerritory(int id, std::string name,int continentID) {
 		continents[continentID - 1]->addTerritoryToContinent(newTerritory);
 	}
 	std::vector<Territory*> temp;
+	if (id == 9) {
+		
+	}
 	temp.push_back(newTerritory);
 	if (map.size() == 0) { 
 		map.push_back(temp); 
@@ -344,9 +342,14 @@ int Map::search(int id) {
 }
 void Map::addBorder(std::vector<int> borders) {
 	int territoryID = borders.at(0);
+	Territory* t = map[territoryID - 1][0];
+	if (territoryID == 9) {
+		cout << "TERRITORY ADDRESS IN BORDER => " << &t;
+	}
 	for (int i = 1; i < borders.size(); i++) {
 		map.at(territoryID - 1).push_back(map.at(borders.at(i) - 1).at(0));
-	
+		Territory* adjTerritoryToSelectedT =  map[territoryID - 1][i];
+		t->addAdjacentTerritory(adjTerritoryToSelectedT);
 	}
 }
 
@@ -354,14 +357,14 @@ void Map::printMap() {
 	for (int i = 0; i < map.size(); i++) {
 		for (int j = 0; j < map[i].size(); j++) {
 			Territory temp = *map[i][j];
-			std::cout << temp.getTerritoryID()<<"->";
+			cout << temp.getTerritoryID()<<"->";
 		}
-		std::cout << std::endl;
+		cout << endl;
 	}
 }
 
 void Map::printContinents() {
-	std::cout << "Continents details: " << std::endl;
+	//cout << "Continents details: " << endl;
 	if (continents.size() > 0) {
 		for (auto x : continents) {
 			x->printContinent();
@@ -378,7 +381,7 @@ bool Map::isConnected() {
 		visited.push_back(0);
 	}
 	//we traverse every node with all possible start points by calling dfs on every node i. 
-	std::cout << "start node: " << 0<< std::endl;
+	//cout << "start node: " << 0<< endl;
 	dfs(0,adjacencyMatrix);
 	//once dfs is complete, we should have been able to visit all nodes in G if graph is connected. is not, then one entry in visited will be false and hence the method
 	//will return false;
@@ -388,12 +391,12 @@ bool Map::isConnected() {
 			return false;
 		}
 	}
-	std::cout << std::endl;
+	//cout << endl;
 	for (int i = 0; i < adjacencyMatrix.size();i++) {
 		for (int j = 0; j < adjacencyMatrix[i].size(); j++) {
-			std::cout << adjacencyMatrix[i][j] << " ";
+			//cout << adjacencyMatrix[i][j] << " ";
 		}
-		std::cout << std::endl;
+		//cout << endl;
 	}
 	return true;
 }
@@ -403,7 +406,7 @@ std::vector<std::vector<int>> Map::constructUnidirectionalMatrix() {
 	//i is the iterator over the map vector. it goes from 0 to the size of G
 	for (int i = 0; i < size; i++) {
 		std::vector<int> adjacencyMatrixRow;
-		//std::cout << "in here";
+		////cout << "in here";
 		//j is the iterator over every row in the adjacencyMatrix. every row corresponds to a territory and its neighbours.if an entry has been assigned one, it 
 		//means that the territory at row i has a neighbour at column j
 		for (int j = 0; j < size; j++) {
@@ -452,7 +455,7 @@ void Map::dfs(int start, std::vector<std::vector<int>> adjacencyMatrix) {
 	while (!stack.empty()) {
 		int id_index_visited = stack.top();
 		stack.pop();
-		std::cout << "visited = " << id_index_visited + 1 << std::endl;
+		//cout << "visited = " << id_index_visited + 1 << endl;
 		for (int i = 0; i < adjacencyMatrix[id_index_visited].size(); i++) {
 			if (!visited[i]) {
 				if (adjacencyMatrix[id_index_visited][i] == 1) {
@@ -471,8 +474,8 @@ bool Map::areContinentsConnected() {
 		continentsVisited.push_back(0);
 	}
 	for (int k = 0; k < continents.size(); k++) {
-		std::cout << "start node: " << k;
-		std::cout << endl;
+		//cout << "start node: " << k;
+		//cout << endl;
 		continentDfs(k,adjacencyMatrix);
 		for (int j = 0; j < continentsVisited.size(); j++) {
 			if (!continentsVisited[j]) {
@@ -517,7 +520,7 @@ void Map::continentDfs(int start, std::vector<std::vector<int>> adjacencyMatrix)
 	while (!stack.empty()) {	
 		int continentIndexInStack = stack.top() - 1;	
 		stack.pop();
-		std::cout << "visited: " << continentIndexInStack << endl;
+		//cout << "visited: " << continentIndexInStack << endl;
 		std::vector<Territory*> territoriesInContinent = continents[continentIndexInStack]->getContinentTerritoryList();
 		for (int i = 0; i < territoriesInContinent.size(); i++) {			
 			int territoryID = territoriesInContinent[i]->getTerritoryID();
@@ -542,32 +545,32 @@ void Map::continentDfs(int start, std::vector<std::vector<int>> adjacencyMatrix)
 }
 
 bool Map::validate() {
-	cout << "--------------Welcome to Validate--------------------" << endl;
-	cout << ">>step 1: calling is Territory unique verrification..." << endl;
+	//cout << "--------------Welcome to Validate--------------------" << endl;
+	//cout << ">>step 1: calling is Territory unique verrification..." << endl;
 	bool isUnique = uniqueTerritory();
 	if (isUnique) {
-		cout << ">>step 1 complete: Territory is unique." << endl;
+		//cout << ">>step 1 complete: Territory is unique." << endl;
 	}
 	else {
-		cout << ">>Step 1 FAILED: Territory not unique. There exits a duplicate";
+		//cout << ">>Step 1 FAILED: Territory not unique. There exits a duplicate";
 	}
-	std::cout << endl;
-	cout << ">>step 2: calling isConnected to verify if map is a connected graph" << endl;
+	//cout << endl;
+	//cout << ">>step 2: calling isConnected to verify if map is a connected graph" << endl;
 	bool is_connected = isConnected();
 	if (is_connected) {
-		cout << ">>step 2 SUCCESS: The entire map is connected." << endl;
+		//cout << ">>step 2 SUCCESS: The entire map is connected." << endl;
 	}
 	else {
-		cout << ">>Step 2 FAILED: The map is not connected ";
+		//cout << ">>Step 2 FAILED: The map is not connected ";
 	}
-	cout << ">>step 3: calling areContinentsConnected to verify if continents are a connected subgraphs" << endl;
+	//cout << ">>step 3: calling areContinentsConnected to verify if continents are a connected subgraphs" << endl;
 	bool are_continents_connected = areContinentsConnected();
-	std::cout << endl;	
+	//cout << endl;	
 	if (are_continents_connected) {
-		cout << ">>step 3 SUCCESS: Continents are also connected" << endl;
+		//cout << ">>step 3 SUCCESS: Continents are also connected" << endl;
 	}
 	else {
-		cout << ">>Step 3 FAILED: The continents are not connected";
+		//cout << ">>Step 3 FAILED: The continents are not connected";
 	}
 	if (isUnique && is_connected && are_continents_connected) {
 		return true;

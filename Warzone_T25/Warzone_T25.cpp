@@ -11,13 +11,11 @@ int main()
 	MapLoader* loader = new MapLoader();
 	Map* map;
 	map = new Map(loader->generateMap("./MapFiles/canada.map"));
-	//cout << *map;
 	GameEngine* engine = new GameEngine(map);
 	Player* player1 = new Player(1,"Yasser");
 	Player* player2 = new Player(2, "Neil");
 	engine->addPlayer(player1);
 	engine->addPlayer(player2);
-	//cout << *map;
 
 	//cont 1
 	map->assignOccupantToTerritory(1, player1);
@@ -49,11 +47,15 @@ int main()
 	map->assignOccupantToTerritory(9, player1);
 	Territory* territory9 = map->getTerritory(9);
 	player1->assignTerritoryToPlayer(territory9);
-
+	cout << "TERRITORY IM GETTING WITH GETTERRITORY(9) => " << &territory9 << endl << endl;
+	cout << "REINFORCEMENT PHASE:" << endl;
 	engine->reinforcementPhase();
+	cout << endl << endl;
+	cout << "ISSUE ORDER PHASE:" << endl;
+	engine->issueOrdersPhase();
 	//cout << *player1;
 	//part_1::start();  
-	part_2::start();
+	//part_2::start();
 	//part_3::start();
 	//part_4::start();
 	//part_5::start();

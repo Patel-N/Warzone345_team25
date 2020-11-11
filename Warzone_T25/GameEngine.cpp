@@ -89,6 +89,12 @@ void GameEngine::reinforcementPhase()
 
 void GameEngine::issueOrdersPhase(){
 
+	//Loop through players
+	for (int i = 0; i < players.size(); i++) {
+		cout << "Player => " << players[i]->getPlayerName() << endl;
+		players[i]->toAttack();
+	}
+
 }
 
 void GameEngine::executeOrdersPhase(){}

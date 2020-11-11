@@ -10,8 +10,7 @@ class Territory {
 
 public:
 	//constructors and destructors
-	Territory(int id, std::string name, int continentID);
-	Territory(int id, std::string name, int continentID, Map* map);
+	Territory(int id, std::string name, int continentID);\
 	Territory(const Territory &territory);
 	Territory();
 	~Territory();
@@ -27,13 +26,15 @@ public:
 	Territory& operator= (const Territory& territory);
 
 	vector<Territory*> getAdjacentTerritories();
+	void addAdjacentTerritory(Territory*);
+
 private:
 	int territoryId;
 	Player* player;
 	int numArmies;
 	std::string territoryName;
 	int territory_continentID;
-	Map* map;
+	vector<Territory*> adjacentTerritories;
 };
 
 class Continent {
@@ -88,9 +89,11 @@ private:
 	std::vector<std::vector<Territory*>> map;
 	std::vector<Continent*> continents;
 	int size;
+
 	//helper vectors
 	std::vector<bool> visited;
 	std::vector<bool> continentsVisited;
+	
 	//helper functions
 	void dfs(int startNode, std::vector<std::vector<int>> adjacencyMatrix);
 	void continentDfs(int startNode, std::vector<std::vector<int>> adjacencyMatrix);	

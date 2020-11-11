@@ -145,9 +145,47 @@ void Player::setArmyToBePlaced(int count)
 vector<Territory*>Player::toAttack() {// returns list of territory pointers to defend
     
     Node* head = NULL;
-
-    //Get List of adjacent territories
     
+    vector<Territory*> allPlayerAdjacentTerritory;
+    //Get List of adjacent territories
+    //Iterate through all territories owned by a player
+    cout << "\t" << territoryPtr.size() << endl;
+    for (int i = 0; i < territoryPtr.size(); i++) {
+        vector<Territory*> gdt = territoryPtr[i]->getAdjacentTerritories();
+        cout << "\tCount --> " << gdt.size() << endl;
+        
+        //cout << "\tTerritory => " << territoryPtr[i]->getName() << " With id => " << territoryPtr[i]->getTerritoryID() << endl;
+            
+        for (int j = 0; j < gdt.size(); j++) {
+        }
+        ////Iterate through adjacent territories of a specific territories 
+        //for (int j = 0; j < gdt.size(); j++) {
+
+        //    bool isUnique = true;
+
+        //    //Add if make the vector not empty
+        //    if (allPlayerAdjacentTerritory.size() == 0) {
+        //        allPlayerAdjacentTerritory.push_back(gdt[j]);
+        //    }
+
+        //    //Check if territory is already in the adjacent vector
+        //    for (int k = 0; k < allPlayerAdjacentTerritory.size(); k++) {
+        //        
+        //        //Check if new territory is already part of the unique adjacent vector
+        //        if (gdt[j]->getTerritoryID() == allPlayerAdjacentTerritory[k]->getTerritoryID())
+        //            isUnique = false;
+        //    }
+
+        //    //Add if unique
+        //    if (isUnique)
+        //        allPlayerAdjacentTerritory.push_back(gdt[j]);
+        //}
+    }
+
+    //cout << "\tCount of terri => " << allPlayerAdjacentTerritory.size() << endl;
+    for (int i = 0; i < allPlayerAdjacentTerritory.size(); i++) {
+        cout << "\tTerritory id => " << allPlayerAdjacentTerritory[i]->getTerritoryID() <<endl;
+    }
     return  { territoryPtr };
 }
 
