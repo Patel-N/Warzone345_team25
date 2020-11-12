@@ -10,23 +10,28 @@ class Territory {
 
 public:
 	//constructors and destructors
-	Territory(Territory* t);
+	Territory();
 	Territory(int id, std::string name, int continentID);
 	Territory(const Territory &territory);
-	Territory();
+	Territory(int tId, Player* p, int numArmies, string tName, int continentId);
 	~Territory();
 	//getters
 	int getTerritoryID();
 	int getTerritoryContinentID();
 	std::string getName();
+	inline Player* getPlayer() { return player; }
+	inline int getNumArmies() { return numArmies; }
+	vector<Territory*> getAdjacentTerritories();
+
 	//setters
 	void setTerritoryID(int id);
 	void setTerritoryOccupant(Player*);
 	void setTerritoryName(std::string name);
+	inline void setNumArmies(int num) { numArmies = num; }
+	
+
 	friend ostream& operator<<(ostream& outs, const Territory& theObject);
 	Territory& operator= (const Territory& territory);
-
-	vector<Territory*> getAdjacentTerritories();
 	void addAdjacentTerritory(Territory*);
 
 private:
@@ -112,20 +117,22 @@ namespace part_1{
 //DOUBLY LINKED LIST IMPLEMENTATION FOR TERRITORY
 class Node {
 private:
-	Territory* data;
+	Territory* sourceTerri;
+	Territory* targetTerri;
 	int listsize;
 
 public:
 	//Ctors	
 	Node();
-	Node(Territory* t);
+	Node(Territory* sT, Territory* tT);
 
 	//Dtor
 	~Node();
 
 	//Getters
-	inline Territory* getTerritory() { return data; };
-	
+	inline Territory* getSourceTerritory() { return sourceTerri; };
+	inline Territory* getTargetTerritory() { return targetTerri; };
+
 	Node* prev = NULL;
 	Node* next = NULL;
 	void addBefore(Territory* t, Node* n);

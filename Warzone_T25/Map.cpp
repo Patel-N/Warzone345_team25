@@ -14,6 +14,14 @@ Territory::Territory(const Territory& territory) {
 	*this = territory;
 }
 
+Territory::Territory(int tId, Player* p, int numArmies, string tName, int continentId) {
+	territoryId = tId;
+	player = p;
+	numArmies = numArmies;
+	territoryName = tName;
+	territory_continentID = continentId;
+}
+
 Territory::Territory() {
 	//PRINTING FROM MO'S TERRITORY CLASS
 	//cout << "Creating a new territory";
@@ -69,20 +77,16 @@ Territory& Territory::operator=(const Territory& territory) {
 		territoryName = territory.territoryName;
 		territory_continentID = territory.territory_continentID;
 		numArmies = territory.numArmies;
-		/*if (territory.player != NULL) {
+		if (territory.player != NULL) {
 			Player* tempPlayer = new Player(territory.player->getPlayerId(), territory.player->getPlayerName());
 			player = tempPlayer;
 		}
 		else {
 			player = NULL;
-		}*/
+		}
 		for (int i = 0; i < territory.adjacentTerritories.size(); i++) {
-			cout << territory.adjacentTerritories[i]->getName() << endl;
-			Territory* adjT = territory.adjacentTerritories[i];
 			addAdjacentTerritory(territory.adjacentTerritories[i]);
 		}
-		cout << endl;
-		
 	}
 	return *this;
 }
@@ -191,6 +195,7 @@ Map::Map(const Map& map) {
 }
 
 Map::~Map() {
+	
 	for (int i = map.size() - 1; i > 0; i--) {
 		delete map[i][0];
 		map[i].clear();
@@ -213,7 +218,8 @@ Map& Map::operator=(const Map& originalMap) {
 	}
 	for (int j = 0; j < originalMap.map.size(); j++) {
 		std::vector<Territory*> tempVector;
-		Territory* territory = new Territory(*originalMap.map[j][0]);
+		
+		Territory* territory = new Territory(originalMap.map[j][0]->getTerritoryID(), originalMap.map[j][0]->getPlayer(), originalMap.map[j][0]->getNumArmies(), originalMap.map[j][0]->getName(), originalMap.map[j][0]->getTerritoryContinentID());
 		tempVector.push_back(territory);
 		continents[territory->getTerritoryContinentID() - 1]->addTerritoryToContinent(territory);
 		map.push_back(tempVector);
@@ -230,7 +236,15 @@ Map& Map::operator=(const Map& originalMap) {
 				}
 			}
 		}
-	}	
+	}
+
+	for (int i = 0; i < this->map.size(); i++) {
+		for (int j = 1; j < this->map[i].size(); j++) {
+			cout << "\tSubterritory ==> " << this->map[i][j]->getTerritoryID() << " || address ==> " << this->map[i][j] << endl;
+			this->map[i][0]->addAdjacentTerritory(this->map[i][j]);
+		}
+		cout << endl;
+	}
 	return *this;
 }
 
@@ -324,6 +338,8 @@ void Map::addTerritory(int id, std::string name,int continentID) {
 Territory* Map::getTerritory(int id) {
 	return map[id - 1][0];
 }
+
+
 int Map::getSize() {
 	return size;
 }
@@ -354,7 +370,6 @@ void Map::addBorder(std::vector<int> borders) {
 		Territory* adjTerritoryToSelectedT = map[territoryID - 1][i];
 		t->addAdjacentTerritory(adjTerritoryToSelectedT);
 	}
-	//cout << "Territory -> " << t->getName() << " has #borders => " << t->getAdjacentTerritories().size() << endl;
 }
 
 void Map::printMap() {

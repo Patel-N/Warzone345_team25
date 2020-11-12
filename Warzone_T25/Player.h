@@ -24,6 +24,7 @@ public:
 	void issueOrder() ;
 	
 	//Ctors
+	Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<Order*> o, int armyCount);
 	Player(int,string);
 	Player();
 	

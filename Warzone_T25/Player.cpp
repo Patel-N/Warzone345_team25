@@ -14,13 +14,22 @@ using namespace std;
 
 
 // player classs is in chard of attac
-Player::Player(int id,string name) : playerId(id),playerName(name){};
 
 Player::Player() {
     playerId = -1;
     playerName = "nullPlayer";
 }
 
+Player::Player(int id, string name) : playerId(id), playerName(name) {};
+
+Player::Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<Order*> o, int armyCount) {
+    playerId = id;
+    this->playerName = name;
+    this->handPtr = h;
+    this->orderPtr = o;
+    
+
+}
 
 //copy constructor
 Player::Player(const Player& input) {
@@ -146,41 +155,12 @@ vector<Territory*>Player::toAttack() {// returns list of territory pointers to d
     
     Node* head = NULL;
     
-    vector<Territory*> allPlayerAdjacentTerritory;
-    //Get List of adjacent territories
-    //Iterate through all territories owned by a player
-    cout << "\t" << territoryPtr.size() << endl;
-    for (int i = 0; i < territoryPtr.size(); i++) {
-        vector<Territory*> gdt = territoryPtr[i]->getAdjacentTerritories();
-              
-        cout << "\tTerritory => " << territoryPtr[i]->getName() << " With id => " << territoryPtr[i]->getTerritoryID() << endl;
-
-        
-        //Iterate through adjacent territories of a specific territories 
-        for (int j = 0; j < gdt.size(); j++) {
-            cout << "\t\tSubterritory id => " << gdt[j]->getTerritoryID() << endl;
-            bool isUnique = true;
-
-            //Add if make the vector not empty
-            if (allPlayerAdjacentTerritory.size() == 0) {
-                allPlayerAdjacentTerritory.push_back(gdt[j]);
-            }
-
-            //Check if territory is already in the adjacent vector
-            for (int k = 0; k < allPlayerAdjacentTerritory.size(); k++) {
-                
-                //Check if new territory is already part of the unique adjacent vector
-                if (gdt[j]->getTerritoryID() == allPlayerAdjacentTerritory[k]->getTerritoryID())
-                    isUnique = false;
-            }
-
-            //Add if unique
-            if (isUnique)
-                allPlayerAdjacentTerritory.push_back(gdt[j]);
-        }
-    }
-
+    vector<Territory*> playerAdjTerri = getPlayerAdjcentTerritories();
     
+    //Loop through the players owned territories
+    for (int i = 0; i < territoryPtr.size()) {
+    
+    }
     
     return  { territoryPtr };
 }
@@ -204,3 +184,48 @@ void Player::issueOrder() {
     */
 };
     
+
+vector<Territory*> Player::getPlayerAdjcentTerritories() {
+    
+    vector<Territory*> allPlayerAdjacentTerritory;
+    //Get List of adjacent territories
+    //Iterate through all territories owned by a player
+
+    cout << "\t" << territoryPtr.size() << endl;
+    for (int i = 0; i < territoryPtr.size(); i++) {
+        vector<Territory*> gdt = territoryPtr[i]->getAdjacentTerritories();
+
+        cout << "\tTerritory => " << territoryPtr[i] << " With id => " << territoryPtr[i]->getTerritoryID() << endl;
+
+
+        ////Iterate through adjacent territories of a specific territories 
+        for (int j = 0; j < gdt.size(); j++) {
+            cout << "\t\tSubterritory id => " << gdt[j] << " with ID => " << gdt[j]->getTerritoryID() << endl;
+            bool isUnique = true;
+
+            //Add if make the vector not empty
+            if (allPlayerAdjacentTerritory.size() == 0) {
+                allPlayerAdjacentTerritory.push_back(gdt[j]);
+            }
+
+            //Check if territory is already in the adjacent vector
+            for (int k = 0; k < allPlayerAdjacentTerritory.size(); k++) {
+
+                //Check if new territory is already part of the unique adjacent vector
+                if (gdt[j]->getTerritoryID() == allPlayerAdjacentTerritory[k]->getTerritoryID())
+                    isUnique = false;
+            }
+
+            //Add if unique
+            if (isUnique)
+                allPlayerAdjacentTerritory.push_back(gdt[j]);
+        }
+    }
+
+    cout << "THE SIZE OF ADJACENT UNIQUE VECTOR => " << allPlayerAdjacentTerritory.size() << endl;
+    for (int i = 0; i < allPlayerAdjacentTerritory.size(); i++) {
+        cout << allPlayerAdjacentTerritory[i]->getTerritoryID() << endl;
+    }
+
+    return allPlayerAdjacentTerritory;
+}
