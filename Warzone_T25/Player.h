@@ -18,6 +18,7 @@ private:
 	int playerId;
 	string playerName;
 	int armyToBePlaced;
+	vector<Territory*> getPlayerAdjcentTerritories();
 
 
 public:

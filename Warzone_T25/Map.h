@@ -120,11 +120,12 @@ private:
 	Territory* sourceTerri;
 	Territory* targetTerri;
 	int listsize;
+	int armyDiff;
 
 public:
 	//Ctors	
 	Node();
-	Node(Territory* sT, Territory* tT);
+	Node(Territory* sT, Territory* tT, int aD);
 
 	//Dtor
 	~Node();
@@ -132,12 +133,15 @@ public:
 	//Getters
 	inline Territory* getSourceTerritory() { return sourceTerri; };
 	inline Territory* getTargetTerritory() { return targetTerri; };
+	inline int getArmyDiff() { return armyDiff; }
+	inline int getSize() { return listsize; }
 
 	Node* prev = NULL;
 	Node* next = NULL;
-	void addBefore(Territory* t, Node* n);
-	void addAfter(Territory* t, Node* n);
+	void addBefore(Node* nodeToAdd, Node* n);
+	void addAfter(Node* nodeToAdd, Node* n);
 	inline void incrementSize() { listsize++; };
 	inline int size() { return listsize; };
-
+	void sameTargetTerritoryHandling(Node* newNode, Territory* targetTerritory, int newDiff);
+	void addNode(Node* head, Node* newNode);
 };
