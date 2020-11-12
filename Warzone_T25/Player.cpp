@@ -47,7 +47,7 @@ Player::Player(const Player& input) {
         //Handptr->Cardptr.merge(tempList);// merg pointer into list of pointer
     }
 
-
+    /*
     //duplicating order
     for (auto& elm : input.orderPtr) {// for every order in input player order list
         Order* tempOrder = elm; // creating new order pointer and order
@@ -58,36 +58,34 @@ Player::Player(const Player& input) {
         //list<OrderDUMMY*> tempList = { temporder }; //temporary place pointer into a list
         //Orderptr.merge(tempList);// merg pointer into list of pointer
     }
+    */
 }
 
 //assignment operator overload
 Player& Player::operator = (const Player& input) {
     
-    // duplicating territory
-    /*
-    for (auto& elm : input.Territoryptr) {// placing new pointers to with new elements to new player list of territory
-        Territory* temptr = new Territory; // creating new territory pointer and territory
-        temptr->getName() = elm->name; // giving territory same name from input player
-        list<Territory*> tempList = { temptr }; //temporary place pointer into a list
-        //Territoryptr.merge(tempList);// merg pointer into list of pointer
+    // duplicating territory SUCCESS
+    for (int i = 0; i < input.territoryPtr.size(); i++) {// for the size of the input territory vector
+        Territory *temp = input.territoryPtr[i]; //temp pointer to territory object
+        Territory* temp2= new Territory();
+        *temp2 = *temp;
+        territoryPtr[i] = temp2;// apply copy constructor for territory and insert it into player territory
     }
-    */
 
     //duplicating hand
-    handPtr = new Hand; // creating new hand for new player
-    vector<Card*> inputCardsInHand = input.handPtr->getCardsInHand();
-    for (int i = 0; i < inputCardsInHand.size(); i++) {// for every card in input player cards
+    //Hand *temp = new Hand();
+   // handPtr = new Hand(*input.handPtr);
 
         //Call copy ctor
-        Card* tempcard = inputCardsInHand[i];
-        handPtr->addCardToHand(tempcard);
+//        Card* tempcard = inputCardsInHand[i];
+//        handPtr->addCardToHand(tempcard);
         //CHECK WITH MARTIN IF I NEED TO KEEP THIS
         //tempcard->name = elm->name; // giving card same name from input player
         //list<CardDUMMY*> tempList = { tempcard }; //temporary place pointer into a list
         //Handptr->Cardptr.merge(tempList);// merg pointer into list of pointer
-    }
+ //   }
 
-
+/*
     //duplicating order
     for (auto& elm : input.orderPtr) {// for every order in input player order list
         Order* tempOrder = elm; // creating new order pointer and order
@@ -98,6 +96,7 @@ Player& Player::operator = (const Player& input) {
         //list<OrderDUMMY*> tempList = { temporder }; //temporary place pointer into a list
         //Orderptr.merge(tempList);// merg pointer into list of pointer
     }
+    */
 
     return *this;
 }

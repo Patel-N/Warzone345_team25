@@ -14,7 +14,7 @@ class Player
 private:
 	vector<Territory*> territoryPtr; 
 	Hand* handPtr;
-	vector<Order*> orderPtr;
+	OrderList* orderlist;
 	int playerId;
 	string playerName;
 	int armyToBePlaced;
@@ -41,7 +41,7 @@ public:
 	//Getters
 	inline vector<Territory*> getPlayerTerritories() { return territoryPtr; }
 	inline Hand* getPlayerHand() { return handPtr; };
-	inline vector<Order*> getPlayerOrders() { return orderPtr; }
+	//inline vector<Order*> getPlayerOrders() { return orderPtr; }
 	inline int getPlayerId() { return playerId; }
 	inline string getPlayerName() { return playerName; }
 	inline int getArmyToBePlaced() { return armyToBePlaced; };
