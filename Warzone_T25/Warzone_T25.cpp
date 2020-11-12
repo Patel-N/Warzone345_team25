@@ -42,6 +42,7 @@ int main()
 	map->assignOccupantToTerritory(6, player1);
 	Territory* territory6 = map->getTerritory(6);
 	player1->assignTerritoryToPlayer(territory6);
+	territory6->setNumArmies(25);
 	map->assignOccupantToTerritory(7, player1);
 	Territory* territory7 = map->getTerritory(7);
 	player1->assignTerritoryToPlayer(territory7);

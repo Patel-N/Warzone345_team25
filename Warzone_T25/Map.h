@@ -115,7 +115,7 @@ namespace part_1{
 
 
 //DOUBLY LINKED LIST IMPLEMENTATION FOR TERRITORY
-class Node {
+class TerritoryAttackDefend {
 private:
 	Territory* sourceTerri;
 	Territory* targetTerri;
@@ -124,11 +124,15 @@ private:
 
 public:
 	//Ctors	
-	Node();
-	Node(Territory* sT, Territory* tT, int aD);
+	TerritoryAttackDefend();
+	TerritoryAttackDefend(Territory* sT, Territory* tT, int aD);
 
 	//Dtor
-	~Node();
+	~TerritoryAttackDefend();
+
+	//Setters
+	inline void setTargetTerritory(Territory* t) { targetTerri = t; };
+	inline void setArmyDiff(int num) { armyDiff = num; };
 
 	//Getters
 	inline Territory* getSourceTerritory() { return sourceTerri; };
@@ -136,12 +140,12 @@ public:
 	inline int getArmyDiff() { return armyDiff; }
 	inline int getSize() { return listsize; }
 
-	Node* prev = NULL;
-	Node* next = NULL;
-	void addBefore(Node* nodeToAdd, Node* n);
-	void addAfter(Node* nodeToAdd, Node* n);
-	inline void incrementSize() { listsize++; };
-	inline int size() { return listsize; };
-	void sameTargetTerritoryHandling(Node* newNode, Territory* targetTerritory, int newDiff);
-	void addNode(Node* head, Node* newNode);
+	//TerritoryAttackDefend* prev = NULL;
+	//TerritoryAttackDefend* next = NULL;
+	//void addBefore(Node* nodeToAdd, Node* n);
+	//void addAfter(Node* nodeToAdd, Node* n);
+	//inline void incrementSize() { listsize++; };
+	//inline int size() { return listsize; };
+	//void sameTargetTerritoryHandling(Node* newNode, Territory* targetTerritory, int newDiff);
+	//void addNode(Node* head, Node* newNode);
 };

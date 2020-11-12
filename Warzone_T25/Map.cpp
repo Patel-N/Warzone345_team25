@@ -601,120 +601,120 @@ bool Map::validate() {
 
 
 
-Node::Node() {}
+TerritoryAttackDefend::TerritoryAttackDefend() {}
 
-Node::Node(Territory* sT, Territory* tT, int aD)
+TerritoryAttackDefend::TerritoryAttackDefend(Territory* sT, Territory* tT, int aD)
 {
 	sourceTerri = sT;
 	targetTerri = tT;
 	armyDiff = aD;
 }
 
-void Node::addBefore(Node* nodeToAdd, Node* n)
-{
-	//Create new Node
-	nodeToAdd->prev = n->prev;
-	nodeToAdd->next = n;
-
-	n->prev->next = nodeToAdd;
-	n->prev = nodeToAdd;
-	
-	incrementSize();
-}
-
-void Node::addAfter(Node* nodeToAdd, Node* n)
-{
-	//Create new Node
-	nodeToAdd->prev = n;
-	nodeToAdd->next = n->next;
-
-	n->next->prev = nodeToAdd;
-	n->next = nodeToAdd;
-	
-	incrementSize();
-}
-
-void Node::sameTargetTerritoryHandling(Node* newNode, Territory* targetTerritory, int newDiff) {
-
-	Node* tempHead = this->next;
-	bool exitLoopFlag = false;
-
-	while (tempHead->next != NULL) {
-	
-		if (tempHead->getTargetTerritory()->getTerritoryID() == targetTerritory->getTerritoryID()) {
-			
-			//Greater diff with new source
-			if (newDiff > tempHead->getArmyDiff()) {
-				
-				//Remove lesser armyDiff node
-				tempHead->prev->next = tempHead->next;
-				tempHead->next->prev = tempHead->prev;
-
-				//Go through nodes to add at correct position
-				Node* tempHeadRedo = this->next;
-				while (tempHeadRedo->next != NULL) {
-				
-					//head check
-					if (tempHeadRedo->prev == NULL && newDiff > tempHeadRedo->getArmyDiff()) {
-						addBefore(newNode, tempHeadRedo);
-						exitLoopFlag = true;
-						break;
-					}
-					//tail check
-					else if (tempHeadRedo->next == NULL && newDiff > tempHeadRedo->getArmyDiff()) {
-						addAfter(newNode, tempHeadRedo);
-						exitLoopFlag = true;
-						break;
-					}
-
-					//nodes inbetween
-					else if (armyDiff < tempHeadRedo->getArmyDiff() && armyDiff > tempHeadRedo->next->getArmyDiff() ) {
-						addAfter(newNode, tempHeadRedo);
-						exitLoopFlag = true;
-						break;
-					}
-
-					tempHeadRedo = tempHeadRedo->next;
-				}
-
-			}
-
-		}
-
-		//All operations with newNode are done 
-		if (exitLoopFlag)
-			break;
-
-		tempHead = tempHead->next;
-	}
-
-}
-
-void Node::addNode(Node* head, Node* newNode) {
-	
-	
-	//Go through nodes to add at correct position
-	//Node* head = head->next;
-	while (head->next != NULL) {
-
-		//head check
-		if (head->prev->prev == NULL && newNode->getArmyDiff() > head->getArmyDiff()) {
-			addBefore(newNode, head);
-			break;
-		}
-		//tail check
-		else if (head->next->next == NULL && newNode->getArmyDiff() > head->getArmyDiff()) {
-			addAfter(newNode, head);
-			break;
-		}
-
-		//nodes inbetween
-		else if (newNode->getArmyDiff() < head->getArmyDiff() && armyDiff > head->next->getArmyDiff()) {
-			addAfter(newNode, head);
-			break;
-		}
-
-
-		head = head->next;
-	}
-}
+//void TerritoryAttackDefend::addBefore(TerritoryAttackDefend* nodeToAdd, TerritoryAttackDefend* n)
+//{
+//	//Create new Node
+//	nodeToAdd->prev = n->prev;
+//	nodeToAdd->next = n;
+//
+//	n->prev->next = nodeToAdd;
+//	n->prev = nodeToAdd;
+//	
+//	incrementSize();
+//}
+//
+//void TerritoryAttackDefend::addAfter(TerritoryAttackDefend* nodeToAdd, TerritoryAttackDefend* n)
+//{
+//	//Create new Node
+//	nodeToAdd->prev = n;
+//	nodeToAdd->next = n->next;
+//
+//	n->next->prev = nodeToAdd;
+//	n->next = nodeToAdd;
+//	
+//	incrementSize();
+//}
+//
+//void TerritoryAttackDefend::sameTargetTerritoryHandling(TerritoryAttackDefend* newNode, Territory* targetTerritory, int newDiff) {
+//
+//	TerritoryAttackDefend* tempHead = this->next;
+//	bool exitLoopFlag = false;
+//
+//	while (tempHead->next != NULL) {
+//	
+//		if (tempHead->getTargetTerritory()->getTerritoryID() == targetTerritory->getTerritoryID()) {
+//			
+//			//Greater diff with new source
+//			if (newDiff > tempHead->getArmyDiff()) {
+//				
+//				//Remove lesser armyDiff node
+//				tempHead->prev->next = tempHead->next;
+//				tempHead->next->prev = tempHead->prev;
+//
+//				//Go through nodes to add at correct position
+//				TerritoryAttackDefend* tempHeadRedo = this->next;
+//				while (tempHeadRedo->next != NULL) {
+//				
+//					//head check
+//					if (tempHeadRedo->prev == NULL && newDiff > tempHeadRedo->getArmyDiff()) {
+//						addBefore(newNode, tempHeadRedo);
+//						exitLoopFlag = true;
+//						break;
+//					}
+//					//tail check
+//					else if (tempHeadRedo->next == NULL && newDiff > tempHeadRedo->getArmyDiff()) {
+//						addAfter(newNode, tempHeadRedo);
+//						exitLoopFlag = true;
+//						break;
+//					}
+//
+//					//nodes inbetween
+//					else if (armyDiff < tempHeadRedo->getArmyDiff() && armyDiff > tempHeadRedo->next->getArmyDiff() ) {
+//						addAfter(newNode, tempHeadRedo);
+//						exitLoopFlag = true;
+//						break;
+//					}
+//
+//					tempHeadRedo = tempHeadRedo->next;
+//				}
+//
+//			}
+//
+//		}
+//
+//		//All operations with newNode are done 
+//		if (exitLoopFlag)
+//			break;
+//
+//		tempHead = tempHead->next;
+//	}
+//
+//}
+//
+//void TerritoryAttackDefend::addNode(TerritoryAttackDefend* head, TerritoryAttackDefend* newNode) {
+//	
+//	
+//	//Go through nodes to add at correct position
+//	//Node* head = head->next;
+//	while (head->next != NULL) {
+//
+//		//head check
+//		if (head->prev->prev == NULL && newNode->getArmyDiff() > head->getArmyDiff()) {
+//			addBefore(newNode, head);
+//			break;
+//		}
+//		//tail check
+//		else if (head->next->next == NULL && newNode->getArmyDiff() > head->getArmyDiff()) {
+//			addAfter(newNode, head);
+//			break;
+//		}
+//
+//		//nodes inbetween
+//		else if (newNode->getArmyDiff() < head->getArmyDiff() && armyDiff > head->next->getArmyDiff()) {
+//			addAfter(newNode, head);
+//			break;
+//		}
+//
+//
+//		head = head->next;
+//	}
+//}
