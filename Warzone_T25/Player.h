@@ -1,3 +1,6 @@
+//IMPORTANT: assignment operator and copy constructor will only copy playerId,playerName,armyToBePlaced,
+// or else we will have to duplicate territories objects, card objects, and order objects and might break the game
+
 #pragma once
 #include <iostream>
 #include <list>
@@ -7,7 +10,7 @@
 
 using namespace std;
 
-class Territory;
+class Territory;// forward declaration
 
 class Player
 {
@@ -21,27 +24,29 @@ private:
 
 
 public:
-	void issueOrder() ;
-	
-	//Ctors
-	Player(int,string);
+	//constructor
 	Player();
+	Player(int,string);
 	
-	//Dtors
+	//destructor
 	~Player();
 
-	//Copy Ctor
+	//Copy constructor
 	Player(const Player& input);
 	
-	friend ostream& operator << (ostream& output, Player& obj);
-
+	//stream input
 	friend istream& operator >> (istream& input, Player& obj);
 
+	//stream output
+	friend ostream& operator << (ostream& output, Player& obj);
 
-	//Getters
+	//assignment operator = overload
+	Player& operator = (const Player& input);
+
+	//Getters INLINE
 	inline vector<Territory*> getPlayerTerritories() { return territoryPtr; }
 	inline Hand* getPlayerHand() { return handPtr; };
-	//inline vector<Order*> getPlayerOrders() { return orderPtr; }
+	inline OrderList* getPlayerOrders() { return orderlist; }
 	inline int getPlayerId() { return playerId; }
 	inline string getPlayerName() { return playerName; }
 	inline int getArmyToBePlaced() { return armyToBePlaced; };
@@ -49,14 +54,12 @@ public:
 	//Setters
 	void setArmyToBePlaced(int count);
 
-	vector<Territory*> toDefend(); // returns list of territory pointers to defend
-
-	vector<Territory*> toAttack();// returns list of territory pointers to defend
-
+	//functions
+	vector<Territory*> toDefend(); // todo
+	vector<Territory*> toAttack();// todo
 	void assignTerritoryToPlayer(Territory* newTerritory);
+	void issueOrder();// todo
 
-	//assignment operator overload
-	Player& operator = (const Player& input);
 };
 
 
