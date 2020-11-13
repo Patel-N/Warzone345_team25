@@ -33,6 +33,7 @@ public:
 	friend ostream& operator<<(ostream& outs, const Territory& theObject);
 	Territory& operator= (const Territory& territory);
 	void addAdjacentTerritory(Territory*);
+	static bool compByArmyDiff(Territory* a, Territory* b);
 
 private:
 	int territoryId;
@@ -114,12 +115,11 @@ namespace part_1{
 }
 
 
-//DOUBLY LINKED LIST IMPLEMENTATION FOR TERRITORY
+
 class TerritoryAttackDefend {
 private:
 	Territory* sourceTerri;
 	Territory* targetTerri;
-	int listsize;
 	int armyDiff;
 
 public:
@@ -138,14 +138,6 @@ public:
 	inline Territory* getSourceTerritory() { return sourceTerri; };
 	inline Territory* getTargetTerritory() { return targetTerri; };
 	inline int getArmyDiff() { return armyDiff; }
-	inline int getSize() { return listsize; }
 
-	//TerritoryAttackDefend* prev = NULL;
-	//TerritoryAttackDefend* next = NULL;
-	//void addBefore(Node* nodeToAdd, Node* n);
-	//void addAfter(Node* nodeToAdd, Node* n);
-	//inline void incrementSize() { listsize++; };
-	//inline int size() { return listsize; };
-	//void sameTargetTerritoryHandling(Node* newNode, Territory* targetTerritory, int newDiff);
-	//void addNode(Node* head, Node* newNode);
+	static bool compByArmyDiff(TerritoryAttackDefend* a, TerritoryAttackDefend* b);
 };

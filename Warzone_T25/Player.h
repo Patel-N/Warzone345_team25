@@ -8,6 +8,7 @@
 using namespace std;
 
 class Territory;
+class TerritoryAttackDefend;
 
 class Player
 {
@@ -51,9 +52,9 @@ public:
 	//Setters
 	void setArmyToBePlaced(int count);
 
-	vector<Territory*> toDefend(); // returns list of territory pointers to defend
 
-	vector<Territory*> toAttack();// returns list of territory pointers to defend
+	vector<Territory*> toDefend(); // returns list of territory pointers to defend
+	vector<TerritoryAttackDefend*> toAttack();// returns list of territory pointers to defend
 
 	void assignTerritoryToPlayer(Territory* newTerritory);
 
