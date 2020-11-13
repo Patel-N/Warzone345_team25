@@ -20,7 +20,9 @@ using namespace std;
 
 
 // player classs is in chard of attac
-Player::Player(int id,string name,int initialArmyAmount) : playerId(id),playerName(name),armyToBePlaced(initialArmyAmount){};
+Player::Player(int id,string name,int initialArmyAmount) : playerId(id),playerName(name),armyToBePlaced(initialArmyAmount){
+    orderlist = new OrderList();
+};
 
 Player::Player() {
     playerId = -1;
@@ -70,12 +72,12 @@ ostream& operator << (ostream& output, Player& obj) { // ostream, outputs name o
             <<
             "Player does not own territory" << endl;
     }
-    if (obj.getPlayerOrders().size() > 0) {
+    if (obj.getPlayerOrders()->allOrders.size() > 0) {
         output
             << "===========================" << endl
             << "    Player issued orders   " << endl
             << "============================" << endl;
-        vector<Order*> orderList = obj.getPlayerOrders();
+        vector<Order*> orderList = obj.getPlayerOrders()->allOrders;
         for (int i = 0; i < orderList.size(); i++) {
             output << *orderList[i] << endl;
         }
@@ -104,6 +106,10 @@ void Player::setArmyToBePlaced(int count) {
     armyToBePlaced = count;
 }
 
+void Player::addToArmiesToBePlaced(int additionalArmies) {
+    armyToBePlaced += additionalArmies;
+}
+
 vector<Territory*> Player::toDefend() {// returns list of territory pointers to defend
     //DO PROPER IMPLEMENTATION
     return  { territoryPtr };
@@ -130,7 +136,7 @@ void Player::assignTerritoryToPlayer(Territory* newTerritory)
 };
 
 void Player::issueOrder(Order* order) {
-    orderPtr.push_back(order);
+    orderlist->allOrders.push_back(order);
    
     /*
     Order* neworder= new Order(); // creating new order and pointer
@@ -140,9 +146,9 @@ void Player::issueOrder(Order* order) {
 };
 Order* Player::getNextOrder() {
     Order* orderToReturn;
-    if (orderPtr.size() > 0) {
-        Order* orderToReturn = orderPtr.front();
-        orderPtr.erase(orderPtr.begin());//iterator starts at the first element and erases the first element since no increment
+    if (orderlist->allOrders.size() > 0) {
+        Order* orderToReturn = orderlist->allOrders.front();
+        orderlist->allOrders.erase(orderlist->allOrders.begin());//iterator starts at the first element and erases the first element since no increment
         return orderToReturn;
     }
     else {

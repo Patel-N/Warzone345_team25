@@ -65,8 +65,6 @@ public:
 	void removeTerritoryFromList(int playerIndex);
 	Order* getNextOrder();
 	//functions
-	vector<Territory*> toDefend(); // todo
-	vector<Territory*> toAttack();// todo
 	void declareDiplomacy(int);
 	void clearDiplomacy();
 	vector<int> getDiplomacies();

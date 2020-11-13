@@ -106,7 +106,7 @@ void GameEngine::executeOrdersPhase(){
 		for (int i = 0; i < players.size(); i++) {
 			//when all payers have no more orders to execute, areAllOrdersExecuted will become true. if only one 
 			//player still has orders, it will set the variable to false 
-			if (players[i]->getPlayerOrders().size() == 0) {
+			if (players[i]->getPlayerOrders()->allOrders.size() == 0) {
 				allOrdersFinished[i] = 0;
 			}
 			else {
