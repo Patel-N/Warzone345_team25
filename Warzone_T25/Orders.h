@@ -56,6 +56,14 @@ class Advance : public Order {
 public:
 	bool validate();
 	void execute(int playerIndex);
+	void move();
+	vector<int> attack();
+	void conquer(vector<int>);
+	void defeatDamageControl(vector<int>);
+	bool isDiplomacyDeclared();
+	void displayBattleComposition(int);
+	void DisplayBattleResult(vector<int>);
+	vector<int> runBattleMechanics(int);
 	Advance();
 	Advance(int, Territory*, Territory*, Player*);
 	~Advance();
@@ -132,6 +140,7 @@ class Negotiate : public Order {
 public:
 	bool validate();
 	void execute(int playerIndex);
+	void displayDiplomacies();
 	Negotiate();
 	Negotiate(Player*, Player*);
 	~Negotiate();

@@ -22,6 +22,7 @@ using namespace std;
 // player classs is in chard of attac
 Player::Player(int id,string name,int initialArmyAmount) : playerId(id),playerName(name),armyToBePlaced(initialArmyAmount){
     orderlist = new OrderList();
+    isConquerer = false;
 };
 
 Player::Player() {
@@ -106,6 +107,10 @@ void Player::setArmyToBePlaced(int count) {
     armyToBePlaced = count;
 }
 
+void Player::setConquererFlag(bool conquererFlag) {
+    isConquerer = conquererFlag;
+}
+
 void Player::addToArmiesToBePlaced(int additionalArmies) {
     armyToBePlaced += additionalArmies;
 }
@@ -119,8 +124,15 @@ void Player::removeTerritoryFromList(int territoryIndex) {
     territoryPtr.erase(territoryPtr.begin() + territoryIndex);
 }
 //method to add players on the diplomacy list of a player
-void Player::declareDiplomacy(int playerId) {
-    diplomacy.push_back(playerId);
+void Player::declareDiplomacy(Player* targetedPlayer) {
+    if (targetedPlayer == NULL) { 
+        cout << endl << "ERROR: Cannot declare diplomacy on NULL player";
+        return;
+    }
+    else {
+        this->addPlayerToDiplomacyList(targetedPlayer->getPlayerId());//by adding targeted player on the diplomacy list of the issuing player,we stop any possible attack from the targeted player
+       targetedPlayer->addPlayerToDiplomacyList(this->getPlayerId());//diplomacy goes both ways and hence the issuing player should also not be able to attack target
+    }
 }
 
 //method to clear the diplomacy list
@@ -129,6 +141,9 @@ void::Player::clearDiplomacy() {
 }
 vector<int> Player::getDiplomacies() {
     return diplomacy;
+}
+void::Player::addPlayerToDiplomacyList(int playerId) {
+    diplomacy.push_back(playerId);
 }
 void Player::assignTerritoryToPlayer(Territory* newTerritory)
 {

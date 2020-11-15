@@ -22,6 +22,7 @@ private:
 	int playerId;
 	string playerName;
 	int armyToBePlaced;
+	bool isConquerer;
 	vector<int> diplomacy;//this member variable serves to add target players for the negotiate order
 
 
@@ -55,9 +56,12 @@ public:
 	inline int getPlayerId() { return playerId; }
 	inline string getPlayerName() { return playerName; }
 	inline int getArmyToBePlaced() { return armyToBePlaced; };
+	inline bool getConquererFlag() { return isConquerer; }
 
 	//Setters
 	void setArmyToBePlaced(int count);
+	void setConquererFlag(bool);
+	
 	void addToArmiesToBePlaced(int);
 	vector<Territory*> toDefend(); // returns list of territory pointers to defend
 	vector<Territory*> toAttack();// returns list of territory pointers to defend
@@ -65,8 +69,9 @@ public:
 	void removeTerritoryFromList(int playerIndex);
 	Order* getNextOrder();
 	//functions
-	void declareDiplomacy(int);
+	void declareDiplomacy(Player* player);
 	void clearDiplomacy();
+	void addPlayerToDiplomacyList(int);
 	vector<int> getDiplomacies();
 
 	void assignTerritoryToPlayer(Territory* newTerritory);

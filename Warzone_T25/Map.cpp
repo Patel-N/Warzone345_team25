@@ -96,6 +96,15 @@ Territory& Territory::operator=(const Territory& territory) {
 	return *this;
 }
 
+void Territory::addAdjacentTerritory(Territory* adjT) {
+	adjacentTerritories.push_back(adjT);
+}
+
+vector<Territory*> Territory::getAdjacentTerritories() {
+	return adjacentTerritories;
+}
+
+
 Continent::Continent(int id, std::string name, int bonus) : continentId(id), continentName(name), bonus(bonus) {
 	//left empty on purpose to demonstrate fancy constructor syntax =)
 }
@@ -219,6 +228,7 @@ Map& Map::operator=(const Map& originalMap) {
 		tempVector.push_back(territory);
 		continents[territory->getTerritoryContinentID() - 1]->addTerritoryToContinent(territory);
 		map.push_back(tempVector);
+		size++;
 	}
 	for (int i = 0; i < originalMap.map.size(); i++) {
 		std::vector<int> borders;
@@ -233,16 +243,12 @@ Map& Map::operator=(const Map& originalMap) {
 			}
 		}
 	}
-	/*
-	 for(int i = 0; i< this->map.size();i++){
-		for(int j=1;j<this->map[i].size();j++){
-			this->map[i][0].addAdjacentTerritory(this->map[i][j].getTerritoryID() -1)
+	for (int i = 0; i < this->map.size(); i++) {
+		for (int j = 1; j < this->map[i].size(); j++) {
+			this->map[i][0]->addAdjacentTerritory(this->map[i][j]);
 		}
-
-	 }
-	
-	
-	*/
+		cout << endl;
+	}
 	return *this;
 }
 
@@ -357,9 +363,11 @@ int Map::search(int id) {
 }
 void Map::addBorder(std::vector<int> borders) {
 	int territoryID = borders.at(0);
+	Territory* t = getTerritory(territoryID);
 	for (int i = 1; i < borders.size(); i++) {
 		map.at(territoryID - 1).push_back(map.at(borders.at(i) - 1).at(0));
-	
+		Territory* adjTerritoryToSelectedT = map[territoryID - 1][i];
+		t->addAdjacentTerritory(adjTerritoryToSelectedT);	
 	}
 }
 

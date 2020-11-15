@@ -277,8 +277,8 @@ bool Airlift::validate() {
 void Airlift::execute(int playerIndex) {
 	if (validate()) {
 		cout << "Order validated. Starting execution for Player[" << playerIndex << "] Airlift Order: " << endl;
-		//step 1 of execution: determine if its a move order or an attack order
-		if (target->getTerritoryOccupant()->getPlayerId() == issuingPlayer->getPlayerId()) {
+		//step 1 of execution: determine if its a move order or an attack order : Note: if its a null player, its automatically an attack
+		if (target->getTerritoryOccupant() !=NULL && target->getTerritoryOccupant()->getPlayerId() == issuingPlayer->getPlayerId()) {
 			//we determined it is a move order
 			cout << endl << "Player wants to drop armies in friendly Territory..." << endl;
 			move();
@@ -287,7 +287,7 @@ void Airlift::execute(int playerIndex) {
 			//we determined it is an attack order. we verify if diplomacy exist between the two players
 			cout << endl << "Player wants to drop armies in enemy Territory..." << endl;
 			cout << endl << "Starting attack attempt... Verifying if diplomacy exists..." << endl;
-			if (isDiplomacyDeclared()) { cout << endl << "Attempt at attacking Failed. Targeted player has declared diplomacy" << endl; }
+			if(isDiplomacyDeclared()){ cout << endl << "Attempt at attacking Failed. There exist a diplomacy between the two players" << endl; }
 			else {
 				cout << endl << "No Diplomacy Exist... get ready for BATTLE !!" << endl;
 				//resultingStats format: [resultingStats[0]:armies that attacked ||resultingStats[1] attackerEliminations ||resultingStats[2] defenderEliminations]
@@ -317,14 +317,18 @@ void Airlift::execute(int playerIndex) {
 
 bool Airlift::isDiplomacyDeclared() {
 	//we verify if the targeted player has the issuing player on its diplomacy list. if yes, we return true meaning the issuing player cannot attack
-	int targetedPlayerDiplomacyListSize = target->getTerritoryOccupant()->getDiplomacies().size();
-	vector<int> targetedPlayerDiplomacyList = target->getTerritoryOccupant()->getDiplomacies();
-	for (int i = 0; i < targetedPlayerDiplomacyListSize; i++) {
-		if (targetedPlayerDiplomacyList[i] == issuingPlayer->getPlayerId()) {
-			return true;
+	if (target->getTerritoryOccupant() == NULL) { return false; }
+	else {
+		int targetedPlayerDiplomacyListSize = target->getTerritoryOccupant()->getDiplomacies().size();
+		vector<int> targetedPlayerDiplomacyList = target->getTerritoryOccupant()->getDiplomacies();
+		for (int i = 0; i < targetedPlayerDiplomacyListSize; i++) {
+
+			if (targetedPlayerDiplomacyList[i] == issuingPlayer->getPlayerId()) {
+				return true;
+			}
 		}
+		return false;
 	}
-	return false;
 }
 
 void Airlift::move() {
@@ -421,6 +425,13 @@ vector<int> Airlift::runBattleMechanics(int armiesToAttackWith) {
 
 void Airlift::displayBattleComposition(int armiesToAttackWith) {
 	cout << endl << "===========BATTLE COMPOSITION DISPLAY===========" << endl;
+	cout << endl << "[ATTACKER INFO] : Attacker Name: " << "[ " << issuingPlayer->getPlayerName() << " ]" << " Attacker ID: " << "[ " << issuingPlayer->getPlayerId() << " ]" << endl;
+	if (target->getTerritoryOccupant() == NULL) {
+		cout << endl << "[DEFENDER INFO] : NULL PLAYER"<< endl;
+	}
+	else {
+		cout << endl << "[DEFENDER INFO] : Attacker Name: " << "[ " << target->getTerritoryOccupant()->getPlayerName() << " ]" << " Attacker ID: " << "[ " << target->getTerritoryOccupant()->getPlayerId() << " ]" << endl;
+	}
 	cout << endl << "Attacking Territory Name: " <<"[ "<< source->getName()<<" ]" << " Attacking Territory ID: "<< "[ "<<source->getTerritoryID()<<" ]"<<endl;
 	cout << endl << "Defender Territory Name: " << "[ " << target->getName() << " ]" << " Defender Territory ID " << "[ " << target->getTerritoryID() << " ]" << endl;
 	cout << endl << "Attacker will be attacking with: " << armiesToAttackWith << " armies." << endl;
@@ -433,7 +444,7 @@ void Airlift::DisplayBattleResult(vector<int> resultingStats) {
 	cout << endl << "Attacker eliminated " << ((resultingStats[1]>target->getNumArmies())? target->getNumArmies(): resultingStats[1]) << " defenders" << endl;//resultingStats[1] = attackerEliiminations || target->getNumArmies() = armies on defending territory
 	cout << endl << "Defender now has " << ( (target->getNumArmies() - resultingStats[1] >0) ? target->getNumArmies() - resultingStats[1]  : 0) << " armies" << endl;//resultingStats[1] = attackerEliiminations || target->getNumArmies() = armies on defending territory
 	cout << endl << "Defender eliminated " << ((resultingStats[2]>resultingStats[0]) ?resultingStats[0]:resultingStats[2]) << " attackers" << endl;//resultingStats[2] = defenderEliminations || result[0] = attacking armies
-	cout << endl << "Remaining attacking armies = " <<( (resultingStats[0] - resultingStats[2] > 0) ? target->getNumArmies() : 0)<< " armies" << endl;//resultingStats[2] = defenderEliminations || result[0] = attacking armies
+	cout << endl << "Remaining attacking armies = " <<( (resultingStats[0] - resultingStats[2] > 0) ? resultingStats[0] - resultingStats[2] : 0)<< " armies" << endl;//resultingStats[2] = defenderEliminations || result[0] = attacking armies
 	//the reason why we use conditional if statement is because an attacker or defender could have eliminated more armies than needed. for that case we change the display
 }
 
@@ -449,9 +460,23 @@ void Airlift::conquer(vector<int> resultingStats) {
 
 	}
 	target->setTerritoryOccupant(issuingPlayer);
+	if (!issuingPlayer->getConquererFlag()) {
+		//giving new card to player because he conquered a territory for the first time
+		if (Player::common_deck->getDeckSize() > 0) {
+			Card* card = Player::common_deck->draw();
+			cout << endl << "First territory conquered in the Turn... Player's gets a card " << endl;
+			cout << endl << "Here it the new card Drawn: "<<*card << endl;
+			issuingPlayer->getPlayerHand()->addCardToHand(card);
+			cout << endl << "Here is the player's new Hand: " << endl << *issuingPlayer->getPlayerHand() << endl;
+		}
+		else {
+			cout << endl << "The deck is empty. Card was not added to player's hand" << endl;
+		}
+	}
 	cout << endl << "======NEW TERRITORY COMPOSITION=====" << endl;
 	cout << endl << *source << endl << endl;
 	cout << endl << *target << endl << endl;
+
 }
 
 void Airlift::defeatDamageControl(vector<int> resultingStats) {
@@ -527,8 +552,10 @@ bool Negotiate::validate() {
 void Negotiate::execute(int playerIndex) {
 	if (validate()) {
 		cout << "Order validated. Starting execution for Player[" << playerIndex << "] Negotiate Order: " << endl;
-		issuingPlayer->declareDiplomacy(targetPlayer->getPlayerId());
-		setorderState(true); // Order Deploy is Executed
+		issuingPlayer->declareDiplomacy(targetPlayer);//by declaring diplomacy the target player can no longer attack the issuing player in this turn
+		setorderState(true);
+		displayDiplomacies();
+		//cout << "********target player negotiate list " << targetPlayer->getDiplomacies()[0];
 	}
 
 }
@@ -545,6 +572,12 @@ Negotiate::Negotiate(Player* source, Player* target) {
 	cout << "Negotiate Constructed: " << endl;
 	issuingPlayer = source;
 	targetPlayer = target;
+}
+
+void Negotiate::displayDiplomacies() {
+	cout << endl << "PLAYER DIPLOMACIES: " << endl;
+	cout << endl << "Player " << "[ " << issuingPlayer->getPlayerId() << " ]" << " has declared a negotiate order with "
+		         << "Player " << "[ " << targetPlayer->getPlayerId() << "  ]" << endl;
 }
 
 //De-constructor 

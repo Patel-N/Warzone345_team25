@@ -56,6 +56,9 @@ public:
 	~Deck();
 
 	void addCardToDeck(Card* card);
+	
+	//Getters INLINE
+	inline int getDeckSize() { return deckVec.size(); }
 
 	// Removes card from deck and adds it to hand.
 	Card* draw();
