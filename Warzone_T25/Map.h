@@ -21,20 +21,22 @@ public:
 	std::string getName();
 	inline Player* getPlayer() { return player; }
 	inline int getNumArmies() { return numArmies; }
+	inline bool getIsVisited() { return isVisited; }
 	vector<Territory*> getAdjacentTerritories();
+
 
 	//setters
 	void setTerritoryID(int id);
 	void setTerritoryOccupant(Player*);
 	void setTerritoryName(std::string name);
 	inline void setNumArmies(int num) { numArmies = num; }
-	
+	inline void setIsVisited(bool v) { isVisited = v; }
 
 	friend ostream& operator<<(ostream& outs, const Territory& theObject);
 	Territory& operator= (const Territory& territory);
 	void addAdjacentTerritory(Territory*);
-	static bool compByArmyDiff(Territory* a, Territory* b);
-
+	static bool compByArmyCount(Territory* a, Territory* b);
+	static bool compById(Territory* a, Territory* b);
 private:
 	int territoryId;
 	Player* player;
@@ -42,6 +44,7 @@ private:
 	std::string territoryName;
 	int territory_continentID;
 	vector<Territory*> adjacentTerritories;
+	bool isVisited = false;
 };
 
 class Continent {

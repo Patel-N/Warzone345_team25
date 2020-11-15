@@ -27,8 +27,6 @@ Player::Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<O
     this->playerName = name;
     this->handPtr = h;
     this->orderPtr = o;
-    
-
 }
 
 //copy constructor
@@ -151,96 +149,152 @@ void Player::setArmyToBePlaced(int count)
     armyToBePlaced = count;
 }
 
-vector<TerritoryAttackDefend*> Player::toAttack() {// returns list of territory pointers to defend
+vector<Territory*> Player::toAttack() {// returns list of territory pointers to defend
     
   
     //Build a vector of source territory attacking a target territory
-    vector<Territory*> allPlayerAdjacentTerritory;
-    vector<TerritoryAttackDefend*> attackOptions;
+    vector<Territory*> attackableTerritories;
    
-    //Iterate through all territories owned by a player
-    for (int i = 0; i < territoryPtr.size(); i++) {
+    ////Iterate through all territories owned by a player
+    //for (int i = 0; i < territoryPtr.size(); i++) {
 
-        //Get List of adjacent territories
-        vector<Territory*> gdt = territoryPtr[i]->getAdjacentTerritories();
+    //    //Get List of adjacent territories
+    //    vector<Territory*> gdt = territoryPtr[i]->getAdjacentTerritories();
 
-        cout << "\tTerritory => " << territoryPtr[i] << " With id => " << territoryPtr[i]->getTerritoryID() << endl;
+    //    cout << "\tTerritory => " << territoryPtr[i] << " With id => " << territoryPtr[i]->getTerritoryID() << endl;
 
 
-        //Iterate through adjacent territories of a specific territories 
-        for (int j = 0; j < gdt.size(); j++) {
-            cout << "\t\tSubterritory id => " << gdt[j] << " with ID => " << gdt[j]->getTerritoryID();
-            bool isUnique = true;
+    //    //Iterate through adjacent territories of a specific territories 
+    //    for (int j = 0; j < gdt.size(); j++) {
+    //        cout << "\t\tSubterritory id => " << gdt[j] << " with ID => " << gdt[j]->getTerritoryID();
+    //        bool isUnique = true;
 
-           
-            //Check the diff between armies of the territories they could potentially attack
-            int armyDifference = territoryPtr[i]->getNumArmies() - gdt[j]->getNumArmies();
-            cout << " || The army diff is => " << armyDifference << endl;
+    //       
+    //        //Check the diff between armies of the territories they could potentially attack
+    //        int armyDifference = territoryPtr[i]->getNumArmies() - gdt[j]->getNumArmies();
+    //        cout << " || The army diff is => " << armyDifference << endl;
 
-            //Create attacking option
-            TerritoryAttackDefend* attackProposal = new TerritoryAttackDefend(territoryPtr[i], gdt[j], armyDifference);
+    //        //Create attacking option
+    //        TerritoryAttackDefend* attackProposal = new TerritoryAttackDefend(territoryPtr[i], gdt[j], armyDifference);
 
-            //Add if the vector not empty
-            if (allPlayerAdjacentTerritory.size() == 0) {
-                allPlayerAdjacentTerritory.push_back(gdt[j]);
-            }
+    //        //Add if the vector not empty
+    //        if (allPlayerAdjacentTerritory.size() == 0) {
+    //            allPlayerAdjacentTerritory.push_back(gdt[j]);
+    //        }
 
-            //Check if territory is already in the adjacent vector
-            for (int k = 0; k < allPlayerAdjacentTerritory.size(); k++) {
+    //        //Check if territory is already in the adjacent vector
+    //        for (int k = 0; k < allPlayerAdjacentTerritory.size(); k++) {
 
-                //Check if new territory is already part of the unique adjacent vector
-                if (gdt[j]->getTerritoryID() == allPlayerAdjacentTerritory[k]->getTerritoryID()) {
-                    isUnique = false;
+    //            //Check if new territory is already part of the unique adjacent vector
+    //            if (gdt[j]->getTerritoryID() == allPlayerAdjacentTerritory[k]->getTerritoryID()) {
+    //                isUnique = false;
 
-                    //Loop through attacking options to update
-                    for (int l = 0; l < attackOptions.size(); l++) {
-                        //3 conditions (same target id, greater diff, territory doesn't belong to same player)
-                        if (attackOptions[l]->getTargetTerritory()->getTerritoryID() == gdt[j]->getTerritoryID() &&
-                            attackProposal->getArmyDiff() > attackOptions[l]->getArmyDiff() &&
-                            attackProposal->getSourceTerritory()->getPlayer() != attackProposal->getTargetTerritory()->getPlayer()) {
+    //                //Loop through attacking options to update
+    //                for (int l = 0; l < attackOptions.size(); l++) {
+    //                    //3 conditions (same target id, greater diff, territory doesn't belong to same player)
+    //                    if (attackOptions[l]->getTargetTerritory()->getTerritoryID() == gdt[j]->getTerritoryID() &&
+    //                        attackProposal->getArmyDiff() > attackOptions[l]->getArmyDiff() &&
+    //                        attackProposal->getSourceTerritory()->getPlayer() != attackProposal->getTargetTerritory()->getPlayer()) {
 
-                            //Update
-                            attackOptions[l]->setTargetTerritory(attackProposal->getTargetTerritory());
-                            attackOptions[l]->setArmyDiff(attackProposal->getArmyDiff());
+    //                        //Update
+    //                        attackOptions[l]->setTargetTerritory(attackProposal->getTargetTerritory());
+    //                        attackOptions[l]->setArmyDiff(attackProposal->getArmyDiff());
 
-                        }
+    //                    }
 
-                    }
-                }
+    //                }
+    //            }
 
-            }
+    //        }
 
-            //Add if unique
-            if (isUnique) {
-                //Add to vector
-                allPlayerAdjacentTerritory.push_back(gdt[j]);
-                
-                //Add to options 
-                if (attackProposal->getSourceTerritory()->getPlayer() != attackProposal->getTargetTerritory()->getPlayer()) {
-                    attackOptions.push_back(attackProposal);
-                }
-            }
+    //        //Add if unique
+    //        if (isUnique) {
+    //            //Add to vector
+    //            allPlayerAdjacentTerritory.push_back(gdt[j]);
+    //            
+    //            //Add to options 
+    //            if (attackProposal->getSourceTerritory()->getPlayer() != attackProposal->getTargetTerritory()->getPlayer()) {
+    //                attackOptions.push_back(attackProposal);
+    //            }
+    //        }
 
+    //    }
+    //}
+
+    ////Sort vector
+    //sort(attackOptions.begin(), attackOptions.end(), TerritoryAttackDefend::compByArmyDiff);
+    //
+
+    ////CHECK NODE LIST
+    //cout << endl << endl;
+    //for (int i = 0; i < attackOptions.size(); i++) {
+    //    cout << "Source terri " << attackOptions[i]->getSourceTerritory()->getTerritoryID() << " || Target terri "  << attackOptions[i]->getTargetTerritory()->getTerritoryID() << " || Army diff " << attackOptions[i]->getArmyDiff() << endl;
+    //}
+
+    vector<Territory*> allTerritories = allTerritoryVectorBuilder(territoryPtr[0]);
+
+    for (int i = 0; i < allTerritories.size(); i++) {
+    
+        bool isEnnemyTerritory = true;
+
+        for (int j = 0; j < territoryPtr.size(); j++) {
+        
+            if (allTerritories[i]->getTerritoryID() == territoryPtr[j]->getTerritoryID())
+                isEnnemyTerritory = false;
         }
+
+        if (isEnnemyTerritory) {
+            attackableTerritories.push_back(allTerritories[i]);
+        }
+
     }
 
-    //Sort vector
-    sort(attackOptions.begin(), attackOptions.end(), TerritoryAttackDefend::compByArmyDiff);
-    
+    sort(attackableTerritories.begin(), attackableTerritories.end(), Territory::compByArmyCount);
 
-    //CHECK NODE LIST
-    cout << endl << endl;
-    for (int i = 0; i < attackOptions.size(); i++) {
-        cout << "Source terri " << attackOptions[i]->getSourceTerritory()->getTerritoryID() << " || Target terri "  << attackOptions[i]->getTargetTerritory()->getTerritoryID() << " || Army diff " << attackOptions[i]->getArmyDiff() << endl;
+    for (int i = 0; i < attackableTerritories.size(); i++) {
+        cout << "Terri id => " << attackableTerritories[i]->getTerritoryID() << "\t || Name => " << attackableTerritories[i]->getName() << "\t || Army count =>" << attackableTerritories[i]->getNumArmies() << endl;
     }
-    
-    return attackOptions;
+
+    return attackableTerritories;
 }
+
+vector<Territory*> Player::allTerritoryVectorBuilder(Territory* origin) {
+    
+    vector<Territory*> terriBuilder;
+    
+    //Check if territory is visited
+    if (!origin->getIsVisited()) {
+        
+        //Set the territory as visited and add it to the vector
+        origin->setIsVisited(true);
+        terriBuilder.push_back(origin);
+
+        //Loop through its adjacent territories recursively
+        for (int i = 0; i < origin->getAdjacentTerritories().size(); i++) {
+            vector<Territory*> subterritoryVector = allTerritoryVectorBuilder(origin->getAdjacentTerritories()[i]);
+            terriBuilder.insert(terriBuilder.end(), subterritoryVector.begin(), subterritoryVector.end());
+        }
+
+    }
+
+    //vector<Territory*> currentAdjacent = origin->getAdjacentTerritories();
+    sort(terriBuilder.begin(), terriBuilder.end(), Territory::compById);
+
+    
+    return terriBuilder;
+}
+
 
 vector<Territory*> Player::toDefend() {// returns list of territory pointers to defend
     
-    sort(territoryPtr.begin(), territoryPtr.end(), Territory::compByArmyCount);
+    vector<Territory*> territoryToBeDefended;
+    for (int i = 0; i < territoryPtr.size(); i++) {
+        territoryToBeDefended.push_back(new Territory(*territoryPtr[i]));
+    }
 
+    sort(territoryToBeDefended.begin(), territoryToBeDefended.end(), Territory::compByArmyCount);
+
+    return territoryToBeDefended;
 };
 
 void Player::assignTerritoryToPlayer(Territory* newTerritory)

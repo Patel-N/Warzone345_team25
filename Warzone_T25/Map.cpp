@@ -95,12 +95,17 @@ void Territory::addAdjacentTerritory(Territory* adjT) {
 	adjacentTerritories.push_back(adjT);
 }
 
+
 vector<Territory*> Territory::getAdjacentTerritories() {
 	return adjacentTerritories;
 }
 
 bool Territory::compByArmyCount(Territory* a, Territory* b) {
 	return a->getNumArmies() < b->getNumArmies();
+}
+
+bool Territory::compById(Territory* a, Territory* b) {
+	return a->getTerritoryID() < b->getTerritoryID();
 }
 
 Continent::Continent(int id, std::string name, int bonus) : continentId(id), continentName(name), bonus(bonus) {

@@ -54,9 +54,10 @@ public:
 
 
 	vector<Territory*> toDefend(); // returns list of territory pointers to defend
-	vector<TerritoryAttackDefend*> toAttack();// returns list of territory pointers to defend
+	vector<Territory*> toAttack();// returns list of territory pointers to defend
 
 	void assignTerritoryToPlayer(Territory* newTerritory);
+	vector<Territory*> allTerritoryVectorBuilder(Territory* origin);
 
 	//assignment operator overload
 	Player& operator = (const Player& input);
