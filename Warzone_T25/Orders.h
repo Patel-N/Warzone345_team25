@@ -166,6 +166,7 @@ public:
 	void print();
 	void move(int fromPos, int toPos);
 	void remove(int numRem);
+	void sort();
 	//Constructor
 	OrderList();
 

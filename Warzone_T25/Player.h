@@ -67,6 +67,7 @@ public:
 	vector<Territory*> toAttack();// returns list of territory pointers to defend
 	void setPlayerHand(Hand*);
 	void removeTerritoryFromList(int playerIndex);
+	void sortOrderList();
 	Order* getNextOrder();
 	//functions
 	void declareDiplomacy(Player* player);

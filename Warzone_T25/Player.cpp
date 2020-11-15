@@ -157,13 +157,17 @@ void Player::assignTerritoryToPlayer(Territory* newTerritory)
 
 void Player::issueOrder(Order* order) {
     orderlist->allOrders.push_back(order);
-   
+    sortOrderList();
     /*
     Order* neworder= new Order(); // creating new order and pointer
     list<OrderDUMMY*> temp = { neworder }; //temporary place pointer into a list
     Orderptr.merge(temp);// merg pointer into list of pointer
     */
 };
+
+void Player::sortOrderList() {
+    orderlist->sort();
+}
 Order* Player::getNextOrder() {
     Order* orderToReturn;
     if (orderlist->allOrders.size() > 0) {

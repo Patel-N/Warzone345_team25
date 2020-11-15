@@ -921,6 +921,47 @@ void OrderList::move(int fromPos, int toPos) {
 		return;
 	}
 }
+
+void OrderList::sort() {
+	if (allOrders.size() < 2) { return; }
+	else {
+		int newOrderPos = allOrders.size() - 1;
+		//the following if statement makes sure to not move an order if it is not one of the priority 3
+		if (allOrders[newOrderPos]->getorderName() != "deploy" && allOrders[newOrderPos]->getorderName() != "airlift" && allOrders[newOrderPos]->getorderName() != "blockade") {
+			return;
+		}
+		int positionToInsert = -1;
+		for (int i = allOrders.size() -2 ; i>=0; i < i--) {
+			if(allOrders[newOrderPos]->getorderName() == "deploy" ){
+				if (allOrders[i]->getorderName() == "deploy") {
+					positionToInsert = i + 2;//since the move position takes positions from 1 to vector size
+					break;
+				}
+				else { continue; }
+			}
+			else if (allOrders[newOrderPos]->getorderName() == "airlift") {
+				if (allOrders[i]->getorderName() == "deploy" || allOrders[i]->getorderName() == "airlift") {
+					positionToInsert = i + 2;//since the move position takes positions from 1 to vector size
+					break;
+				}
+				else { continue; }
+			}
+			else if (allOrders[newOrderPos]->getorderName() == "blockade") {
+				if (allOrders[i]->getorderName() == "deploy" ||  allOrders[i]->getorderName() == "airlift" || allOrders[i]->getorderName() == "blockade") {
+					positionToInsert = i + 2;//since the move position takes positions from 1 to vector size
+					break;
+				}
+				else { continue; }
+			}
+		}
+		if (positionToInsert == -1) {
+			move(newOrderPos + 1, 1);
+		}
+		else {
+			move(newOrderPos + 1, positionToInsert);
+		}
+	}
+}
 void OrderList::remove(int numRem) {
 	delete(allOrders[numRem - 1]);
 	allOrders.erase(allOrders.begin() + (numRem - 1));
