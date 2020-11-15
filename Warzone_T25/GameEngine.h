@@ -5,19 +5,24 @@
 using namespace std;
 class GameEngine {
 public:
+	//constructors
 	GameEngine();
 	GameEngine(Map* map);
 
-	//Setters Getters
+	//Setters
 	void setGameMap(Map* map);
-	
+	void addPlayer(Player*);
+
+	//getters
 	Map* getGameMap();
 	vector<Player*> getPlayers();
 
+
+	//functions
 	void reinforcementPhase();
 	void issueOrdersPhase();
 	void executeOrdersPhase();
-	void addPlayer(Player*);
+	
 
 private:
 	vector<Player*> players;

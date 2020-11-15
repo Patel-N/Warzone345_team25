@@ -6,6 +6,9 @@
 #include "MapLoader.h"
 #include"Player.h"
 #include"GameEngine.h"
+#include "GameStartUp.h"
+
+int abc = 1;
 int main()
 {
 	MapLoader* loader = new MapLoader();
@@ -13,12 +16,17 @@ int main()
 	map = new Map(loader->generateMap("./MapFiles/canada.map"));
 	//cout << *map;
 	GameEngine* engine = new GameEngine(map);
+	
 	Player* player1 = new Player(1,"Yasser");
 	Player* player2 = new Player(2, "Neil");
 	engine->addPlayer(player1);
 	engine->addPlayer(player2);
 	//cout << *map;
+	GameStartUp* gameStartUp = new GameStartUp(engine);//giving gameStartClass the engin object, that contains players and territories
+	gameStartUp->startUpPhase();// assign territory to players randomly, give army to territory
 
+
+	/*
 	//cont 1
 	map->assignOccupantToTerritory(1, player1);
 	Territory* territory = map->getTerritory(1);
@@ -49,11 +57,14 @@ int main()
 	map->assignOccupantToTerritory(9, player1);
 	Territory* territory9 = map->getTerritory(9);
 	player1->assignTerritoryToPlayer(territory9);
-
-	engine->reinforcementPhase();
+	*/
+	
+	
+	//engine->reinforcementPhase();
+	
 	//cout << *player1;
 	//part_1::start();  
-	part_2::start();
+	//part_2::start();
 	//part_3::start();
 	//part_4::start();
 	//part_5::start();

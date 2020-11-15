@@ -28,6 +28,7 @@ Player::Player() {
 //destructor
 Player::~Player() {
     // IMPORTANT: none of the objects player could be holding are deleted
+    cout << this->getPlayerName()<<"player destroyed" << endl;
 }
 
 //copy constructor

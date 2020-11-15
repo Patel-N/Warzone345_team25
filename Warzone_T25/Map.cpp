@@ -202,6 +202,7 @@ Map& Map::operator=(const Map& originalMap) {
 		tempVector.push_back(territory);
 		continents[territory->getTerritoryContinentID() - 1]->addTerritoryToContinent(territory);
 		map.push_back(tempVector);
+		size++;
 	}
 	for (int i = 0; i < originalMap.map.size(); i++) {
 		std::vector<int> borders;
