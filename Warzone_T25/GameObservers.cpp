@@ -1,20 +1,99 @@
 #include "GameObservers.h"
+#include "GameEngine.h"
 
-int main(void) {
-	// Create a ClockTimer model object to be observed
-	ClockTimer* model = new ClockTimer;
+#include <iostream>
 
-	// Create a DigitalClock view object   // that is connected to the ClockTimer  
-	DigitalClock* view = new DigitalClock(model);
+// OBSERVER CLASS
+Observer::Observer() {
 
-	// Create a clock controller and connect everything together
-	ClockController* controller = new ClockController(view, model);
-
-	controller->controlClock();
-
-	delete view;
-	delete model;
-	delete controller;
-
-	return 0;
 }
+
+Observer::~Observer() {
+
+}
+
+// SUBJECT CLASS
+Subject::Subject() {
+	_observers = new list<Observer*>;
+}
+
+Subject::~Subject() {
+	delete _observers;
+}
+
+void Subject::Attach(Observer* o) {
+	_observers->push_back(o);
+};
+
+void Subject::Detach(Observer* o) {
+	_observers->remove(o);
+};
+
+void Subject::Notify() {
+	list<Observer*>::iterator i = _observers->begin();
+	for (; i != _observers->end(); ++i)
+		(*i)->Update();
+};
+
+// PHASE OBSERVER CLASS
+PhaseObserver::PhaseObserver() {
+};
+
+PhaseObserver::PhaseObserver(GameEngine* s) {
+	//Upon instantiation, attaches itself 
+	//to a ClockTimer
+	_subject = s;
+	_subject->Attach(this);
+};
+
+PhaseObserver::~PhaseObserver() {
+	//Upon destruction, detaches itself 
+	//from its ClockTimer      
+	_subject->Detach(this);
+};
+
+void PhaseObserver::Update() {
+	//Called by Notify() when state of Subject changes
+	display();
+};
+
+void PhaseObserver::display() {
+	int hour = _subject->getHour();
+	int minute = _subject->getMinute();
+	int second = _subject->getSecond();
+	int interval = _subject->getInterval();
+	cout << hour << ":" << minute << ":" << second << "(" << interval << ")" << endl;
+};
+
+
+
+
+// STATS OBSERVER CLASS
+StatsObserver::StatsObserver() {
+};
+
+StatsObserver::StatsObserver(GameEngine* s) {
+	//Upon instantiation, attaches itself 
+	//to a ClockTimer
+	_subject = s;
+	_subject->Attach(this);
+};
+
+StatsObserver::~StatsObserver() {
+	//Upon destruction, detaches itself 
+	//from its ClockTimer      
+	_subject->Detach(this);
+};
+
+void StatsObserver::Update() {
+	//Called by Notify() when state of Subject changes
+	display();
+};
+
+void StatsObserver::display() {
+	int hour = _subject->getHour(); 
+	int minute = _subject->getMinute();
+	int second = _subject->getSecond();
+	int interval = _subject->getInterval();
+	cout << hour << ":" << minute << ":" << second << "(" << interval << ")" << endl;
+};

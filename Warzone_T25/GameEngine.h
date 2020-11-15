@@ -2,8 +2,10 @@
 #include<vector>
 #include"Player.h"
 #include"Map.h"
+#include"GameObservers.h"
+
 using namespace std;
-class GameEngine {
+class GameEngine : public Subject {
 public:
 	GameEngine();
 	GameEngine(Map* map);

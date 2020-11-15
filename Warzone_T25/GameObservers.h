@@ -1,7 +1,11 @@
 #pragma once
 #include <list>
+
 using namespace std;
 
+//class GameEngine;
+
+// Super class (abstract class)
 class Observer {
 
 public:
@@ -12,6 +16,7 @@ protected:
 	Observer();
 };
 
+// Super class (abstract class)
 class Subject {
 
 public:
@@ -26,49 +31,34 @@ private:
 };
 
 // The Observable object must be a 
-// subclass of Subject.
-class ClockTimer : public Subject {
+// subclass of Subject. (GAME ENGINE)
+
+
+class PhaseObserver : public Observer {
 
 public:
-    ClockTimer();
-    int getHour() { return hour; };
-    int getMinute() { return minute; };
-    int getSecond() { return second; };
-    int getInterval() { return timedInterval; };
-    void start();
-    void setTimedInterval(int newTimedInterval);
-    void setTime(int newH, int newM, int newS);
-    void tick();
-    ~ClockTimer();
-
-private:
-    int hour;
-    int minute;
-    int second;
-    int timedInterval;
-};
-
-class DigitalClock : public Observer {
-
-public:
-    DigitalClock();
-    DigitalClock(ClockTimer* s);
-    ~DigitalClock();
+    PhaseObserver();
+    PhaseObserver(GameEngine* s);
+    ~PhaseObserver();
     void Update();
     void display();
 
 private:
-    ClockTimer* _subject;
+    GameEngine* _subject;
 };
 
-class ClockController {
-
-private:
-    DigitalClock* clockView;
-    ClockTimer* clockModel;
+class StatsObserver : public Observer {
 
 public:
-    ClockController(DigitalClock* newView, ClockTimer* newModel);
-    void controlClock();
+    StatsObserver();
+    StatsObserver(GameEngine* s);
+    ~StatsObserver();
+    void Update();
+    void display();
+
+private:
+    GameEngine* _subject;
 };
+
+
 
