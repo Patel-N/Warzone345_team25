@@ -121,7 +121,12 @@ vector<Territory*> Player::toDefend() {// returns list of territory pointers to 
 };
 
 void Player::removeTerritoryFromList(int territoryIndex) {
-    territoryPtr.erase(territoryPtr.begin() + territoryIndex);
+    cout << "LIST SIZE: " << territoryPtr.size();
+    for (int i = 0; i < territoryPtr.size();i++) {
+        if (territoryPtr[i]->getTerritoryID() - 1 == territoryIndex) {
+            territoryPtr.erase(territoryPtr.begin() + i);
+        }
+    }
 }
 //method to add players on the diplomacy list of a player
 void Player::declareDiplomacy(Player* targetedPlayer) {

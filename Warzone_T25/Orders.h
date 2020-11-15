@@ -82,6 +82,7 @@ class Bomb : public Order {
 public:
 	bool validate();
 	void execute(int playerIndex);
+	void displayBombResult();
 	Bomb();
 	Bomb(Player*, Territory*);
 	~Bomb();
@@ -98,6 +99,7 @@ class Blockade : public Order {
 public:
 	bool validate();
 	void execute(int);
+	void displayBlockedTerritory();
 	Blockade(Player*,Territory*);
 	Blockade();
 	~Blockade();

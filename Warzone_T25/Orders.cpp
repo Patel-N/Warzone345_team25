@@ -94,12 +94,75 @@ Deploy& Deploy::operator=(Deploy& deploy) {
 
 // Advance
 bool Advance::validate() {
-	return true;
+	cout << endl << "Executing Player [ " << issuingPlayer->getPlayerId() << " ]" << "Advance order... Validate step 1: source belonging to issuing player..." << endl;
+	//step 1: validate to make sure that source territory belongs to issuingPlayer
+	if(issuingPlayer->getPlayerTerritories().size()>0){
+		bool found = false;
+		for (int i = 0; i < issuingPlayer->getPlayerTerritories().size(); i++) {
+			if ((source->getTerritoryID() == issuingPlayer->getPlayerTerritories()[i]->getTerritoryID())) {
+				found = true;
+
+			}
+		}
+		if (!found) { return false; }
+	}
+	cout << endl << "Step 1 SUCCESS. Proceeding to step 2..." << endl;
+	//step 2: Validate if targeted territory is adjacent to advancing territory
+	cout << endl << "Step2:Validating if target is adjacent.." << endl;
+	if (this->source->getAdjacentTerritories().size()>0) {
+		for (int i = 0; i < source->getAdjacentTerritories().size(); i++) {
+			Territory* adjacent_terr = source->getAdjacentTerritories()[i];
+			if (adjacent_terr->getTerritoryID() == target->getTerritoryID()) {
+				cout << endl << "Targeted is Adjacent.   Time to March..." << endl;
+				return true;
+			}
+		}
+		cout << endl << "Targeted territory not Adjacent...Order is invalid" << endl;
+		return false;
+	}
+
+		return false;
+	
+
 }
+
 void Advance::execute(int playerIndex) {
 	if (validate()) {
-		cout << "Executing Player[" << playerIndex << "] Advance Order: " << endl;
+		cout << "Order validated. Executing player "<<"[ "<<issuingPlayer->getPlayerId() <<" ]"<<" Advance Order"<< endl;
+		//step 1 of execution: determine if its a move order or an attack order : Note: if its a null player, its automatically an attack
+		if (target->getTerritoryOccupant() != NULL && target->getTerritoryOccupant()->getPlayerId() == issuingPlayer->getPlayerId()) {
+			//we determined it is a move order
+			cout << endl << "Player wants to advance armies in friendly Territory..." << endl;
+			move();
+		}
+		else {
+			//we determined it is an attack order. we verify if diplomacy exist between the two players
+			cout << endl << "Player wants to advance armies in enemy Territory..." << endl;
+			cout << endl << "Starting attack attempt... Verifying if diplomacy exists..." << endl;
+			if (isDiplomacyDeclared()) { cout << endl << "Attempt at attacking Failed. There exist a diplomacy between the two players" << endl; }
+			else {
+				cout << endl << "No Diplomacy Exist... get ready for BATTLE !!" << endl;
+				//resultingStats format: [resultingStats[0]:armies that attacked ||resultingStats[1] attackerEliminations ||resultingStats[2] defenderEliminations]
+				vector<int> resultingStats = attack();
+				//Now we analyze results and determine the outcome
+				if (resultingStats.size() == 0) { cout << "Attack did not occur due to missing armies." << endl; }
+				else {
+					DisplayBattleResult(resultingStats);
+					if (target->getNumArmies() - resultingStats[1] <= 0) {//resultingStats[1] = attackerEliminations
+						//territory has been conquered
+						conquer(resultingStats);
+					}
+					else {
+						//territory was not conquered
+						defeatDamageControl(resultingStats);
+					}
+				}
+			}
+		}
 		setorderState(true); // Order Deploy is Executed
+	}
+	else {
+		cout << "Cannot Execute order: Order is invalid." << endl;
 	}
 }
 //Constructor 
@@ -137,15 +200,229 @@ Advance& Advance::operator=(Advance& advance) {
 }
 
 
+
+bool Advance::isDiplomacyDeclared() {
+	//we verify if the targeted player has the issuing player on its diplomacy list. if yes, we return true meaning the issuing player cannot attack
+	if (target->getTerritoryOccupant() == NULL) { return false; }
+	else {
+		int targetedPlayerDiplomacyListSize = target->getTerritoryOccupant()->getDiplomacies().size();
+		vector<int> targetedPlayerDiplomacyList = target->getTerritoryOccupant()->getDiplomacies();
+		for (int i = 0; i < targetedPlayerDiplomacyListSize; i++) {
+
+			if (targetedPlayerDiplomacyList[i] == issuingPlayer->getPlayerId()) {
+				return true;
+			}
+		}
+		return false;
+	}
+}
+
+void Advance::move() {
+	//step 1: verify if there is enough army to move
+	if (source->getNumArmies() - 1 >= armiesToAdvance) {
+		cout << endl << "Moving " << armiesToAdvance << " armies from " << source->getName() << " to " << target->getName() << endl;
+		source->addNumArmies(-armiesToAdvance);//adding the negative the amount means removing armies
+		target->addNumArmies(armiesToAdvance);
+		cout << endl << "======NEW TERRITORY COMPOSITION=====" << endl;
+		cout << endl << *source << endl << endl;
+		cout << endl << *target << endl << endl;
+
+	}
+	else {
+		//design decision: we will move what ever is left and keep one on the territory
+		if (source->getNumArmies() > 1) {
+			int armiesToMove = source->getNumArmies() - 1;
+			target->addNumArmies(armiesToMove);
+			cout << endl << "Moving " << armiesToMove << " from " << source->getName() << " to " << target->getName() << endl;
+			source->addNumArmies(-armiesToMove);//adding the negative the amount means removing armies
+			target->addNumArmies(armiesToMove);
+			cout << endl << "======NEW TERRITORY COMPOSITION=====" << endl;
+			cout << endl << *source << endl << endl;
+			cout << endl << *target << endl << endl;
+		}
+		else {
+			cout << endl << "attempt at moving armies failed. Not enough Armies" << endl;
+		}
+	}
+}
+
+vector<int> Advance::attack() {
+	//attack mechanics explained: randomizing an integer from 1 to 10. if the number is between [1 and 6] attacker eliminates a soldier on the defense
+	//once all attacking soldiers have attacked, we repeat the same with the defending armies, this time however, the defender eliminates attacking
+	//soliders for numbers between [1 and 7]
+	vector<int> resultingStats;
+	int armiesToAttackWith = 0;
+	if (source->getNumArmies() - 1 <= armiesToAdvance) {
+		//design choice: if not enough armies, we attack with whats available as long as we keep one behind
+		if (source->getNumArmies() > 1) {
+			armiesToAttackWith = source->getNumArmies() - 1;
+			source->addNumArmies(-armiesToAttackWith);//adding the negative the amount means removing armies
+		}
+		else {
+			//not enough armies to attack
+			return resultingStats;
+		}
+	}
+	else {
+		armiesToAttackWith = armiesToAdvance;
+		source->addNumArmies(-armiesToAttackWith);//adding the negative the amount means removing armies
+	}
+	displayBattleComposition(armiesToAttackWith);
+	resultingStats = runBattleMechanics(armiesToAttackWith);
+	return resultingStats;
+
+}
+
+vector<int> Advance::runBattleMechanics(int armiesToAttackWith) {
+	vector<int> resultingStats;
+	resultingStats.push_back(armiesToAttackWith);
+	int attackerEliminations = 0;
+	cout << endl << "Attacker rolling dices... GO DICE ROLL!!! " << endl;
+	for (int i = 0; i < armiesToAttackWith; i++) {
+		int diceRoll = (int)(rand() % 10) + 1;
+
+		if (diceRoll >= 1 && diceRoll <= 6) {
+			cout << endl << "Dice roll result " << diceRoll << " Army#" << i + 1 << " Eliminates one defender" << endl;
+			attackerEliminations++;
+		}
+		else {
+			cout << endl << "Dice roll result " << diceRoll << " Army#" << i + 1 << " does not  Eliminate any defender" << endl;
+		}
+		diceRoll = 0;
+	}
+	resultingStats.push_back(attackerEliminations);
+	int defenderEliminations = 0;
+	int defendingArmies = target->getNumArmies();
+	cout << endl << "Defender rolling dices... GO DICE ROLL!!! " << endl;
+	for (int i = 0; i < defendingArmies; i++) {
+		int diceRoll = rand() % 10 + 1;
+		if (diceRoll >= 1 && diceRoll <= 7) {
+			cout << endl << "Dice roll result " << diceRoll << " Army#" << i + 1 << " Eliminates one attacker" << endl;
+			defenderEliminations++;
+		}
+		else {
+			cout << endl << "Dice roll result " << diceRoll << " Army#" << i + 1 << " does not  Eliminate any attacker" << endl;
+		}
+		diceRoll = 0;
+	}
+	resultingStats.push_back(defenderEliminations);
+	return resultingStats;
+}
+
+void Advance::displayBattleComposition(int armiesToAttackWith) {
+	cout << endl << "===========BATTLE COMPOSITION DISPLAY===========" << endl;
+	cout << endl << "[ATTACKER INFO] : Attacker Name: " << "[ " << issuingPlayer->getPlayerName() << " ]" << " Attacker ID: " << "[ " << issuingPlayer->getPlayerId() << " ]" << endl;
+	if (target->getTerritoryOccupant() == NULL) {
+		cout << endl << "[DEFENDER INFO] : NULL PLAYER" << endl;
+	}
+	else {
+		cout << endl << "[DEFENDER INFO] : Defender Name: " << "[ " << target->getTerritoryOccupant()->getPlayerName() << " ]" << " Attacker ID: " << "[ " << target->getTerritoryOccupant()->getPlayerId() << " ]" << endl;
+	}
+	cout << endl << "Attacking Territory Name: " << "[ " << source->getName() << " ]" << " Attacking Territory ID: " << "[ " << source->getTerritoryID() << " ]" << endl;
+	cout << endl << "Defender Territory Name: " << "[ " << target->getName() << " ]" << " Defender Territory ID " << "[ " << target->getTerritoryID() << " ]" << endl;
+	cout << endl << "Attacker will be attacking with: " << armiesToAttackWith << " armies." << endl;
+	cout << endl << "Attacker has: " << source->getNumArmies() << " Left on source territory" << endl;
+	cout << endl << "Defender will be defending with: " << target->getNumArmies() << " armies. Stay tuned" << endl;
+	cout << endl << "====================END BATTLE COMPOSITION DISPLAY ==========================" << endl;
+}
+void Advance::DisplayBattleResult(vector<int> resultingStats) {
+	cout << endl << "===========BATTLE RESULTS===========" << endl;
+	cout << endl << "Attacker eliminated " << ((resultingStats[1] > target->getNumArmies()) ? target->getNumArmies() : resultingStats[1]) << " defenders" << endl;//resultingStats[1] = attackerEliiminations || target->getNumArmies() = armies on defending territory
+	cout << endl << "Defender now has " << ((target->getNumArmies() - resultingStats[1] > 0) ? target->getNumArmies() - resultingStats[1] : 0) << " armies" << endl;//resultingStats[1] = attackerEliiminations || target->getNumArmies() = armies on defending territory
+	cout << endl << "Defender eliminated " << ((resultingStats[2] > resultingStats[0]) ? resultingStats[0] : resultingStats[2]) << " attackers" << endl;//resultingStats[2] = defenderEliminations || result[0] = attacking armies
+	cout << endl << "Remaining attacking armies = " << ((resultingStats[0] - resultingStats[2] > 0) ? resultingStats[0] - resultingStats[2] : 0) << " armies" << endl;//resultingStats[2] = defenderEliminations || result[0] = attacking armies
+	//the reason why we use conditional if statement is because an attacker or defender could have eliminated more armies than needed. for that case we change the display
+}
+
+void Advance::conquer(vector<int> resultingStats) {
+	cout << endl << "Attacker WINS !!!" << endl;
+	if (resultingStats[0] - resultingStats[2] <= 0) {//resultingStats[0] = armiesAttackedWith || resultingStats[2] = defenderEliminations 
+		//no armies to move to new territory. new territory will have 0 army by game design choice
+		target->setNumArmies(0);
+	}
+	else {
+		int occupyingArmies = resultingStats[0] - resultingStats[2];
+		target->setNumArmies(occupyingArmies);
+
+	}
+	target->setTerritoryOccupant(issuingPlayer);
+	if (!issuingPlayer->getConquererFlag()) {
+		//giving new card to player because he conquered a territory for the first time
+		if (Player::common_deck->getDeckSize() > 0) {
+			Card* card = Player::common_deck->draw();
+			cout << endl << "First territory conquered in the Turn... Player's gets a card " << endl;
+			cout << endl << "Here it the new card Drawn: " << *card << endl;
+			issuingPlayer->getPlayerHand()->addCardToHand(card);
+			cout << endl << "Here is the player's new Hand: " << endl << *issuingPlayer->getPlayerHand() << endl;
+		}
+		else {
+			cout << endl << "The deck is empty. Card was not added to player's hand" << endl;
+		}
+	}
+	cout << endl << "======NEW TERRITORY COMPOSITION=====" << endl;
+	cout << endl << *source << endl << endl;
+	cout << endl << *target << endl << endl;
+
+}
+
+void Advance::defeatDamageControl(vector<int> resultingStats) {
+	cout << endl << "Defender WINS !!!" << endl;
+	int returningAttackers = resultingStats[0] - resultingStats[2]; //resultingStats[0] = armies that attacked || resultingStats[1] = attackerEliminations || resultingStats[2] = defenderEliminations
+	//if there are attackers to add back to the source territory
+	if (returningAttackers > 0) { source->addNumArmies(returningAttackers); }
+	//remove eliminated defenders
+	target->addNumArmies(-resultingStats[1]);//resultingStats[1] = attackerEliminations
+	cout << endl << "======NEW TERRITORY COMPOSITION=====" << endl;
+	cout << endl << *source << endl << endl;
+	cout << endl << *target << endl << endl;
+}
+
+
 // Bomb
 bool Bomb::validate() {
+	//step 1: validate if player has bomb card. if yes: play card and continue to step 2. if not, return false.
+	cout << endl << "Executing Player " << "[ " << issuingPlayer->getPlayerId() << " ]" << " Bomb order" << endl;
+	cout << endl << "Step1: Verify if Player has bomb card in hand..." << endl;
+	if (!issuingPlayer->getPlayerHand()->isCardInHand(2)) {
+		cout << endl << "Card not found. Cannot execute order... " << endl;
+		return false;
+	}
+	cout << endl << "Step1 SUCCESS. Found bomb card... Proceeding to step2" << endl;
+	cout << endl << "Step2: Verify that target territory belongs to enemy" << endl;
+	if (target->getTerritoryOccupant() == NULL) {
+		cout << endl << "Step2: SUCCESS. Territory belongs to enemy" << endl;
+		return true;
+	}
+	if (target->getTerritoryOccupant()->getPlayerId() == issuingPlayer->getPlayerId()) { 
+		cout << endl << "Step2 FAIL... Territory belongs to issuing player. SUICIDE MISSION ABORT!!!" << endl;
+		return false; 
+	}
+	cout << endl << "Step2: SUCCESS. Territory belongs to enemy" << endl;
 	return true;
 }
 void Bomb::execute(int playerIndex) {
 	if (validate()) {
-		cout << "Executing Player[" << playerIndex << "] Bomb Order: " << endl;
+		cout <<endl<< "Validation complete. Commencing execution..." << endl;
+		cout <<endl<< "Mission Control to Heaver Bombers 963...Mission is a go..." << endl;
+		cout <<endl<< "Heavy Bombers to Mission Control... We have visual on the target. Sending target's pre state report" << endl;
+		displayBombResult();
+		cout << endl << "Heavy Bombers to Mission Control... deploying Bombs... may god have mercy on their souls" << endl;
+		cout << endl << "*******BLAST*******"<< endl;
+		int currentNumArmies = target->getNumArmies();
+		int resultingArmies = currentNumArmies / 2;
+		target->setNumArmies(resultingArmies);
+		cout << endl << "Heaver Bombers to Mission Control... Bombes successully landed on target... Sending in target's post state report"<< endl;
+		displayBombResult();
+		cout << endl << "Mission Control to heaver bombers... mission complete... time to come back home boys" << endl;
 		setorderState(true); // Order Deploy is Executed
 	}
+}
+
+void Bomb::displayBombResult() {
+	cout << endl << "=========================" << endl;
+	cout << endl << "       TARGET REPORT       " << endl;
+	cout << endl << "=========================" << endl;
+	cout << endl << *target;	
 }
 //Constructor 
 Bomb::Bomb() {
@@ -183,14 +460,15 @@ Bomb& Bomb::operator=(Bomb& bomb) {
 //Blockade
 bool Blockade::validate() {
 	//step 1: validate if player has blockade card. if yes: play card and continue to step 2. if not, return false.
+	cout << endl << "Executing Player "<<"[ "<<issuingPlayer->getPlayerId()<<" ]"<<" Blockade order"<< endl;
+	cout << endl << "Step1: Verify is Player has blockade card in hand..." << endl;
 	if (!issuingPlayer->getPlayerHand()->isCardInHand(3)) {
+		cout << endl << "Card not found. Cannot execute order... " << endl;
 		return false;
 	}
 	else {
 		cout << endl << "card found. Playing card... " << endl;
 		issuingPlayer->getPlayerHand()->play(3, Player::common_deck);//we play card even if validate function returns false.
-		cout << endl << "New hand: " << endl;
-		cout << endl << *issuingPlayer->getPlayerHand() << endl;
 		//step 2: validate to make sure target territory belongs to player
 		for (int i = 0; i < issuingPlayer->getPlayerTerritories().size(); i++) {
 			if (targetTerritory->getTerritoryID() == issuingPlayer->getPlayerTerritories()[i]->getTerritoryID()) {
@@ -203,7 +481,7 @@ bool Blockade::validate() {
 }
 void Blockade::execute(int playerIndex) {
 	if (validate()) {
-		cout << endl << "Executing blockade order..." << endl;
+		cout << endl << "Order validated. Executing blockade order..." << endl;
 		//step 1: doubling territory armies
 		int currentArmyAmount = targetTerritory->getNumArmies();
 		targetTerritory->addNumArmies(currentArmyAmount);
@@ -212,13 +490,23 @@ void Blockade::execute(int playerIndex) {
 		targetTerritory->setTerritoryOccupant(NULL);
 		//step 3: removing territory from player's list
 		int territoryIndex = targetTerritory->getTerritoryID() - 1;
+		cout << endl << "YA WATANNNNNNNN" << territoryIndex<<endl;
 		issuingPlayer->removeTerritoryFromList(territoryIndex);
+		cout << endl << "YA WATANNNNNNNN" << endl;
 		setorderState(true);
+		displayBlockedTerritory();
 
 	}
 	else {
 		cout << "Cannot Execute order: Order is invalid."<<endl;
 	}
+}
+
+void Blockade::displayBlockedTerritory(){
+	cout << endl << "==========================" << endl;
+	cout << endl << "   BLOCKED TERRITORY      " << endl;
+	cout << endl << "==========================" << endl;
+	cout << endl << *targetTerritory << endl;
 }
 
 //Constructor 
@@ -258,6 +546,7 @@ bool Airlift::validate() {
 	//step 1: validate if player has an airlift card. if yes: play card and continue to step 2. if not, return false.
 	cout << endl << "Executing Airlift order... Looking for Airlift card in hand" << endl;
 	if (!issuingPlayer->getPlayerHand()->isCardInHand(1)) {
+		cout << endl << "Card not found... Cannot execute order" << endl;
 		return false;
 	}
 	else {
@@ -347,7 +636,7 @@ void Airlift::move() {
 		if (source->getNumArmies() > 1) {
 			int armiesToMove = source->getNumArmies() - 1;
 			target->addNumArmies(armiesToMove);
-			cout << endl << "Moving " << armiesToMove << "from " << source->getName() << " to " << target->getName() << endl;
+			cout << endl << "Moving " << armiesToMove << " armies from " << source->getName() << " to " << target->getName() << endl;
 			source->addNumArmies(-armiesToMove);//adding the negative the amount means removing armies
 			target->addNumArmies(armiesToMove);
 			cout << endl << "======NEW TERRITORY COMPOSITION=====" << endl;
@@ -430,7 +719,7 @@ void Airlift::displayBattleComposition(int armiesToAttackWith) {
 		cout << endl << "[DEFENDER INFO] : NULL PLAYER"<< endl;
 	}
 	else {
-		cout << endl << "[DEFENDER INFO] : Attacker Name: " << "[ " << target->getTerritoryOccupant()->getPlayerName() << " ]" << " Attacker ID: " << "[ " << target->getTerritoryOccupant()->getPlayerId() << " ]" << endl;
+		cout << endl << "[DEFENDER INFO] : Defender Name: " << "[ " << target->getTerritoryOccupant()->getPlayerName() << " ]" << " Attacker ID: " << "[ " << target->getTerritoryOccupant()->getPlayerId() << " ]" << endl;
 	}
 	cout << endl << "Attacking Territory Name: " <<"[ "<< source->getName()<<" ]" << " Attacking Territory ID: "<< "[ "<<source->getTerritoryID()<<" ]"<<endl;
 	cout << endl << "Defender Territory Name: " << "[ " << target->getName() << " ]" << " Defender Territory ID " << "[ " << target->getTerritoryID() << " ]" << endl;
