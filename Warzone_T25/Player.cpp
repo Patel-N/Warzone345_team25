@@ -312,11 +312,25 @@ void Player::assignTerritoryToPlayer(Territory* newTerritory)
 
 void Player::issueOrder() {
    
-    /*
-    Order* neworder= new Order(); // creating new order and pointer
-    list<OrderDUMMY*> temp = { neworder }; //temporary place pointer into a list
-    Orderptr.merge(temp);// merg pointer into list of pointer
-    */
+    //Player shouldn't be able to call other orders if they still have deployable armies
+    if (getArmyToBePlaced() >= 0) {
+        
+        vector<Territory*> playerWeakestTerritory = toDefend();
+
+        //Find average army count
+        int sum = 0;
+        for (int i; i < playerWeakestTerritory.size(); i++) {
+            sum += playerWeakestTerritory[i]->getNumArmies();
+        }
+
+        int average = sum / average;
+    }
+    //No more army to deploy, followup with next order
+    else {
+        
+    }
+    
+
 };
     
 

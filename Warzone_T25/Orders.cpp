@@ -248,6 +248,29 @@ Negotiate& Negotiate::operator=(Negotiate& negotiate) {
 	return *this;
 }
 
+//Commit
+bool Commit::validate() {
+	return true;
+}
+
+void Commit::execute(int playerIndex) {
+	if (validate()) {
+		cout << "Executing Player[" << playerIndex << "] Commit Order: " << endl;
+		setorderState(true); // Order Deploy is Executed
+	}
+}
+
+//Constructor 
+Commit::Commit() {
+	setorderName("Commit");
+	setorderState(false);
+	cout << "Commit Constructed: " << endl;
+}
+
+Commit::~Commit() {
+	cout << "Commit De-constructed: " << endl;
+}
+
 ostream& operator << (ostream& output, Order& order) {
 	if (order.getorderState() == false) {
 		output << "The order name is: " << order.getorderName() << " and the order has not been exectuted yet. " << endl;

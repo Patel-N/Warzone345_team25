@@ -19,8 +19,9 @@ private:
 	int playerId;
 	string playerName;
 	int armyToBePlaced;
-	vector<Territory*> getPlayerAdjcentTerritories();
+	vector<Territory*> getPlayerAdjacentTerritories();
 	int nonCommitedArmy;
+	bool isCommited = false;
 
 
 public:
@@ -50,10 +51,12 @@ public:
 	inline string getPlayerName() { return playerName; }
 	inline int getArmyToBePlaced() { return armyToBePlaced; };
 	inline int getNonComitedArmy() { return nonCommitedArmy; }
+	inline bool getIsCommited() { return isCommited; }
 
 	//Setters
 	void setArmyToBePlaced(int count);
 	inline void setNonComitedArmy(int count) { nonCommitedArmy = count; }
+	inline void setIsCommited(bool com) { isCommited = com; }
 
 	vector<Territory*> toDefend(); // returns list of territory pointers to defend
 	vector<Territory*> toAttack();// returns list of territory pointers to defend
