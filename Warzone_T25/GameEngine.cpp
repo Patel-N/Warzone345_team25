@@ -112,11 +112,14 @@ void GameEngine::executeOrdersPhase(){
 			else {
 				Order* candidateOrder = players[i]->getNextOrder();
 				candidateOrder->execute(i);
+				players[i]->getPlayerOrders()->remove(1);
+				//delete candidateOrder;//this order will no longer be reused after execution and it iis safe to delete it.
 			}
 		}
 	}
 	for (int i = 0; i < players.size(); i++) {
 		players[i]->clearDiplomacy();
+		players[i]->setConquererFlag(false);//conquererFlag is the variable that determines whether the player conquered or not a territory during a turn
 	}
 }
 

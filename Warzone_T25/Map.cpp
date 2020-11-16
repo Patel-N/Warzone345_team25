@@ -22,7 +22,7 @@ Territory::Territory() {
 }
 
 Territory::~Territory() {
-	
+	cout << endl << "Territory Deleted" << endl;
 }
 
 std::string Territory::getName() {
@@ -83,15 +83,7 @@ Territory& Territory::operator=(const Territory& territory) {
 		territoryId = territory.territoryId;
 		territoryName = territory.territoryName;
 		territory_continentID = territory.territory_continentID;
-		numArmies = territory.numArmies;
-		/*if (territory.player != NULL) {
-			Player* tempPlayer = new Player(territory.player->getPlayerId(), territory.player->getPlayerName());
-			player = tempPlayer;
-		}
-		else {
-			player = NULL;
-		}*/
-		
+		numArmies = territory.numArmies;		
 	}
 	return *this;
 }
@@ -424,7 +416,6 @@ std::vector<std::vector<int>> Map::constructUnidirectionalMatrix() {
 	//i is the iterator over the map vector. it goes from 0 to the size of G
 	for (int i = 0; i < size; i++) {
 		std::vector<int> adjacencyMatrixRow;
-		//std::cout << "in here";
 		//j is the iterator over every row in the adjacencyMatrix. every row corresponds to a territory and its neighbours.if an entry has been assigned one, it 
 		//means that the territory at row i has a neighbour at column j
 		for (int j = 0; j < size; j++) {
@@ -596,39 +587,4 @@ bool Map::validate() {
 	else {
 		return false;
 	}
-}
-
-
-
-Node::Node() {}
-
-Node::Node(Territory* t)
-{
-	data = t;
-}
-
-void Node::addBefore(Territory* t, Node* n)
-{
-	//Create new Node
-	Node* newNode = new Node(t);
-	newNode->prev = n->prev;
-	newNode->next = n;
-
-	n->prev->next = newNode;
-	n->prev = newNode;
-	
-	incrementSize();
-}
-
-void Node::addAfter(Territory* t, Node* n)
-{
-	//Create new Node
-	Node* newNode = new Node(t);
-	newNode->prev = n;
-	newNode->next = n->next;
-
-	n->next->prev = newNode;
-	n->next = newNode;
-	
-	incrementSize();
 }

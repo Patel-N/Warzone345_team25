@@ -1,23 +1,16 @@
 #pragma once
 
 #include "Player.h"
-
 #include "Map.h"
-
 #include <cstddef>
-
 #include <list>
-
 #include <iostream>
-
 #include <sstream>
-
 #include <string>
 
 Deck* Player::common_deck = NULL; // initializing static class member. 
 
 using namespace std;
-
 
 // player classs is in chard of attac
 Player::Player(int id,string name,int initialArmyAmount) : playerId(id),playerName(name),armyToBePlaced(initialArmyAmount){
@@ -121,7 +114,6 @@ vector<Territory*> Player::toDefend() {// returns list of territory pointers to 
 };
 
 void Player::removeTerritoryFromList(int territoryIndex) {
-    cout << "LIST SIZE: " << territoryPtr.size();
     for (int i = 0; i < territoryPtr.size();i++) {
         if (territoryPtr[i]->getTerritoryID() - 1 == territoryIndex) {
             territoryPtr.erase(territoryPtr.begin() + i);
@@ -158,11 +150,6 @@ void Player::assignTerritoryToPlayer(Territory* newTerritory)
 void Player::issueOrder(Order* order) {
     orderlist->allOrders.push_back(order);
     sortOrderList();
-    /*
-    Order* neworder= new Order(); // creating new order and pointer
-    list<OrderDUMMY*> temp = { neworder }; //temporary place pointer into a list
-    Orderptr.merge(temp);// merg pointer into list of pointer
-    */
 };
 
 void Player::sortOrderList() {
@@ -172,13 +159,11 @@ Order* Player::getNextOrder() {
     Order* orderToReturn;
     if (orderlist->allOrders.size() > 0) {
         Order* orderToReturn = orderlist->allOrders.front();
-        orderlist->allOrders.erase(orderlist->allOrders.begin());//iterator starts at the first element and erases the first element since no increment
         return orderToReturn;
     }
     else {
         return NULL;
-    }
-    
+    }    
 }
 
 void Player::setPlayerHand(Hand* newHand) {

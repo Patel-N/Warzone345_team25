@@ -115,9 +115,7 @@ Card* Deck::draw()
 	int randCard = rand() % deckVec.size();
 	cout << "Deck size before draw: " << deckVec.size() << endl;
 	Card* c = deckVec[randCard];
-	cout << "ADDRESS OF CARD " << deckVec[randCard] << endl;
 	deckVec.erase(deckVec.begin() + randCard);
-	cout << "ADDRESS OF NEW CARD " << c << endl;
 	//cout << c->get_type() << "\n";
 	cout << "Deck size after draw: " << deckVec.size() << endl;
 
