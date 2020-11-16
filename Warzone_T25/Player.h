@@ -57,10 +57,11 @@ public:
 	inline string getPlayerName() { return playerName; }
 	inline int getArmyToBePlaced() { return armyToBePlaced; };
 	inline bool getConquererFlag() { return isConquerer; }
-
+	inline OrderList* getOrderList() { return orderlist;  }
 	//Setters
 	void setArmyToBePlaced(int count);
 	void setConquererFlag(bool);
+	void setOrderList(OrderList*);
 	
 	void addToArmiesToBePlaced(int);
 	vector<Territory*> toDefend(); // returns list of territory pointers to defend

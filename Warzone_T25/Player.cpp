@@ -66,7 +66,8 @@ ostream& operator << (ostream& output, Player& obj) { // ostream, outputs name o
             <<
             "Player does not own territory" << endl;
     }
-    if (obj.getPlayerOrders()->allOrders.size() > 0) {
+
+    if (obj.getPlayerOrders() != NULL && obj.getPlayerOrders()->allOrders.size() > 0) {
         output
             << "===========================" << endl
             << "    Player issued orders   " << endl
@@ -104,6 +105,9 @@ void Player::setConquererFlag(bool conquererFlag) {
     isConquerer = conquererFlag;
 }
 
+void Player::setOrderList(OrderList* list) {
+    this->orderlist = list;
+}
 void Player::addToArmiesToBePlaced(int additionalArmies) {
     armyToBePlaced += additionalArmies;
 }

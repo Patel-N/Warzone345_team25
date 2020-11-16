@@ -8,6 +8,7 @@ public:
 	GameEngine();
 
 	GameEngine(Map* map);
+	GameEngine(const GameEngine& engine);
 
 	//Setters Getters
 	void setGameMap(Map* map);
@@ -19,6 +20,7 @@ public:
 	void executeOrdersPhase();
 	void addPlayer(Player*);
 	friend ostream& operator<<(ostream& outs, const GameEngine& theObject);
+	GameEngine& operator= (const GameEngine& engine);
 
 	//getters
 	vector<Player*> getPlayers();

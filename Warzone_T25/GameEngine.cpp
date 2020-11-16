@@ -12,6 +12,49 @@ GameEngine::GameEngine(Map* map)
 	game_map = map;
 }
 
+GameEngine::GameEngine(const GameEngine& engine) {
+	cout << endl << "In engine Copy Constructor" << endl;
+	if (this != &engine) {
+		*this = engine;
+	}
+}
+//the game engine copy constructor copies everything in the original engine except for orders. orders are unique to players and copying the
+//engine will reset all player orders
+GameEngine& GameEngine::operator=(const GameEngine& originalEngine) {
+	cout << endl << "In engine assignment operator" << endl;
+	//using map deep copy constructor
+	Map* map = new Map(*originalEngine.game_map);
+	this->setGameMap(map);	
+	cout << endl << "HERREEEE************" << endl;
+	//using player deep copy constructors. side node: the player copy constructor does not copy player territories or orders
+	vector<Player*>ogPlayerVec = originalEngine.players;
+	//looping through all original players and adding territories based on their previous list and adding cards in hand based on their previous hands
+	for (int i = 0; i < ogPlayerVec.size(); i++) {
+		Player* player = new Player(*ogPlayerVec[i]);
+		this->addPlayer(player);
+		Player* ogPlayer = ogPlayerVec[i];
+		if (ogPlayer->getPlayerTerritories().size() > 0) {
+			vector<Territory*>ogPlayerTerritoryVec = ogPlayer->getPlayerTerritories();
+			for (int j = 0; j < ogPlayerTerritoryVec.size(); j++) {
+				int ogTerritoryId = ogPlayerTerritoryVec[j]->getTerritoryID();
+				this->game_map->assignOccupantToTerritory(ogTerritoryId, player);
+				player->assignTerritoryToPlayer(this->game_map->getTerritory(ogTerritoryId));
+			}
+		}
+		if (ogPlayer->getPlayerHand() != NULL && ogPlayer->getPlayerHand()->getCardsInHand().size() > 0) {
+			Hand* hand = new Hand(*ogPlayer->getPlayerHand());
+		}
+		else {
+			Hand* hand = NULL;
+			player->setPlayerHand(hand);
+		}
+		//setting orderlists objects to null
+		OrderList* orderlist = NULL;
+		player->setOrderList(orderlist);
+	}
+	return *this;	
+}
+
 void GameEngine::setGameMap(Map* map)
 {
 	game_map = map;
@@ -138,8 +181,13 @@ ostream& operator<<(ostream& outs, const GameEngine& theObject) {
 			<< "      Game Players     " << endl
 			<< "=======================" << endl;
 		for (int i = 0; i < theObject.players.size(); i++) {
-			outs
-				<< *theObject.players[i] << endl;
+			if (theObject.players[i] == NULL) {
+				outs << endl << "NULL PLAYER" << endl;
+			}
+			else {
+				outs
+					<< endl << *theObject.players[i] << endl;
+			}
 		}
 	}
 	else {
