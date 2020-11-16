@@ -994,7 +994,7 @@ void OrderList::sort() {
 			return;
 		}
 		int positionToInsert = -1;
-		for (int i = allOrders.size() -2 ; i>=0; i < i--) {
+		for (int i = allOrders.size() -2 ; i>=0; i--) {
 			if(allOrders[newOrderPos]->getorderName() == "deploy" ){
 				if (allOrders[i]->getorderName() == "deploy") {
 					positionToInsert = i + 2;//since the move position takes positions from 1 to vector size
