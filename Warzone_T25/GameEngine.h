@@ -13,6 +13,8 @@ public:
 	void setGameMap(Map* map);
 	void addPlayer(Player*);
 
+	
+
 	//getters
 	Map* getGameMap();
 	vector<Player*> getPlayers();
@@ -22,7 +24,7 @@ public:
 	void reinforcementPhase();
 	void issueOrdersPhase();
 	void executeOrdersPhase();
-	
+	void startUpPhase();// assign players territories in round robin, and give them armies in  int armyToBePlaced in player class
 
 private:
 	vector<Player*> players;

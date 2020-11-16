@@ -6,7 +6,6 @@
 #include "MapLoader.h"
 #include"Player.h"
 #include"GameEngine.h"
-#include "GameStartUp.h"
 
 int abc = 1;
 int main()
@@ -19,12 +18,30 @@ int main()
 	
 	Player* player1 = new Player(1,"Yasser");
 	Player* player2 = new Player(2, "Neil");
+	Player* player3 = new Player(3, "Martin");
+	Player* player4 = new Player(4, "paurauch");
+	Player* player5 = new Player(5, "123");
 	engine->addPlayer(player1);
 	engine->addPlayer(player2);
+	engine->addPlayer(player3);
+	engine->addPlayer(player4);
+	engine->addPlayer(player5);
 	//cout << *map;
-	GameStartUp* gameStartUp = new GameStartUp(engine);//giving gameStartClass the engin object, that contains players and territories
-	gameStartUp->startUpPhase();// assign territory to players randomly, give army to territory
+	engine->startUpPhase();// assign territory to players randomly, give army to territory
+	
+	/*
+	cout << "outside:" << endl;
+	cout << engine->getPlayers().at(0)->getPlayerName() << ": " << engine->getPlayers().at(0)->getPlayerTerritories().size() << endl;
 
+	cout << engine->getPlayers().at(0)->getPlayerName() << ": " << engine->getPlayers().at(0)->getPlayerTerritories().size() << endl;
+	cout << engine->getPlayers().at(1)->getPlayerName() << ": " << engine->getPlayers().at(1)->getPlayerTerritories().size() << endl;
+	cout << engine->getPlayers().at(0)->getPlayerName() << "  ter: " << engine->getPlayers().at(0)->getPlayerTerritories().at(0)->getName() << endl;
+	cout << engine->getPlayers().at(2)->getPlayerName() << ": " << engine->getPlayers().at(2)->getPlayerTerritories().size() << endl;
+	cout << engine->getPlayers().at(3)->getPlayerName() << ": " << engine->getPlayers().at(3)->getPlayerTerritories().size() << endl;
+	cout << engine->getPlayers().at(4)->getPlayerName() << ": " << engine->getPlayers().at(4)->getPlayerTerritories().size() << endl;
+	cout << engine->getPlayers().at(4)->getPlayerName() << "  ter: " << engine->getPlayers().at(4)->getPlayerTerritories().at(4)->getName() << endl;
+	cout <<"getArmyToBePlaced: "<< engine->getPlayers().at(2)->getArmyToBePlaced() << endl;
+	*/
 
 	/*
 	//cont 1
