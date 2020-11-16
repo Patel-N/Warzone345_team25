@@ -35,7 +35,16 @@ Card &Card::operator= (const Card &card) {
 // Insertion Stream Operator to get object value with ostream.
 ostream& operator << (ostream& out, const Card& c)
 {
-	out << c.type << endl;
+	switch (c.type) {
+	case 1: out << "AIRLIFT CARD"<<endl;
+		break;
+	case 2: out << "BOMB CARD"<<endl;
+		break;
+	case 3: out << "BLOCKADE CARD"<<endl;
+		break;
+	case 4: out << "DIPLOMACY CARD"<<endl;
+		break;
+	}
 	return out;
 }
 
@@ -55,12 +64,6 @@ void Card::set_type(int new_kind) {
 // Gets type of card.
 int Card::get_type() {
 	return type;
-}
-
-// This will be used to implement different card play methods.
-void Card::play() {
-	cout << "Special order created." << endl;
-	cout << "Card played." << endl;
 }
 
 //DECK CLASS IMPLEMENTATIONS
@@ -101,7 +104,7 @@ Deck& Deck::operator= (const Deck& deck) {
 ostream& operator << (ostream& out, const Deck& d)
 {
 	for (int i = 0; i < d.deckVec.size(); i++) {
-		out << d.deckVec[i] << " " << endl;
+		out << *d.deckVec[i] << " " << endl;
 	}
 	return out;
 }
@@ -112,9 +115,7 @@ Card* Deck::draw()
 	int randCard = rand() % deckVec.size();
 	cout << "Deck size before draw: " << deckVec.size() << endl;
 	Card* c = deckVec[randCard];
-	cout << "ADDRESS OF CARD " << deckVec[randCard] << endl;
 	deckVec.erase(deckVec.begin() + randCard);
-	cout << "ADDRESS OF NEW CARD " << c << endl;
 	//cout << c->get_type() << "\n";
 	cout << "Deck size after draw: " << deckVec.size() << endl;
 
@@ -144,21 +145,24 @@ Card* Hand::hand_getCard() {
 	return handCards[0];
 }
 
-void Hand::play(Card* playCard, Deck* deck) {
+bool Hand::isCardInHand(int type) {
 	for (int i = 0; i < handCards.size(); i++) {
-		if (handCards[i]->get_type() == playCard->get_type()) {
-			Card* ptr = handCards[i];
-			handCards[i]->play();
-			handCards.erase(handCards.begin() + i);
-			deck->addCardToDeck(ptr);
-			
+		if (handCards[i]->get_type() == type) {
+			return true;
 		}
-
-
 	}
-
+	return false;
 }
 
+void Hand::play(int type, Deck* deck) {
+	for (int i = 0; i < handCards.size(); i++) {
+		if (handCards[i]->get_type() == type) {
+			Card* ptr = handCards[i];
+			handCards.erase(handCards.begin() + i);
+			deck->addCardToDeck(ptr);
+		}
+	}
+}
 // Copy constructor
 Hand::Hand(const Hand& hand) {
 	handCards = hand.handCards;
@@ -180,7 +184,7 @@ Hand& Hand::operator= (const Hand& hand) {
 ostream& operator << (ostream& out, const Hand& h)
 {
 	for (int i = 0; i < h.handCards.size(); i++) {
-		out << h.handCards[i] << " " << endl;
+		out << *h.handCards[i] << " " << endl;
 	}
 	return out;
 }

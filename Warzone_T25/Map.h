@@ -17,11 +17,18 @@ public:
 	//getters
 	int getTerritoryID();
 	int getTerritoryContinentID();
+	int getNumArmies();
 	std::string getName();
+	Player* getTerritoryOccupant();
+	vector<Territory*> getAdjacentTerritories();
 	//setters
 	void setTerritoryID(int id);
 	void setTerritoryOccupant(Player*);
 	void setTerritoryName(std::string name);
+	void setNumArmies(int);
+
+	void addNumArmies(int);
+	void addAdjacentTerritory(Territory*);
 	friend ostream& operator<<(ostream& outs, const Territory& theObject);
 	Territory& operator= (const Territory& territory);
 private:
@@ -30,6 +37,7 @@ private:
 	int numArmies;
 	std::string territoryName;
 	int territory_continentID;
+	vector<Territory*> adjacentTerritories;
 
 };
 
@@ -100,30 +108,3 @@ private:
 namespace part_1{
 	void start();
 }
-
-
-//DOUBLY LINKED LIST IMPLEMENTATION FOR TERRITORY
-class Node {
-private:
-	Territory* data;
-	int listsize;
-
-public:
-	//Ctors	
-	Node();
-	Node(Territory* t);
-
-	//Dtor
-	~Node();
-
-	//Getters
-	inline Territory* getTerritory() { return data; };
-	
-	Node* prev = NULL;
-	Node* next = NULL;
-	void addBefore(Territory* t, Node* n);
-	void addAfter(Territory* t, Node* n);
-	inline void incrementSize() { listsize++; };
-	inline int size() { return listsize; };
-
-};
