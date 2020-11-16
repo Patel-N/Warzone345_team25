@@ -101,6 +101,25 @@ public:
 	Negotiate& operator=(Negotiate& negotiate);
 };
 
+class Commit : public Order {
+
+public:
+	bool validate();
+	void execute(int playerIndex);
+
+	//Ctor
+	Commit();
+
+	//Dtor
+	~Commit();
+
+	//Copy ctor
+	Commit(Order& commit);
+
+	//Overloaded Assignment Op
+	Commit& operator=(Commit& input);
+
+};
 
 
 class OrderList {

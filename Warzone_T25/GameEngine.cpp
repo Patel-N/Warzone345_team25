@@ -92,7 +92,7 @@ void GameEngine::issueOrdersPhase(){
 	for (int i = 0; i < players.size(); i++) {
 		cout << "Player => " << players[i]->getPlayerName() << endl;
 		//players[i]->toDefend();
-		players[i]->toAttack();
+		//players[i]->toAttack();
 	}
 
 }
