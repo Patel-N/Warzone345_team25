@@ -165,7 +165,9 @@ void Hand::play(int type, Deck* deck) {
 }
 // Copy constructor
 Hand::Hand(const Hand& hand) {
-	handCards = hand.handCards;
+	if (this != &hand) {
+		*this = hand;
+	}
 }
 
 vector<Card*> Hand::getCardsInHand()
@@ -174,8 +176,15 @@ vector<Card*> Hand::getCardsInHand()
 }
 
 // Assignment Operator
-Hand& Hand::operator= (const Hand& hand) {
+Hand& Hand::operator= (const Hand& ogHand) {
 	cout << "Assignemnt operator called." << endl;
+	if (ogHand.handCards.size() > 0) {
+		vector<Card*>ogHandVec = ogHand.handCards;
+		for (int i = 0; i < ogHandVec.size(); i++) {
+			Card* card = new Card(*ogHandVec[i]);
+			this->addCardToHand(card);
+		}
+	}
 	return *this;
 
 }

@@ -253,6 +253,9 @@ void part_4::start() {
 	cout << endl << "===============================" << endl;
 	cout << endl << "        END PART 4 DEMO        " << endl;
 	cout << endl << "===============================" << endl;
+	cout << endl << "DEMO ENGINE COPY CONSTRUCTOR" << endl;
+	GameEngine* newEngine = new GameEngine(*engine);
+	cout << *newEngine;
 
 	delete loader;
 	delete map;
