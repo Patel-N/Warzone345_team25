@@ -83,7 +83,6 @@ void GameEngine::reinforcementPhase()
 		cout << players[i]->getPlayerName() << " will get " << armyCount << " new units." << endl;
 		players[i]->setArmyToBePlaced(armyCount);
 	}
-	
 
 }
 

@@ -233,6 +233,8 @@ vector<Territory*> Player::toAttack() {// returns list of territory pointers to 
 
     vector<Territory*> allTerritories = allTerritoryVectorBuilder(territoryPtr[0]);
 
+
+    //Remove territories that already belong to the players from the appropriate vector
     for (int i = 0; i < allTerritories.size(); i++) {
     
         bool isEnnemyTerritory = true;
@@ -249,8 +251,14 @@ vector<Territory*> Player::toAttack() {// returns list of territory pointers to 
 
     }
 
+    //Set the state of all the territories to not visited
+    for (int i = 0; i < allTerritories.size(); i++) {
+        allTerritories[i]->setIsVisited(false);
+    }
+
     sort(attackableTerritories.begin(), attackableTerritories.end(), Territory::compByArmyCount);
 
+    cout << "For " << getPlayerName() << " he can possibly attack " << attackableTerritories.size() << " territories." << endl;
     for (int i = 0; i < attackableTerritories.size(); i++) {
         cout << "Terri id => " << attackableTerritories[i]->getTerritoryID() << "\t || Name => " << attackableTerritories[i]->getName() << "\t || Army count =>" << attackableTerritories[i]->getNumArmies() << endl;
     }
