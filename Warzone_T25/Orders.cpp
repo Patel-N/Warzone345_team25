@@ -230,12 +230,13 @@ Advance& Advance::operator=(Advance& advance) {
 
 bool Advance::isDiplomacyDeclared() {
 	//we verify if the targeted player has the issuing player on its diplomacy list. if yes, we return true meaning the issuing player cannot attack
-	if (target->getTerritoryOccupant() == NULL) { return false; }
+	if (target->getTerritoryOccupant() == NULL) {
+		return false; 
+	}
 	else {
 		int targetedPlayerDiplomacyListSize = target->getTerritoryOccupant()->getDiplomacies().size();
 		vector<int> targetedPlayerDiplomacyList = target->getTerritoryOccupant()->getDiplomacies();
 		for (int i = 0; i < targetedPlayerDiplomacyListSize; i++) {
-
 			if (targetedPlayerDiplomacyList[i] == issuingPlayer->getPlayerId()) {
 				return true;
 			}
@@ -994,7 +995,7 @@ void OrderList::sort() {
 			return;
 		}
 		int positionToInsert = -1;
-		for (int i = allOrders.size() -2 ; i>=0; i--) {
+		for (int i = allOrders.size() -2 ; i>=0;i--) {
 			if(allOrders[newOrderPos]->getorderName() == "deploy" ){
 				if (allOrders[i]->getorderName() == "deploy") {
 					positionToInsert = i + 2;//since the move position takes positions from 1 to vector size
