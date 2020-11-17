@@ -25,8 +25,7 @@ GameEngine& GameEngine::operator=(const GameEngine& originalEngine) {
 	cout << endl << "In engine assignment operator" << endl;
 	//using map deep copy constructor
 	Map* map = new Map(*originalEngine.game_map);
-	this->setGameMap(map);	
-	cout << endl << "HERREEEE************" << endl;
+	this->setGameMap(map);
 	//using player deep copy constructors. side node: the player copy constructor does not copy player territories or orders
 	vector<Player*>ogPlayerVec = originalEngine.players;
 	//looping through all original players and adding territories based on their previous list and adding cards in hand based on their previous hands
