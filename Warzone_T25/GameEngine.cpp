@@ -177,6 +177,7 @@ void GameEngine::startUpPhase()
 	//the purpose of this funtionc is to assign territory to players randomly in a round robin fashion, 
 	//then give players armies in armyToBePlaced
 	//implementation: 1 temp pointer vectors are made for territory poiting to the real objects, then shuffled, then assigned in a robin
+	// also for delivery 2, since i dont work with part1 for the demo and provide my own territories and players, i shuffle the player  list, to satisfy "The order of play of the players in the game is determined randomly"
 	//** for delivery 2, theres also code to demonstrate functionality  output
 	int numOfPlayers = getPlayers().size();
 	int numOfTerritories = getGameMap()->getSize(); ;
@@ -222,6 +223,11 @@ void GameEngine::startUpPhase()
 		cout << "error in case statement in GameStartUp.ccp. Player int armyToBePlaced was not initialized" << endl;
 		break;
 	}
+
+
+	//**SHUFFLING THE PLAYER LIST FOR DELIVERY 2, to satisfy "The order of play of the players in the game is determined randomly"
+	srand(time(0));//part of random process
+	std::random_shuffle(players.begin(), players.end());//shuffle only the pointers of temp array pointer
 
 
 	for (int i = 0; i < numOfPlayers; i++) {// assign int armyToBePlaced 
