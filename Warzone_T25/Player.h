@@ -1,6 +1,5 @@
-//IMPORTANT: assignment operator and copy constructor will only copy playerId,playerName,armyToBePlaced,
-// or else we will have to duplicate territories objects, card objects, and order objects and might break the game
-
+//IMPORTANT: assignment operator and copy constructor will do a shallow copy. duplicated player
+// will point to the orginal objects, like Territory, Hand, Orders, cards or else it might break the game.
 #pragma once
 #include <iostream>
 #include <list>

@@ -34,12 +34,17 @@ Player::~Player() {
 //copy constructor
 Player::Player(const Player& input) {
 
-    //IMPORTANT: assignment operator and copy constructor will only copy playerId,playerName,armyToBePlaced,
-    // or else we will have to duplicate territories objects, card objects, and order objects and might break the game
-    playerId = input.playerId;
-    playerName = input.playerName;
-    armyToBePlaced = input.armyToBePlaced;
+    //IMPORTANT: assignment operator and copy constructor will do a shallow copy. duplicated player
+    // will point to the orginal objects, like Territory, Hand, Orders, cards or else it might break the game.
 
+     territoryPtr = input.territoryPtr;
+     handPtr = input.handPtr;
+     orderlist = input.orderlist;
+     playerId = input.playerId;
+     playerName = input.playerName;
+     armyToBePlaced = input.armyToBePlaced;
+     isConquerer = input.isConquerer;
+     diplomacy = input.diplomacy;//this member variable serves to add target players for the negotiate order
 }
 
 //stream input
@@ -95,11 +100,18 @@ ostream& operator << (ostream& output, Player& obj) { // ostream, outputs name o
 //assignment operator = overload
 Player& Player::operator = (const Player& input) {
 
-    //IMPORTANT: assignment operator and copy constructor will only copy playerId,playerName,armyToBePlaced,
-    // or else we will have to duplicate territories objects, card objects, and order objects and might break the game
+
+    //IMPORTANT: assignment operator and copy constructor will do a shallow copy. duplicated player
+    // will point to the orginal objects, like Territory, Hand, Orders, cards or else it might break the game.
+
+    territoryPtr = input.territoryPtr;
+    handPtr = input.handPtr;
+    orderlist = input.orderlist;
     playerId = input.playerId;
     playerName = input.playerName;
     armyToBePlaced = input.armyToBePlaced;
+    isConquerer = input.isConquerer;
+    diplomacy = input.diplomacy;//this member variable serves to add target players for the negotiate order
 
     return *this;
 }
