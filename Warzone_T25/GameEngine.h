@@ -7,26 +7,29 @@ class GameEngine {
 public:
 	//constructors
 	GameEngine();
+
 	GameEngine(Map* map);
+	GameEngine(const GameEngine& engine);
 
 	//Setters
 	void setGameMap(Map* map);
-	void addPlayer(Player*);
 
-	
 
-	//getters
+
 	Map* getGameMap();
-	vector<Player*> getPlayers();
-
-
-	//functions
 	void reinforcementPhase();
 	void issueOrdersPhase();
 	void executeOrdersPhase();
-	void startUpPhase();// PART2 assign players territories in round robin, and give them armies in  int armyToBePlaced in player class
+	void addPlayer(Player*);
+  void startUpPhase();// PART2 assign players territories in round robin, and give them armies in  int armyToBePlaced in player class
+	friend ostream& operator<<(ostream& outs, const GameEngine& theObject);
+	GameEngine& operator= (const GameEngine& engine);
 
+
+	//getters
+	vector<Player*> getPlayers();
 private:
 	vector<Player*> players;
 	Map* game_map;
+
 };

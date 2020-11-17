@@ -10,6 +10,7 @@
 
 int main()
 {
+
 	MapLoader* loader = new MapLoader();
 	Map* map;
 	map = new Map(loader->generateMap("./MapFiles/canada.map"));
@@ -24,7 +25,7 @@ int main()
 	//part_1::start();  
 	//part_2::start(); // part_1 should be enabled with part_2
 	//part_3::start();
-	//part_4::start();
+//	part_4::start();
 	//part_5::start();
 
 

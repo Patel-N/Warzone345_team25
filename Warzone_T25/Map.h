@@ -17,11 +17,18 @@ public:
 	//getters
 	int getTerritoryID();
 	int getTerritoryContinentID();
+	int getNumArmies();
 	std::string getName();
+	Player* getTerritoryOccupant();
+	vector<Territory*> getAdjacentTerritories();
 	//setters
 	void setTerritoryID(int id);
 	void setTerritoryOccupant(Player*);
 	void setTerritoryName(std::string name);
+	void setNumArmies(int);
+
+	void addNumArmies(int);
+	void addAdjacentTerritory(Territory*);
 	friend ostream& operator<<(ostream& outs, const Territory& theObject);
 	Territory& operator= (const Territory& territory);
 private:
@@ -30,6 +37,7 @@ private:
 	int numArmies;
 	std::string territoryName;
 	int territory_continentID;
+	vector<Territory*> adjacentTerritories;
 
 };
 
@@ -100,5 +108,4 @@ private:
 namespace part_1{
 	void start();
 }
-
 
