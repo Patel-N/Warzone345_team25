@@ -12,10 +12,54 @@ GameEngine::GameEngine(Map* map)
 	game_map = map;
 }
 
+GameEngine::GameEngine(const GameEngine& engine) {
+	cout << endl << "In engine Copy Constructor" << endl;
+	if (this != &engine) {
+		*this = engine;
+	}
+}
+//the game engine copy constructor copies everything in the original engine except for orders. orders are unique to players and copying the
+//engine will reset all player orders
+GameEngine& GameEngine::operator=(const GameEngine& originalEngine) {
+	cout << endl << "In engine assignment operator" << endl;
+	//using map deep copy constructor
+	Map* map = new Map(*originalEngine.game_map);
+	this->setGameMap(map);	
+	cout << endl << "HERREEEE************" << endl;
+	//using player deep copy constructors. side node: the player copy constructor does not copy player territories or orders
+	vector<Player*>ogPlayerVec = originalEngine.players;
+	//looping through all original players and adding territories based on their previous list and adding cards in hand based on their previous hands
+	for (int i = 0; i < ogPlayerVec.size(); i++) {
+		Player* player = new Player(*ogPlayerVec[i]);
+		this->addPlayer(player);
+		Player* ogPlayer = ogPlayerVec[i];
+		if (ogPlayer->getPlayerTerritories().size() > 0) {
+			vector<Territory*>ogPlayerTerritoryVec = ogPlayer->getPlayerTerritories();
+			for (int j = 0; j < ogPlayerTerritoryVec.size(); j++) {
+				int ogTerritoryId = ogPlayerTerritoryVec[j]->getTerritoryID();
+				this->game_map->assignOccupantToTerritory(ogTerritoryId, player);
+				player->assignTerritoryToPlayer(this->game_map->getTerritory(ogTerritoryId));
+			}
+		}
+		if (ogPlayer->getPlayerHand() != NULL && ogPlayer->getPlayerHand()->getCardsInHand().size() > 0) {
+			Hand* hand = new Hand(*ogPlayer->getPlayerHand());
+		}
+		else {
+			Hand* hand = NULL;
+			player->setPlayerHand(hand);
+		}
+		//setting orderlists objects to null
+		OrderList* orderlist = NULL;
+		player->setOrderList(orderlist);
+	}
+	return *this;	
+}
+
 void GameEngine::setGameMap(Map* map)
 {
 	game_map = map;
 }
+
 
 Map* GameEngine::getGameMap()
 {
@@ -88,17 +132,106 @@ void GameEngine::reinforcementPhase()
 
 void GameEngine::issueOrdersPhase(){
 
-	//Loop through players
+	//Update nonCommitedArmies count for all players;
 	for (int i = 0; i < players.size(); i++) {
-		cout << "Player => " << players[i]->getPlayerName() << endl;
-		//players[i]->toDefend();
-		//players[i]->toAttack();
+		
+		vector<Territory*> playerT = players[i]->getPlayerTerritories();
+
+		for (int j = 0; j < playerT.size(); j++) {
+			playerT[j]->setNonCommitedArmies(playerT[j]->getNumArmies());
+			//cout << "Noncommit => " << playerT[j]->getNonCommitedArmies() << " || Current => " << playerT[j]->getNumArmies()  << endl;
+		}
+
+	}
+
+	//Loop through players
+	int commitedPlayersCount = 0;
+	int index = 0;
+	
+	while (commitedPlayersCount != players.size()) {
+		
+		
+		//Player can't be commited already
+		if (!players[index]->getIsCommited()) {
+			players[index]->issueOrder();
+
+			//Check if last order is a commit
+			if (players[index]->getOrderList()->allOrders.size() > 0 && players[index]->getOrderList()->peekLastOrder() == "Commit") {
+				cout << "Player " << players[index]->getPlayerName() << " has commited their turn." << endl;
+				commitedPlayersCount++;
+				players[index]->setIsCommited(true);
+			}
+		}
+
+		index++;
+
+		//Reset index for round robin
+		if (index == players.size())
+			index = 0;
 	}
 
 }
 
-void GameEngine::executeOrdersPhase(){}
+void GameEngine::executeOrdersPhase(){
+	vector<int> allOrdersFinished;
+	for (int i = 0; i < players.size(); i++) {
+		allOrdersFinished.push_back(1);
+	}
+	bool terminateExecution = false;
+	while (!terminateExecution) {
+		terminateExecution = true;
+		for (int i = 0; i < players.size(); i++) {
+			if (allOrdersFinished[i] == 1) { terminateExecution = false; }
+		}
+		for (int i = 0; i < players.size(); i++) {
+			//when all payers have no more orders to execute, areAllOrdersExecuted will become true. if only one 
+			//player still has orders, it will set the variable to false 
+			if (players[i]->getPlayerOrders()->allOrders.size() == 0) {
+				allOrdersFinished[i] = 0;
+			}
+			else {
+				Order* candidateOrder = players[i]->getNextOrder();
+				candidateOrder->execute(i);
+				players[i]->getPlayerOrders()->remove(1);
+				//delete candidateOrder;//this order will no longer be reused after execution and it iis safe to delete it.
+			}
+		}
+	}
+	for (int i = 0; i < players.size(); i++) {
+		players[i]->clearDiplomacy();
+		players[i]->setConquererFlag(false);//conquererFlag is the variable that determines whether the player conquered or not a territory during a turn
+	}
+
+}
 
 void GameEngine::addPlayer(Player* player) {
 	players.push_back(player);
+}
+
+ostream& operator<<(ostream& outs, const GameEngine& theObject) {
+	outs
+		<< "==================================" << endl
+		<< "        WELCOME TO WARZONE        " << endl
+		<< "==================================" << endl;
+	if (theObject.players.size() > 0) {
+		outs
+			<< "=======================" << endl
+			<< "      Game Players     " << endl
+			<< "=======================" << endl;
+		for (int i = 0; i < theObject.players.size(); i++) {
+			if (theObject.players[i] == NULL) {
+				outs << endl << "NULL PLAYER" << endl;
+			}
+			else {
+				outs
+					<< endl << *theObject.players[i] << endl;
+			}
+		}
+	}
+	else {
+		outs
+			<< "There are no players in the game yet" << endl;
+	}
+
+	return outs;
 }

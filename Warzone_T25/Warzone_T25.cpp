@@ -17,10 +17,6 @@ int main()
 	engine->addPlayer(player1);
 	engine->addPlayer(player2);
 
-	cout << "please" << endl << endl;
-	Territory* t = map->getTerritory(1)->getAdjacentTerritories()[0];
-	cout << t << endl << endl;
-
 	//cont 1
 	map->assignOccupantToTerritory(1, player1);
 	Territory* territory = map->getTerritory(1);
@@ -87,25 +83,12 @@ int main()
 	//part_3::start();
 	//part_4::start();
 	//part_5::start();
-}
-
-/*
-* 
-* 
-	Player:
+	
+	
+	/*	Player:
 		Go through everything with Martin
 		Outputstream needs to be updated
+	*/
+}
 
 
-	Order:
-		Check abstract implementation and see how it would work for issuing Orders
-
-	Map:
-		Create method to assigning player* to a territory
-
-	MapLoader:
-		InputStream
-
-	Cards:
-		Make sure everything is good
-*/

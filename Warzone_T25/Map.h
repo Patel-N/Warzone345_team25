@@ -18,29 +18,37 @@ public:
 	//getters
 	int getTerritoryID();
 	int getTerritoryContinentID();
+	int getNumArmies();
 	std::string getName();
 	inline Player* getPlayer() { return player; }
-	inline int getNumArmies() { return numArmies; }
 	inline bool getIsVisited() { return isVisited; }
+	inline int getNonCommitedArmies() { return nonComittedArmies; };
 	vector<Territory*> getAdjacentTerritories();
-
+	Player* getTerritoryOccupant();
 
 	//setters
 	void setTerritoryID(int id);
 	void setTerritoryOccupant(Player*);
 	void setTerritoryName(std::string name);
-	inline void setNumArmies(int num) { numArmies = num; }
+	void setNumArmies(int num);
 	inline void setIsVisited(bool v) { isVisited = v; }
+	inline void setNonCommitedArmies(int count) { nonComittedArmies += count; };
 
+	//Additional functions
+	void addNumArmies(int);
 	friend ostream& operator<<(ostream& outs, const Territory& theObject);
 	Territory& operator= (const Territory& territory);
 	void addAdjacentTerritory(Territory*);
 	static bool compByArmyCount(Territory* a, Territory* b);
 	static bool compById(Territory* a, Territory* b);
+	inline void incNonCommitedArmies(int count) { nonComittedArmies += count; }
+	inline void decNonCommitedArmies(int count) { nonComittedArmies -= count; }
+
 private:
 	int territoryId;
 	Player* player;
 	int numArmies;
+	int nonComittedArmies;
 	std::string territoryName;
 	int territory_continentID;
 	vector<Territory*> adjacentTerritories;
@@ -117,30 +125,3 @@ namespace part_1{
 	void start();
 }
 
-
-
-class TerritoryAttackDefend {
-private:
-	Territory* sourceTerri;
-	Territory* targetTerri;
-	int armyDiff;
-
-public:
-	//Ctors	
-	TerritoryAttackDefend();
-	TerritoryAttackDefend(Territory* sT, Territory* tT, int aD);
-
-	//Dtor
-	~TerritoryAttackDefend();
-
-	//Setters
-	inline void setTargetTerritory(Territory* t) { targetTerri = t; };
-	inline void setArmyDiff(int num) { armyDiff = num; };
-
-	//Getters
-	inline Territory* getSourceTerritory() { return sourceTerri; };
-	inline Territory* getTargetTerritory() { return targetTerri; };
-	inline int getArmyDiff() { return armyDiff; }
-
-	static bool compByArmyDiff(TerritoryAttackDefend* a, TerritoryAttackDefend* b);
-};

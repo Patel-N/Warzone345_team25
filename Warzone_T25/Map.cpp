@@ -32,7 +32,7 @@ Territory::Territory() {
 }
 
 Territory::~Territory() {
-	
+	cout << endl << "Territory Deleted" << endl;
 }
 
 std::string Territory::getName() {
@@ -47,11 +47,28 @@ int Territory::getTerritoryContinentID() {
 	return territory_continentID;
 }
 
+int Territory::getNumArmies() {
+	return numArmies;
+}
+
+Player* Territory::getTerritoryOccupant() {
+	return player;
+}
+
+void Territory::setNumArmies(int armies) {
+	numArmies = armies;
+}
+
 void Territory::setTerritoryName(std::string newName) {
 	territoryName = newName;
 }
+
 void Territory::setTerritoryOccupant(Player* newPlayer) {
 	player = newPlayer;
+}
+
+void Territory::addNumArmies(int extraArmies) {
+	numArmies += extraArmies;
 }
 
 ostream& operator<<(ostream& outs, const Territory& theObject) {
@@ -76,6 +93,7 @@ Territory& Territory::operator=(const Territory& territory) {
 		territoryId = territory.territoryId;
 		territoryName = territory.territoryName;
 		territory_continentID = territory.territory_continentID;
+
 		numArmies = territory.numArmies;
 		if (territory.player != NULL) {
 			Player* tempPlayer = new Player(territory.player->getPlayerId(), territory.player->getPlayerName());
@@ -87,6 +105,7 @@ Territory& Territory::operator=(const Territory& territory) {
 		for (int i = 0; i < territory.adjacentTerritories.size(); i++) {
 			addAdjacentTerritory(territory.adjacentTerritories[i]);
 		}
+		numArmies = territory.numArmies;		
 	}
 	return *this;
 }
@@ -95,10 +114,10 @@ void Territory::addAdjacentTerritory(Territory* adjT) {
 	adjacentTerritories.push_back(adjT);
 }
 
-
 vector<Territory*> Territory::getAdjacentTerritories() {
 	return adjacentTerritories;
 }
+
 
 bool Territory::compByArmyCount(Territory* a, Territory* b) {
 	return a->getNumArmies() < b->getNumArmies();
@@ -232,6 +251,7 @@ Map& Map::operator=(const Map& originalMap) {
 		tempVector.push_back(territory);
 		continents[territory->getTerritoryContinentID() - 1]->addTerritoryToContinent(territory);
 		map.push_back(tempVector);
+		size++;
 	}
 	for (int i = 0; i < originalMap.map.size(); i++) {
 		std::vector<int> borders;
@@ -249,7 +269,6 @@ Map& Map::operator=(const Map& originalMap) {
 
 	for (int i = 0; i < this->map.size(); i++) {
 		for (int j = 1; j < this->map[i].size(); j++) {
-			cout << "\tSubterritory ==> " << this->map[i][j]->getTerritoryID() << " || address ==> " << this->map[i][j] << endl;
 			this->map[i][0]->addAdjacentTerritory(this->map[i][j]);
 		}
 		cout << endl;
@@ -434,7 +453,6 @@ std::vector<std::vector<int>> Map::constructUnidirectionalMatrix() {
 	//i is the iterator over the map vector. it goes from 0 to the size of G
 	for (int i = 0; i < size; i++) {
 		std::vector<int> adjacencyMatrixRow;
-		////cout << "in here";
 		//j is the iterator over every row in the adjacencyMatrix. every row corresponds to a territory and its neighbours.if an entry has been assigned one, it 
 		//means that the territory at row i has a neighbour at column j
 		for (int j = 0; j < size; j++) {
@@ -606,20 +624,4 @@ bool Map::validate() {
 	else {
 		return false;
 	}
-}
-
-
-
-TerritoryAttackDefend::TerritoryAttackDefend() {}
-
-TerritoryAttackDefend::TerritoryAttackDefend(Territory* sT, Territory* tT, int aD)
-{
-	sourceTerri = sT;
-	targetTerri = tT;
-	armyDiff = aD;
-}
-
-bool TerritoryAttackDefend::compByArmyDiff(TerritoryAttackDefend* a, TerritoryAttackDefend* b)
-{
-	return a->getArmyDiff() > b->getArmyDiff();
 }

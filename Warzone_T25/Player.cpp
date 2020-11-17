@@ -2,117 +2,55 @@
 
 #include "Player.h"
 #include "Map.h"
-
 #include <cstddef>
 #include <list>
 #include <iostream>
 #include <sstream>
 #include <algorithm>
 
+Deck* Player::common_deck = NULL; // initializing static class member. 
 
 using namespace std;
 
-
 // player classs is in chard of attac
+Player::Player(int id,string name,int initialArmyAmount) : playerId(id),playerName(name),armyToBePlaced(initialArmyAmount){
+    orderlist = new OrderList();
+    isConquerer = false;
+};
 
 Player::Player() {
     playerId = -1;
     playerName = "nullPlayer";
+    orderlist = new OrderList();
 }
 
-Player::Player(int id, string name) : playerId(id), playerName(name) {};
+Player::Player(int id, string name){
+    playerName = name;
+    playerId = id;
+    orderlist = new OrderList();
+};
 
 Player::Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<Order*> o, int armyCount) {
     playerId = id;
     this->playerName = name;
     this->handPtr = h;
-    this->orderPtr = o;
+    orderlist = new OrderList();
 }
 
 //copy constructor
 Player::Player(const Player& input) {
 
-    //duplicating territory TO REDO!!!
-    //for (auto& elm : input.Territoryptr) {// placing new pointers to with new elements to new player list of territory
-    //    Territory* temptr = new Territory; // creating new territory pointer and territory
-    //    temptr->getName() = elm->name; // giving territory same name from input player
-    //    list<Territory*> tempList = { temptr }; //temporary place pointer into a list
-    //    Territoryptr.merge(tempList);// merg pointer into list of pointer
-    //}
-    
-    //duplicating hand
-    handPtr = new Hand; // creating new hand for new player
-    vector<Card*> inputCardsInHand = input.handPtr->getCardsInHand();
-    for (int i = 0; i < inputCardsInHand.size() ; i++) {// for every card in input player cards
-        
-        //Call copy ctor
-        Card* tempcard = inputCardsInHand[i];
-        handPtr->addCardToHand(tempcard);
-        //CHECK WITH MARTIN IF I NEED TO KEEP THIS
-        //tempcard->name = elm->name; // giving card same name from input player
-        //list<CardDUMMY*> tempList = { tempcard }; //temporary place pointer into a list
-        //Handptr->Cardptr.merge(tempList);// merg pointer into list of pointer
-    }
+    //IMPORTANT: assignment operator and copy constructor will only copy playerId,playerName,armyToBePlaced,
+    // or else we will have to duplicate territories objects, card objects, and order objects and might break the game
+    playerId = input.playerId;
+    playerName = input.playerName;
+    armyToBePlaced = input.armyToBePlaced;
 
-
-    //duplicating order
-    for (auto& elm : input.orderPtr) {// for every order in input player order list
-        Order* tempOrder = elm; // creating new order pointer and order
-        orderPtr.push_back(tempOrder);
-
-        //CHECK WITH MARTIN IF I NEED TO KEEP THIS
-        //temporder->name = elm->name; // giving order same name from input player
-        //list<OrderDUMMY*> tempList = { temporder }; //temporary place pointer into a list
-        //Orderptr.merge(tempList);// merg pointer into list of pointer
-    }
 }
 
-//assignment operator overload
-Player& Player::operator = (const Player& input) {
-    
-    // duplicating territory
-    /*
-    for (auto& elm : input.Territoryptr) {// placing new pointers to with new elements to new player list of territory
-        Territory* temptr = new Territory; // creating new territory pointer and territory
-        temptr->getName() = elm->name; // giving territory same name from input player
-        list<Territory*> tempList = { temptr }; //temporary place pointer into a list
-        //Territoryptr.merge(tempList);// merg pointer into list of pointer
-    }
-    */
-
-    //duplicating hand
-    handPtr = new Hand; // creating new hand for new player
-    vector<Card*> inputCardsInHand = input.handPtr->getCardsInHand();
-    for (int i = 0; i < inputCardsInHand.size(); i++) {// for every card in input player cards
-
-        //Call copy ctor
-        Card* tempcard = inputCardsInHand[i];
-        handPtr->addCardToHand(tempcard);
-        //CHECK WITH MARTIN IF I NEED TO KEEP THIS
-        //tempcard->name = elm->name; // giving card same name from input player
-        //list<CardDUMMY*> tempList = { tempcard }; //temporary place pointer into a list
-        //Handptr->Cardptr.merge(tempList);// merg pointer into list of pointer
-    }
-
-
-    //duplicating order
-    for (auto& elm : input.orderPtr) {// for every order in input player order list
-        Order* tempOrder = elm; // creating new order pointer and order
-        orderPtr.push_back(tempOrder);
-
-        //CHECK WITH MARTIN IF I NEED TO KEEP THIS
-        //temporder->name = elm->name; // giving order same name from input player
-        //list<OrderDUMMY*> tempList = { temporder }; //temporary place pointer into a list
-        //Orderptr.merge(tempList);// merg pointer into list of pointer
-    }
-
-    return *this;
-}
-
-
-//stream insertion
+//stream input
 istream& operator >> (istream& input, Player& obj) {
-    Territory*tempter = new Territory;
+    Territory* tempter = new Territory;
     string mystring;
     getline(cin, mystring);
     tempter->getName() = mystring;
@@ -120,34 +58,63 @@ istream& operator >> (istream& input, Player& obj) {
     return input;
 }
 
-
-
-ostream &operator << (ostream& output, Player& obj) { // ostream, outputs name of territory of player
+//stream output
+ostream& operator << (ostream& output, Player& obj) { // ostream, outputs name of territory of player
     output
         << "Player name = " << obj.getPlayerName() << endl
-        << "Player id = " << obj.getPlayerId() << endl;
+        << "Player id = " << obj.getPlayerId() << endl
+        << "Player has " <<obj.getArmyToBePlaced()<<" in his army pool" << endl;
     if (obj.getPlayerTerritories().size() > 0) {
         output
-        << "===========================" << endl
-        << "    Player territory list   " << endl
-        << "============================" << endl;
-        vector<Territory*> territoryList = obj.getPlayerTerritories();
+            <<
+            "===========================" << endl <<
+            "    Player territory list   " << endl <<
+            "============================" << endl;
+        vector < Territory* > territoryList = obj.getPlayerTerritories();
         for (int i = 0; i < territoryList.size(); i++) {
             output << *territoryList[i] << endl;
         }
     }
     else {
         output
-            << "Player does not own territory" << endl;
+            <<
+            "Player does not own territory" << endl;
+    }
+
+    if (obj.getPlayerOrders() != NULL && obj.getPlayerOrders()->allOrders.size() > 0) {
+        output
+            << "===========================" << endl
+            << "    Player issued orders   " << endl
+            << "============================" << endl;
+        vector<Order*> orderList = obj.getPlayerOrders()->allOrders;
+        for (int i = 0; i < orderList.size(); i++) {
+            output << *orderList[i] << endl;
+        }
+    }
+    else {
+        output
+            << "Player does not have any issued orders" << endl;
     }
     return output;
 }
 
+//assignment operator = overload
+Player& Player::operator = (const Player& input) {
 
-void Player::setArmyToBePlaced(int count)
-{
+    //IMPORTANT: assignment operator and copy constructor will only copy playerId,playerName,armyToBePlaced,
+    // or else we will have to duplicate territories objects, card objects, and order objects and might break the game
+    playerId = input.playerId;
+    playerName = input.playerName;
+    armyToBePlaced = input.armyToBePlaced;
+
+    return *this;
+}
+
+//setters
+void Player::setArmyToBePlaced(int count) {
     armyToBePlaced = count;
 }
+
 
 vector<Territory*> Player::toAttack() {// returns list of territory pointers to defend
     
@@ -267,12 +234,12 @@ vector<Territory*> Player::toAttack() {// returns list of territory pointers to 
 }
 
 vector<Territory*> Player::allTerritoryVectorBuilder(Territory* origin) {
-    
+
     vector<Territory*> terriBuilder;
-    
+
     //Check if territory is visited
     if (!origin->getIsVisited()) {
-        
+
         //Set the territory as visited and add it to the vector
         origin->setIsVisited(true);
         terriBuilder.push_back(origin);
@@ -288,8 +255,19 @@ vector<Territory*> Player::allTerritoryVectorBuilder(Territory* origin) {
     //vector<Territory*> currentAdjacent = origin->getAdjacentTerritories();
     sort(terriBuilder.begin(), terriBuilder.end(), Territory::compById);
 
-    
+
     return terriBuilder;
+}
+
+void Player::setConquererFlag(bool conquererFlag) {
+    isConquerer = conquererFlag;
+}
+
+void Player::setOrderList(OrderList* list) {
+    this->orderlist = list;
+}
+void Player::addToArmiesToBePlaced(int additionalArmies) {
+    armyToBePlaced += additionalArmies;
 }
 
 
@@ -297,7 +275,7 @@ vector<Territory*> Player::toDefend() {// returns list of territory pointers to 
     
     vector<Territory*> territoryToBeDefended;
     for (int i = 0; i < territoryPtr.size(); i++) {
-        territoryToBeDefended.push_back(new Territory(*territoryPtr[i]));
+        territoryToBeDefended.push_back(territoryPtr[i]);
     }
 
     sort(territoryToBeDefended.begin(), territoryToBeDefended.end(), Territory::compByArmyCount);
@@ -305,33 +283,114 @@ vector<Territory*> Player::toDefend() {// returns list of territory pointers to 
     return territoryToBeDefended;
 };
 
+void Player::removeTerritoryFromList(int territoryIndex) {
+    for (int i = 0; i < territoryPtr.size();i++) {
+        if (territoryPtr[i]->getTerritoryID() - 1 == territoryIndex) {
+            territoryPtr.erase(territoryPtr.begin() + i);
+        }
+    }
+}
+//method to add players on the diplomacy list of a player
+void Player::declareDiplomacy(Player* targetedPlayer) {
+    if (targetedPlayer == NULL) { 
+        cout << endl << "ERROR: Cannot declare diplomacy on NULL player";
+        return;
+    }
+    else {
+        this->addPlayerToDiplomacyList(targetedPlayer->getPlayerId());//by adding targeted player on the diplomacy list of the issuing player,we stop any possible attack from the targeted player
+       targetedPlayer->addPlayerToDiplomacyList(this->getPlayerId());//diplomacy goes both ways and hence the issuing player should also not be able to attack target
+    }
+}
+
+//method to clear the diplomacy list
+void::Player::clearDiplomacy() {
+    diplomacy.clear();
+}
+vector<int> Player::getDiplomacies() {
+    return diplomacy;
+}
+void::Player::addPlayerToDiplomacyList(int playerId) {
+    diplomacy.push_back(playerId);
+}
 void Player::assignTerritoryToPlayer(Territory* newTerritory)
 {
     territoryPtr.push_back(newTerritory);
 };
 
 void Player::issueOrder() {
-   
+    
+
     //Player shouldn't be able to call other orders if they still have deployable armies
-    if (getArmyToBePlaced() >= 0) {
+    if (getArmyToBePlaced() != 0) {
         
-        vector<Territory*> playerWeakestTerritory = toDefend();
+        vector<Territory*> playerWeakestTerritories = toDefend();
 
-        //Find average army count
-        int sum = 0;
-        for (int i; i < playerWeakestTerritory.size(); i++) {
-            sum += playerWeakestTerritory[i]->getNumArmies();
+        //Split through the least having territories
+        int splitCount = getArmyToBePlaced() / territoryPtr.size();
+        //Determine if you want to assign a split amount of territories or the full amount
+        if (splitCount > getArmyToBePlaced()) {
+            deployCreation(playerWeakestTerritories, splitCount);
         }
-
-        int average = sum / average;
+        else { //Deploy every unit remaining
+            deployCreation(playerWeakestTerritories, getArmyToBePlaced());
+        }
+        
     }
     //No more army to deploy, followup with next order
     else {
-        
+        Commit* c = new Commit();
+        orderlist->add(c);
     }
     
 
 };
+
+void Player::deployCreation(vector<Territory*> playerWeakestTerritories,int armyCount) {
+    
+    
+    //Update nonCommitedCount
+    for (int i = 0; i < playerWeakestTerritories.size(); i++) {
+        cout << "Territory ==> " << playerWeakestTerritories[i]->getName() << "Current => " << playerWeakestTerritories[i]->getNumArmies() << " || Predicted => " << playerWeakestTerritories[i]->getNonCommitedArmies() << endl;
+        
+        //Only add if territories hasn't had anything commited to it
+        if (playerWeakestTerritories[i]->getNumArmies() == playerWeakestTerritories[i]->getNonCommitedArmies()) {
+
+            //Increment the num of nonCommitedArmies
+            playerWeakestTerritories[i]->incNonCommitedArmies(armyCount);
+
+            //Create the order & Update armyToBePlaced cout
+            Deploy* d = new Deploy(armyCount, playerWeakestTerritories[i], this);
+            orderlist->add(d);
+            armyToBePlaced -= armyCount;
+            cout << getPlayerName() << " Deploying " << armyCount << " at territory " << playerWeakestTerritories[i]->getTerritoryID() << endl;
+
+            break;
+        }
+
+    }
+
+}
     
 
+void Player::issueOrder(Order* order) {
+    orderlist->allOrders.push_back(order);
+    sortOrderList();
+};
 
+void Player::sortOrderList() {
+    orderlist->sort();
+}
+Order* Player::getNextOrder() {
+    Order* orderToReturn;
+    if (orderlist->allOrders.size() > 0) {
+        Order* orderToReturn = orderlist->allOrders.front();
+        return orderToReturn;
+    }
+    else {
+        return NULL;
+    }    
+}
+
+void Player::setPlayerHand(Hand* newHand) {
+    handPtr = newHand;
+}

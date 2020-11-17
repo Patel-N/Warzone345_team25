@@ -6,20 +6,26 @@ using namespace std;
 class GameEngine {
 public:
 	GameEngine();
+
 	GameEngine(Map* map);
+	GameEngine(const GameEngine& engine);
 
 	//Setters Getters
 	void setGameMap(Map* map);
-	
-	Map* getGameMap();
-	vector<Player*> getPlayers();
 
+
+	Map* getGameMap();
 	void reinforcementPhase();
 	void issueOrdersPhase();
 	void executeOrdersPhase();
 	void addPlayer(Player*);
+	friend ostream& operator<<(ostream& outs, const GameEngine& theObject);
+	GameEngine& operator= (const GameEngine& engine);
 
+	//getters
+	vector<Player*> getPlayers();
 private:
 	vector<Player*> players;
 	Map* game_map;
+
 };
