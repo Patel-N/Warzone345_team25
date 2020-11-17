@@ -588,3 +588,4 @@ bool Map::validate() {
 		return false;
 	}
 }
+

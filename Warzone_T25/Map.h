@@ -1,4 +1,4 @@
-#pragma once
+	#pragma once
 #include"Player.h"
 #include <string>
 #include<vector>
@@ -108,3 +108,4 @@ private:
 namespace part_1{
 	void start();
 }
+

@@ -23,6 +23,14 @@ Player::Player() {
     playerName = "nullPlayer";
 }
 
+
+//destructor
+Player::~Player() {
+    // IMPORTANT: none of the objects player could be holding are deleted
+    cout << this->getPlayerName()<<"player destroyed" << endl;
+}
+
+
 //copy constructor
 Player::Player(const Player& input) {
 
@@ -105,12 +113,14 @@ void Player::setConquererFlag(bool conquererFlag) {
     isConquerer = conquererFlag;
 }
 
+
 void Player::setOrderList(OrderList* list) {
     this->orderlist = list;
 }
 void Player::addToArmiesToBePlaced(int additionalArmies) {
     armyToBePlaced += additionalArmies;
 }
+
 
 vector<Territory*> Player::toDefend() {// returns list of territory pointers to defend
     //DO PROPER IMPLEMENTATION
