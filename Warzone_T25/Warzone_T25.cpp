@@ -8,6 +8,11 @@
 #include"GameEngine.h"
 int main()
 {
+	GameEngine* sub = new GameEngine;
+
+	//Observer object
+	PhaseObserver* view = new PhaseObserver(sub);
+
 	MapLoader* loader = new MapLoader();
 	Map* map;
 	map = new Map(loader->generateMap("./MapFiles/canada.map"));
@@ -18,6 +23,8 @@ int main()
 	engine->addPlayer(player1);
 	engine->addPlayer(player2);
 	//cout << *map;
+
+
 
 	//cont 1
 	map->assignOccupantToTerritory(1, player1);

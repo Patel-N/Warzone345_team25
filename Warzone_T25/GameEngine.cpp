@@ -3,8 +3,8 @@
 
 using namespace std;
 
-GameEngine::GameEngine(){
-	cout << "Game Engine Created";
+GameEngine::GameEngine() {
+	cout << "Game Engine Created\n";
 }
 
 GameEngine::GameEngine(Map* map)
@@ -47,7 +47,7 @@ void GameEngine::reinforcementPhase()
 			int cId = t->getTerritoryContinentID();
 			//Check if continent id is not found in vector
 			for (int j = 0; j < continentChecked.size(); j++) {
-				isContinentIdChecked = ( cId == continentChecked[j]) ? true : false;
+				isContinentIdChecked = (cId == continentChecked[j]) ? true : false;
 			}
 
 			//Skip if continentId has already been checked
@@ -63,7 +63,7 @@ void GameEngine::reinforcementPhase()
 				for (int j = 0; j < playerTerritories.size(); j++) {
 					//cout << "print 5 times" << endl;
 					for (int k = 0; k < continentTerritories.size(); k++) {
-					
+
 						//If a territory owned by the player is on the continent increment count
 
 						if (playerTerritories[j]->getTerritoryID() == continentTerritories[cId]->getTerritoryID()) {
@@ -82,17 +82,32 @@ void GameEngine::reinforcementPhase()
 		}
 		cout << players[i]->getPlayerName() << " will get " << armyCount << " new units." << endl;
 		players[i]->setArmyToBePlaced(armyCount);
+		Notify();
 	}
-	
+
 
 }
 
-void GameEngine::issueOrdersPhase(){
+void GameEngine::issueOrdersPhase() {
 
 }
 
-void GameEngine::executeOrdersPhase(){}
+void GameEngine::executeOrdersPhase() {}
 
 void GameEngine::addPlayer(Player* player) {
 	players.push_back(player);
 }
+
+//void GameEngine::Attach(Observer* o) {
+//	_observers->push_back(o);
+//};
+//
+//void GameEngine::Detach(Observer* o) {
+//	_observers->remove(o);
+//};
+//
+//void GameEngine::Notify() {
+//	list<Observer*>::iterator i = _observers->begin();
+//	for (; i != _observers->end(); ++i)
+//		(*i)->Update();
+//};

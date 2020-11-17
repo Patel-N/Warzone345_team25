@@ -1,33 +1,33 @@
 #pragma once
 #include <list>
-
+#include<vector>
 using namespace std;
 
-//class GameEngine;
+class GameEngine;
 
 // Super class (abstract class)
 class Observer {
 
 public:
-	~Observer();
-	virtual void Update() = 0;
+    ~Observer();
+    virtual void Update() = 0;
 
 protected:
-	Observer();
+    Observer();
 };
 
 // Super class (abstract class)
 class Subject {
 
 public:
-	virtual void Attach(Observer* o);
-	virtual void Detach(Observer* o);
-	virtual void Notify();
-	Subject();
-	~Subject();
+    virtual void Attach(Observer* o);
+    virtual void Detach(Observer* o);
+    virtual void Notify();
+    Subject();
+    ~Subject();
 
-private:
-	list<Observer*>* _observers;
+protected:
+    list<Observer*>* _observers;
 };
 
 // The Observable object must be a 

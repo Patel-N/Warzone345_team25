@@ -23,6 +23,7 @@ Subject::~Subject() {
 
 void Subject::Attach(Observer* o) {
 	_observers->push_back(o);
+	cout << _observers->size() << " ATTACH" << endl;
 };
 
 void Subject::Detach(Observer* o) {
@@ -30,9 +31,13 @@ void Subject::Detach(Observer* o) {
 };
 
 void Subject::Notify() {
-	list<Observer*>::iterator i = _observers->begin();
-	for (; i != _observers->end(); ++i)
+	cout << "HELLO" << endl;
+	cout << _observers->size() << "SIIIIIIIIIIIIIZE" << endl;
+	list<Observer*>::iterator it = _observers->begin();
+	for (auto i = _observers->begin(); i != _observers->end(); ++i) {
+		cout << "MOHAMMEEEEEEEEEED" << endl;
 		(*i)->Update();
+	}
 };
 
 // PHASE OBSERVER CLASS
@@ -41,28 +46,34 @@ PhaseObserver::PhaseObserver() {
 
 PhaseObserver::PhaseObserver(GameEngine* s) {
 	//Upon instantiation, attaches itself 
-	//to a ClockTimer
-	_subject = s;
-	_subject->Attach(this);
+	//to a GameEngine
+	cout << "PHASEOBSERVER CALLED!!" << endl;
+	//_subject = s;
+	 s->Attach(this);
 };
 
 PhaseObserver::~PhaseObserver() {
 	//Upon destruction, detaches itself 
-	//from its ClockTimer      
+	//from its GameEngine 
 	_subject->Detach(this);
 };
 
+
 void PhaseObserver::Update() {
 	//Called by Notify() when state of Subject changes
+
 	display();
 };
 
 void PhaseObserver::display() {
-	int hour = _subject->getHour();
-	int minute = _subject->getMinute();
-	int second = _subject->getSecond();
-	int interval = _subject->getInterval();
-	cout << hour << ":" << minute << ":" << second << "(" << interval << ")" << endl;
+	//int hour = _subject->getHour();
+	//int minute = _subject->getMinute();
+	//int second = _subject->getSecond();
+	//int interval = _subject->getInterval();
+	//cout << hour << ":" << minute << ":" << second << "(" << interval << ")" << endl;
+	//Map* map = _subject->getGameMap();
+	//vector<Player*> players = _subject->getPlayers();
+	cout << "-------CURRENT MAP VISHALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL-------\n\n" <</* map*/  "\n\n";
 };
 
 
@@ -91,9 +102,12 @@ void StatsObserver::Update() {
 };
 
 void StatsObserver::display() {
-	int hour = _subject->getHour(); 
-	int minute = _subject->getMinute();
-	int second = _subject->getSecond();
-	int interval = _subject->getInterval();
-	cout << hour << ":" << minute << ":" << second << "(" << interval << ")" << endl;
+	//int hour = _subject->getHour(); 
+	//int minute = _subject->getMinute();
+	//int second = _subject->getSecond();
+	//int interval = _subject->getInterval();
+	//cout << hour << ":" << minute << ":" << second << "(" << interval << ")" << endl;
+	//Map* map = _subject->getGameMap();
+	//vector<Player*> players = _subject->getPlayers();
+	//cout << "CURRENT MAP" <<
 };

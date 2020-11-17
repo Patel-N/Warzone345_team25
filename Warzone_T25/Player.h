@@ -11,6 +11,9 @@
 using namespace std;
 
 class Territory;// forward declaration
+//Example uses forward declaration due to circular reference between Observers and subject
+//class PhaseObserver;
+//class StatsObserver;
 
 class Player
 {

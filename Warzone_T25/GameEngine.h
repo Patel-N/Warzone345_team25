@@ -2,9 +2,9 @@
 #include<vector>
 #include"Player.h"
 #include"Map.h"
-#include"GameObservers.h"
-
+#include "GameObservers.h"
 using namespace std;
+
 class GameEngine : public Subject {
 public:
 	GameEngine();
@@ -12,7 +12,7 @@ public:
 
 	//Setters Getters
 	void setGameMap(Map* map);
-	
+
 	Map* getGameMap();
 	vector<Player*> getPlayers();
 
@@ -20,6 +20,10 @@ public:
 	void issueOrdersPhase();
 	void executeOrdersPhase();
 	void addPlayer(Player*);
+
+	//void Attach(Observer* o);
+	//void Detach(Observer* o);
+	//void Notify();
 
 private:
 	vector<Player*> players;
