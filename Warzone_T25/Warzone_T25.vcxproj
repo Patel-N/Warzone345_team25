@@ -144,6 +144,7 @@
     <ClCompile Include="MapDrivercpp.cpp" />
     <ClCompile Include="Cards.cpp" />
     <ClCompile Include="CardsDriver.cpp" />
+    <ClCompile Include="Part2Driver.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerDriver.cpp" />
     <ClCompile Include="Warzone_T25.cpp" />
@@ -155,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="MapLoader.h" />
+    <ClInclude Include="Part2Driver.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Orders.h" />
     <ClInclude Include="Map.h" />
