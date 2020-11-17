@@ -154,8 +154,9 @@ void GameEngine::startUpPhase()
 	for (int i = 0; i < numOfPlayers; i++) {// assign int armyToBePlaced 
 		getPlayers().at(i)->setArmyToBePlaced(numOfArmieToBePlaced);
 	}
-
+	cout << endl;
 	cout << "cout from GameEngine.cpp, startUpPhase()" << endl;
+	if (numOfPlayers == 0) { cout << "there are no players in the game engine" << endl; }
 	for (int i = 0; i < numOfPlayers; i++) {// demonstration for delivery output
 		
 		cout <<getPlayers().at(i)->getPlayerName() << " owns: " << endl;//output playername

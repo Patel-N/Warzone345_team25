@@ -103,7 +103,7 @@ vector < Territory* > Player::toDefend() { // returns list of territory pointers
 
 vector < Territory* > Player::toAttack() { // returns list of territory pointers to defend
 
-    Node* head = NULL;
+
 
     //todo
 
