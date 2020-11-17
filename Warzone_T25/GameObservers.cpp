@@ -23,7 +23,7 @@ Subject::~Subject() {
 
 void Subject::Attach(Observer* o) {
 	_observers->push_back(o);
-	cout << _observers->size() << " ATTACH" << endl;
+	cout << endl << "ADDRESS OF OBSERVER LIST POINTER IN ATTACH" << _observers << endl;
 };
 
 void Subject::Detach(Observer* o) {
@@ -31,8 +31,7 @@ void Subject::Detach(Observer* o) {
 };
 
 void Subject::Notify() {
-	cout << "HELLO" << endl;
-	cout << _observers->size() << "SIIIIIIIIIIIIIZE" << endl;
+	cout << endl << "ADDRESS OF OBSERVER LIST POINTER IN NOTIFY " << _observers << endl;
 	list<Observer*>::iterator it = _observers->begin();
 	for (auto i = _observers->begin(); i != _observers->end(); ++i) {
 		cout << "MOHAMMEEEEEEEEEED" << endl;
@@ -48,8 +47,8 @@ PhaseObserver::PhaseObserver(GameEngine* s) {
 	//Upon instantiation, attaches itself 
 	//to a GameEngine
 	cout << "PHASEOBSERVER CALLED!!" << endl;
-	//_subject = s;
-	 s->Attach(this);
+	_subject = s;
+	 _subject->Attach(this);
 };
 
 PhaseObserver::~PhaseObserver() {
