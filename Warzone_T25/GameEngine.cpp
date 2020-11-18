@@ -219,14 +219,14 @@ void GameEngine::issueOrdersPhase(){
 			
 			//Reset toAttack territories
 			vector<Territory*> attackableT = players[i]->toAttack();
-			for (int j = 0; i < attackableT.size(); j++) {
+			for (int j = 0; j < attackableT.size(); j++) {
 				attackableT[j]->setWasAdvanced(false);
 				attackableT[j]->setIsAttacked(false);
 			}
 
 			//Reset toAttack territories
 			vector<Territory*> defendableT = players[i]->toDefend();
-			for (int j = 0; i < defendableT.size(); j++) {
+			for (int j = 0; j < defendableT.size(); j++) {
 				defendableT[j]->setWasAdvanced(false);
 				defendableT[j]->setIsAttacked(false);
 			}

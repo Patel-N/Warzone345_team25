@@ -421,9 +421,7 @@ void Player::issueOrder() {
                     if (!playerTerritories[j]->getWasAdvanced() && playerTerritories[j]->getNonCommitedArmies() > playerTerritories[i]->getNonCommitedArmies()) {
                         cout << "Advance(Defence) ==> " << getPlayerName() << " is moving " << playerTerritories[j]->getNonCommitedArmies() << " units to territory -> " << playerTerritories[i]->getTerritoryID() << " from ID " << playerTerritories[j]->getTerritoryID() << endl;
                         Advance* adv = new Advance(playerTerritories[j]->getNonCommitedArmies(), playerTerritories[j], playerTerritories[i], this);
-                        cout << playerTerritories[j]->getNonCommitedArmies() << endl;
                         playerTerritories[j]->decNonCommitedArmies(playerTerritories[j]->getNonCommitedArmies());
-                        cout << playerTerritories[j]->getNonCommitedArmies() << endl;
                         orderlist->add(adv);
 
                         //Mark as the current territory as it moved its army already
@@ -522,13 +520,13 @@ void Player::issueOrder() {
                 }//Reinforcement
                 else if (card->get_type() == 5) {
 
-                    //cout << "Reinforcement ==> " << getPlayerName() << " is getting an additional 5 units." << endl;
-                    //Reinforcement* rein = new Reinforcement(this);
-                    //orderlist->add(rein);
+                    cout << "Reinforcement ==> " << getPlayerName() << " is getting an additional 5 units." << endl;
+                    Reinforcement* rein = new Reinforcement(this);
+                    orderlist->add(rein);
 
-                    ////Card returned back to deck
-                    //getPlayerHand()->play(5, Player::common_deck);
-                    //setIsCardPlayed(true);
+                    //Card returned back to deck
+                    getPlayerHand()->play(5, Player::common_deck);
+                    setIsCardPlayed(true);
 
                 }
 
