@@ -66,7 +66,6 @@ void Deploy::execute(int playerIndex) {
 	if (validate()) {
 		cout <<endl<< "Validation Complete...Commencing execution for player "<<issuingPlayer->getPlayerId()<<" deploy order..." << endl;
 		target->addNumArmies(armiesToDeploy);
-		issuingPlayer->addToArmiesToBePlaced(-armiesToDeploy);
 		setorderState(true); // Order Deploy is Executed
 		cout << endl << "Armies have been deployed on territory " << target->getTerritoryID() << endl;
 		cout << endl << "Here is the new Territory state: " << endl;
@@ -426,11 +425,6 @@ bool Bomb::validate() {
 	//step 1: validate if player has bomb card. if yes: play card and continue to step 2. if not, return false.
 	cout << endl << "Executing Player " << "[ " << issuingPlayer->getPlayerId() << " ]" << " Bomb order" << endl;
 	cout << endl << "Step1: Verify if Player has bomb card in hand..." << endl;
-	if (!issuingPlayer->getPlayerHand()->isCardInHand(2)) {
-		cout << endl << "Card not found. Cannot execute order... " << endl;
-		return false;
-	}
-	issuingPlayer->getPlayerHand()->play(2, Player::common_deck);//we play card even if validate function returns false.
 	cout << endl << "Step1 SUCCESS. Found bomb card... Proceeding to step2" << endl;
 	cout << endl << "Step2: Verify that target territory belongs to enemy" << endl;
 	if (target->getTerritoryOccupant() == NULL) {
@@ -462,6 +456,7 @@ void Bomb::execute(int playerIndex) {
 	}
 	else {
 		cout << endl << "Cannot execute Bomb order. Order is invalid" << endl;
+		setorderState(true); // Order Deploy is Executed
 	}
 }
 
@@ -509,24 +504,19 @@ bool Blockade::validate() {
 	//step 1: validate if player has blockade card. if yes: play card and continue to step 2. if not, return false.
 	cout << endl << "Executing Player "<<"[ "<<issuingPlayer->getPlayerId()<<" ]"<<" Blockade order"<< endl;
 	cout << endl << "STEP1:  Verify is Player has blockade card in hand..." << endl;
-	if (!issuingPlayer->getPlayerHand()->isCardInHand(3)) {
-		cout << endl << "STEP 1 FAIL. Card not found. Cannot execute order... " << endl;
-		return false;
-	}
-	else {
-		cout << endl << "STEP 1 SUCCESS. card found. Playing card...proceeding to next step " << endl;
-		issuingPlayer->getPlayerHand()->play(3, Player::common_deck);//we play card even if validate function returns false.
-		//step 2: validate to make sure target territory belongs to player
-		cout << endl << "STEP2: Verify if terrtitory belongs to player..." << endl;
-		for (int i = 0; i < issuingPlayer->getPlayerTerritories().size(); i++) {
-			if (targetTerritory->getTerritoryID() == issuingPlayer->getPlayerTerritories()[i]->getTerritoryID()) {
-				cout << endl << "STEP2 SUCCESS. Territory belongs to player" << endl;
-				return true;
-			}
+	cout << endl << "STEP 1 SUCCESS. card found. Playing card...proceeding to next step " << endl;
+	issuingPlayer->getPlayerHand()->play(3, Player::common_deck);//we play card even if validate function returns false.
+	//step 2: validate to make sure target territory belongs to player
+	cout << endl << "STEP2: Verify if terrtitory belongs to player..." << endl;
+	for (int i = 0; i < issuingPlayer->getPlayerTerritories().size(); i++) {
+		if (targetTerritory->getTerritoryID() == issuingPlayer->getPlayerTerritories()[i]->getTerritoryID()) {
+			cout << endl << "STEP2 SUCCESS. Territory belongs to player" << endl;
+			return true;
 		}
-		cout << endl << "STEP2 FAIL. Territory does not belong to player" << endl;
-		return false;
 	}
+	cout << endl << "STEP2 FAIL. Territory does not belong to player" << endl;
+	return false;
+
 
 }
 void Blockade::execute(int playerIndex) {
@@ -547,6 +537,7 @@ void Blockade::execute(int playerIndex) {
 	}
 	else {
 		cout << "Cannot Execute blockade order: Order is invalid."<<endl;
+		setorderState(true); // Order Deploy is Executed
 	}
 }
 
@@ -592,26 +583,20 @@ Blockade& Blockade::operator=(Blockade& blockade) {
 // Airlift
 bool Airlift::validate() {
 	//step 1: validate if player has an airlift card. if yes: play card and continue to step 2. if not, return false.
-	cout << endl << "Executing Airlift order...STEP1: Looking for Airlift card in hand" << endl;
-	if (!issuingPlayer->getPlayerHand()->isCardInHand(1)) {
-		cout << endl << "STEP1 FAIL.Card not found... Cannot execute order" << endl;
-		return false;
-	}
-	else {
-		cout << endl << "STEP1 SUCCESS. card found.Card played. Proceeding to step 2... " << endl;
-		issuingPlayer->getPlayerHand()->play(1, Player::common_deck);//we play card even if validate function returns false.
-		//step 2: validate to make sure that source territory belongs to issuingPlayer
-		cout << endl << "STEP2: Validating if source territory belongs to player..." << endl;
-		for (int i = 0; i < issuingPlayer->getPlayerTerritories().size(); i++) {
-			if (source->getTerritoryID() == issuingPlayer->getPlayerTerritories()[i]->getTerritoryID()) {
-				cout << endl << "STEP2: SUCCESS. source territory belongs to player" << endl;
-				return true;
-			}
-
+	cout << endl << "STEP1 SUCCESS. card found.Card played. Proceeding to step 2... " << endl;
+	issuingPlayer->getPlayerHand()->play(1, Player::common_deck);//we play card even if validate function returns false.
+	//step 2: validate to make sure that source territory belongs to issuingPlayer
+	cout << endl << "STEP2: Validating if source territory belongs to player..." << endl;
+	for (int i = 0; i < issuingPlayer->getPlayerTerritories().size(); i++) {
+		if (source->getTerritoryID() == issuingPlayer->getPlayerTerritories()[i]->getTerritoryID()) {
+			cout << endl << "STEP2: SUCCESS. source territory belongs to player" << endl;
+			return true;
 		}
-		cout << endl << "STEP2: FAIL. source territory does not belongs to player" << endl;
-		return false;
+
 	}
+	cout << endl << "STEP2: FAIL. source territory does not belongs to player" << endl;
+	return false;
+	
 }
 void Airlift::execute(int playerIndex) {
 	if (validate()) {
@@ -650,6 +635,7 @@ void Airlift::execute(int playerIndex) {
 	}
 	else {
 		cout << "Cannot Execute airlift order: Order is invalid." << endl;
+		setorderState(true); // Order Deploy is Executed
 	}
 }
 
@@ -875,25 +861,32 @@ Airlift& Airlift::operator=(Airlift& airlift) {
 // Negotiate
 bool Negotiate::validate() {
 	//step 1: validate if player has a negotiate card. if yes: play card and continue to step 2. if not, return false.
-	cout << endl << "Executing Negotiate order...STEP1: Looking for Negotiate card in hand" << endl;
-	if (!issuingPlayer->getPlayerHand()->isCardInHand(4)) {
-		cout << endl << "STEP1 FAIL. Player does not have diplomacy card. Order is invalid" << endl;
-		return false;
-	}
-	else {
-		cout << endl << "STEP1 SUCCESS card found. Playing card...Proceeding to next step " << endl;
-		issuingPlayer->getPlayerHand()->play(4, Player::common_deck);//we play card even if validate function returns false.
-		cout << endl << "STEP2: Verifying that both players are not the same... " << endl;
-		//step 2: validate to make sure target player is not same as issuingPlayer
-		if (issuingPlayer->getPlayerId() != targetPlayer->getPlayerId()) {
-			cout << endl << "STEP2 SUCCESS: Both players are not the same " << endl;
+	cout << endl << "STEP1 SUCCESS card found. Playing card...Proceeding to next step " << endl;
+	issuingPlayer->getPlayerHand()->play(4, Player::common_deck);//we play card even if validate function returns false.
+	cout << endl << "STEP2: Verifying that both players are not the same... " << endl;
+	//step 2: validate to make sure target player is not same as issuingPlayer
+	if (issuingPlayer->getPlayerId() != targetPlayer->getPlayerId()) {
+		cout << endl << "STEP2 SUCCESS: Both players are not the same " << endl;
+		//step 3: validate to see if a negotiation order already exist between two players
+		cout << endl << "STEP3: Verifying if diplomacy already exists between the two players " << endl;
+		bool doesDiplomacyExist = false;
+		for (int i = 0; i < issuingPlayer->getDiplomacies().size(); i++) {
+			if (issuingPlayer->getDiplomacies()[i] == targetPlayer->getPlayerId()) { doesDiplomacyExist = true; }
+		}
+		if (doesDiplomacyExist) {
+			cout << endl << "STEP3 FAIL... Diplomacy alreay exists between the two players" << endl;
+			return false;
+		}
+		else {
+			cout << endl << "STEP3 SUCCESS. No diplomacy exists between the two players yet" << endl;
 			return true;
 		}
-		else { 
-			cout << endl << "STEP2 FAIL Negotiate order invalid. both players are the same" << endl;
-			return false; 
-		}
 	}
+	else { 
+		cout << endl << "STEP2 FAIL Negotiate order invalid. both players are the same" << endl;
+		return false; 
+	}
+
 }
 
 void Negotiate::execute(int playerIndex) {
@@ -902,9 +895,11 @@ void Negotiate::execute(int playerIndex) {
 		issuingPlayer->declareDiplomacy(targetPlayer);//by declaring diplomacy the target player can no longer attack the issuing player in this turn
 		setorderState(true);
 		displayDiplomacies();
+		setorderState(true); // Order Deploy is Executed
 	}
 	else {
 		cout << endl << "Cannot execute Negotiate order. order is invalid" << endl;
+		setorderState(true); // Order Deploy is Executed
 	}
 
 }
@@ -1113,6 +1108,42 @@ OrderList& OrderList::operator=(const OrderList& orderlist) {
 
 	}
 	return *this;
+}
+Reinforcement::Reinforcement(){
+	setorderName("reinforcement");
+}
+
+Reinforcement::Reinforcement(Player* player) {
+	setorderName("reinforcement");
+	issuingPlayer = player;
+	defaultInsertArmies = 5;
+}
+
+bool Reinforcement::validate() {
+	//step 1: validate if player has an airlift card. if yes: play card and continue to step 2. if not, return false.
+	//Validation is now done in execute. hence this validation will always be true because if the order is being executed, then it had a card
+	cout << endl << "Executing Reinforcement order...STEP1: Looking for Reinforcement card in hand" << endl;
+		cout << endl << "STEP1 SUCCESS. Reinforcement Card found...Playing card" << endl;
+		issuingPlayer->getPlayerHand()->play(5, Player::common_deck);
+		return true;
+
+}
+void Reinforcement::execute(int playerIndex) {
+	if (validate()) {
+		cout << "Reinforcement order Validated. Commencing execution of Reinforcement order for player # " << issuingPlayer->getPlayerId() << endl;
+		cout << endl << "Adding " << defaultInsertArmies << " armies to the reinforcement pool. Player will have to play them next trun " << endl;
+		issuingPlayer->addToArmiesToBePlaced(defaultInsertArmies);
+		setorderState(true); // Order Deploy is Executed
+		cout << endl << "==========================" << endl;
+		cout << endl << "     NEW PLAYER STATE     " << endl;
+		cout << endl << "==========================" << endl;
+		cout << *issuingPlayer;
+		setorderState(true); // Order Deploy is Executed
+	}
+	else {
+		cout << endl << "Cannot execute Reinforcement order... Order invalid" << endl;
+		setorderState(true); // Order Deploy is Executed
+	}
 }
 
 // Destructor

@@ -10,6 +10,7 @@ using namespace std;
 2: BOMB
 3: BLOCKADE
 4: DIPLOMACY
+5:REINFORCEMENT
 */
 
 // Forward declaration in order to avoid a circular dependency of pointers between classes.
