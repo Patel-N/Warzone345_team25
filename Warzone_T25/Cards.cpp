@@ -44,7 +44,9 @@ ostream& operator << (ostream& out, const Card& c)
 		break;
 	case 4: out << "DIPLOMACY CARD"<<endl;
 		break;
-	}
+	case 5: out << "REINFORCEMENT CARD" << endl;
+		break;
+}
 	return out;
 }
 
@@ -52,11 +54,11 @@ ostream& operator << (ostream& out, const Card& c)
 void Card::set_type(int new_kind) {
 
 	switch (new_kind) {
-	case 1: std::cout << "Bomb card set.\n";
-	case 2: std::cout << "Reinforcement card set.\n";
-	case 3: std::cout << "Blockade card set.\n";
-	case 4: std::cout << "Airlift card set.\n";
-	case 5: std::cout << "Diplomacy card set.\n";
+	case 1: std::cout << "AIRLIFT card set.\n";
+	case 2: std::cout << "BOMB card set.\n";
+	case 3: std::cout << "BLOCKADE card set.\n";
+	case 4: std::cout << "DIPLOMACY card set.\n";
+	case 5: std::cout << "REINFORCEMENT card set.\n";
 
 	}
 }

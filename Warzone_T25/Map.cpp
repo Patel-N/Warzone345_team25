@@ -391,7 +391,6 @@ bool Map::isConnected() {
 		visited.push_back(0);
 	}
 	//we traverse every node with all possible start points by calling dfs on every node i. 
-	std::cout << "start node: " << 0<< std::endl;
 	dfs(0,adjacencyMatrix);
 	//once dfs is complete, we should have been able to visit all nodes in G if graph is connected. is not, then one entry in visited will be false and hence the method
 	//will return false;
@@ -464,7 +463,6 @@ void Map::dfs(int start, std::vector<std::vector<int>> adjacencyMatrix) {
 	while (!stack.empty()) {
 		int id_index_visited = stack.top();
 		stack.pop();
-		std::cout << "visited = " << id_index_visited + 1 << std::endl;
 		for (int i = 0; i < adjacencyMatrix[id_index_visited].size(); i++) {
 			if (!visited[i]) {
 				if (adjacencyMatrix[id_index_visited][i] == 1) {
@@ -483,7 +481,6 @@ bool Map::areContinentsConnected() {
 		continentsVisited.push_back(0);
 	}
 	for (int k = 0; k < continents.size(); k++) {
-		std::cout << "start node: " << k;
 		std::cout << endl;
 		continentDfs(k,adjacencyMatrix);
 		for (int j = 0; j < continentsVisited.size(); j++) {
@@ -529,7 +526,6 @@ void Map::continentDfs(int start, std::vector<std::vector<int>> adjacencyMatrix)
 	while (!stack.empty()) {	
 		int continentIndexInStack = stack.top() - 1;	
 		stack.pop();
-		std::cout << "visited: " << continentIndexInStack << endl;
 		std::vector<Territory*> territoriesInContinent = continents[continentIndexInStack]->getContinentTerritoryList();
 		for (int i = 0; i < territoriesInContinent.size(); i++) {			
 			int territoryID = territoriesInContinent[i]->getTerritoryID();

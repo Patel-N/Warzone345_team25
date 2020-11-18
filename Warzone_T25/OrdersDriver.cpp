@@ -15,14 +15,6 @@ void part_4::start() {
 	//creating deck and initializing static player variable common_deck
 	Deck* deck = new Deck();
 	Player::common_deck = deck;
-	//filling deck with a card of each type
-	Card* card1 = new Card(1);
-	Card* card2 = new Card(2);
-	Card* card3 = new Card(3);
-	Card* card4 = new Card(4);
-	Player::common_deck->addCardToDeck(card2);
-	Player::common_deck->addCardToDeck(card3);
-	Player::common_deck->addCardToDeck(card4);
 	//creating players, adding players to game engine
 	Player* player1 = new Player(1, "Vishal", 0);
 	Player* player2 = new Player(2, "Neil", 0);
@@ -131,23 +123,13 @@ void part_4::start() {
 	cout << endl << "============================================" << endl;
 	cout << endl << "    PART4 DEM0: SUBPART 5:AIRLIFT DEMO      " << endl;
 	cout << endl << "============================================" << endl;
-	//creating airlift order 1: player 3 will reattempt to attack territory 8 with airlift. attack will fail because player 3 does not have airlift card
-	Order* order13 = new Airlift(4, engine->getGameMap()->getTerritory(4), engine->getGameMap()->getTerritory(8), player3);
-	player3->issueOrder(order13);
-	engine->executeOrdersPhase();//after this function call, all orders are deleted
 	//creating airlift order 2: player 1 will attempt at doing airlift from territory 8- which does not belong to him. attack will fail
 	//adding airlift card to hand
-	Card* card5 = new Card(1);
-	hand_p1->addCardToHand(card5);
-	cout << endl << "Player has now added an airlift card in hand" << endl;
 	Order* order14 = new Airlift(10, engine->getGameMap()->getTerritory(8), engine->getGameMap()->getTerritory(4), player1);
 	player1->issueOrder(order14);
 	//creating airlift order 3: player 1 will now to attack from territory 7 to 3 by doing an airlift.attack will succeed
 	//adding airlift card to hand
 	engine->getGameMap()->getTerritory(3)->setNumArmies(0);//set armies to 0 to allow player 1 to take over territory
-	Card* card6 = new Card(1);
-	hand_p1->addCardToHand(card6);
-	cout << endl << "Player has now added an airlift card in hand" << endl;
 	Order* order15 = new Airlift(10, engine->getGameMap()->getTerritory(7), engine->getGameMap()->getTerritory(3), player1);
 	player1->issueOrder(order15);
 	//creating airlift order 4: player 1 will airlift from territory 1 to territory 3. Attack will succeed but player won't gain a card
@@ -170,22 +152,11 @@ void part_4::start() {
 	cout << endl << "=============================================" << endl;
 	cout << endl << "    PART4 DEM0: SUBPART 6:BLOCKADE DEMO      " << endl;
 	cout << endl << "=============================================" << endl;
-	//creating blockade order 1: player 2 attempts to create blockade but does not have blockade card. order fails
-	Order* order17 = new Blockade(player4, engine->getGameMap()->getTerritory(8));
-	player4->issueOrder(order17);
-	engine->executeOrdersPhase();//after this function call, all orders are deleted
-	//adding blockade card to hand
-	Card* card7 = new Card(3);
-	hand_p4->addCardToHand(card7);
-	cout << endl << "Player has now added an blockade card in hand" << endl;
 	//creating blockade order 2: player 2 is able to use blockade card but territory does not belong to him
 	Order* order18 = new Blockade(player4, engine->getGameMap()->getTerritory(1));
 	player4->issueOrder(order18);
 	engine->executeOrdersPhase();//after this function call, all orders are deleted
 	//creating blockade order 3: player 2 is able to use blockade card and blockade is successful
-	Card* card8 = new Card(3);
-	hand_p4->addCardToHand(card8);
-	cout << endl << "Player has now added an blockade card in hand" << endl;
 	cout << endl << "==============================" << endl;
 	cout << endl << "   PLAYER 4 INFO BEFORE BLK   " << endl;
 	cout << endl << "==============================" << endl;
@@ -202,22 +173,12 @@ void part_4::start() {
 	cout << endl << "==============================================" << endl;
 	cout << endl << "    PART4 DEM0: SUBPART 7:NEGOTIATE DEMO      " << endl;
 	cout << endl << "==============================================" << endl;
-	//DEMO STEP7: create and issue Negotiate orders.order 1 and 2 will fail, order 3 will succeed. then attempt at attacking by both players in the negotiation fails
-	//creating negotiate order 1: player two issues negotiate order but it  fails because no diplomacy card
-	Order* order20 = new Negotiate(player2, player1);
-	player2->issueOrder(order20);
-	engine->executeOrdersPhase();//after this function call, all orders are deleted
+	//DEMO STEP7: create and issue Negotiate orders. 2 will fail, order 3 will succeed. then attempt at attacking by both players in the negotiation fails
 	//creating negotiate order 2: a card is added in the player2's hand, but player 2 issues a negotiation with himself
-	Card* card9 = new Card(4);
-	hand_p2->addCardToHand(card9);
-	cout << endl << "Player has now added a Diplomacy card in hand" << endl;
 	Order* order21 = new Negotiate(player2, player2);
 	player2->issueOrder(order21);
 	engine->executeOrdersPhase();//after this function call, all orders are deleted
 	//creating negotiate order 3: player 1 now issues negotiate order and it succeeds
-	Card* card10 = new Card(4);
-	hand_p1->addCardToHand(card10);
-	cout << endl << "Player has now added a Diplomacy  card in hand" << endl;
 	Order* order22 = new Negotiate(player1, player2);
 	player1->issueOrder(order22);
 	//adding territory to player 2 to demonstrate with no fail the diplomacy
@@ -234,26 +195,66 @@ void part_4::start() {
 	cout << endl << "=========================================" << endl;
 	cout << endl << "    PART4 DEM0: SUBPART 8:BOMB DEMO      " << endl;
 	cout << endl << "=========================================" << endl;
-	//creating bomb order 1: player 2 attempts to bomb neutral player but fails due to missing bomb card
-	Order* order25 = new Bomb(player2, engine->getGameMap()->getTerritory(8));
-	player2->issueOrder(order25);
-	engine->executeOrdersPhase();//after this function call, all orders are deleted
 	//creating bomb order 2: player 2 now has bomb card in hands and attempts to bomb neutral player but fails because
 	//he chose his territory by mistake
-	//adding bomb card in hand
-	Card* card11 = new Card(2);
-	hand_p2->addCardToHand(card11);
-	cout << endl << "Player has now added a BOMB  card in hand" << endl;
 	Order* order26 = new Bomb(player2, engine->getGameMap()->getTerritory(2));
 	player2->issueOrder(order26);
 	engine->executeOrdersPhase();//after this function call, all orders are deleted
 	//create bomb order 3: player 2 has bomb card and chooses the right player. order succeeds
-	Card* card12 = new Card(2);
-	hand_p2->addCardToHand(card12);
-	cout << endl << "Player has now added a BOMB  card in hand" << endl;
 	Order* order27 = new Bomb(player2, engine->getGameMap()->getTerritory(8));
 	player2->issueOrder(order27);
 	engine->executeOrdersPhase();//after this function call, all orders are deleted
+	//DEMO STEP9: create and issue Reinforcement orders. attempt 1 will work and 2 will fail
+	cout << endl << "==========================================" << endl;
+	cout << endl << " PART4 DEM0: SUBPART 9:REINFORCEMENT DEMO    " << endl;
+	cout << endl << "==========================================" << endl;
+
+	//create reinforcement order 2: will succeed because player has the card
+	Order* order29 = new Reinforcement(player2);
+	player2->issueOrder(order29);
+	engine->executeOrdersPhase();//after this function call, all orders are deleted
+	cout << endl << "===================================" << endl;
+	cout << endl << "  DISPLAYING STARTS AFTER PART 9   " << endl;
+	cout << endl << "===================================" << endl;
+	cout << endl << "TERRITORIES IN DEMO" << endl;
+	cout << endl << "=============================" << endl;
+	cout << *engine->getGameMap()->getTerritory(1) << endl;
+	cout << *engine->getGameMap()->getTerritory(2) << endl;
+	cout << *engine->getGameMap()->getTerritory(3) << endl;
+	cout << *engine->getGameMap()->getTerritory(4) << endl;
+	cout << *engine->getGameMap()->getTerritory(7) << endl;
+	cout << *engine->getGameMap()->getTerritory(8) << endl;
+	//DEMO STEP10: create and issue orders in random orders and display how they get executed  in priority
+	//adding armies in player 1 and 2 pool:
+	player1->setArmyToBePlaced(10);
+	player2->setArmyToBePlaced(15);
+	Order* order30 = new Airlift(2, engine->getGameMap()->getTerritory(1), engine->getGameMap()->getTerritory(7), player1);
+	Order* order31 = new Blockade(player2, engine->getGameMap()->getTerritory(2));
+	Order* order32 = new Deploy(10, engine->getGameMap()->getTerritory(1), player1);
+	Order* order33 = new Deploy(15, engine->getGameMap()->getTerritory(2), player2);
+	Order* order34 = new Deploy(8, engine->getGameMap()->getTerritory(1), player1);
+	Order* order35 = new Bomb(player2,engine->getGameMap()->getTerritory(1));
+	Order* order36 = new Negotiate(player1, player2);
+	Order* order37 = new Reinforcement(player2);
+	player1->issueOrder(order30);
+	player2->issueOrder(order31);
+	player1->issueOrder(order32);
+	player2->issueOrder(order33);
+	player1->issueOrder(order34);
+	player2->issueOrder(order35);
+	player1->issueOrder(order36);
+	player2->issueOrder(order37);
+	cout << endl << "==================================================" << endl;
+	cout << endl << " PART4 DEM0: SUBPART 10:PRE EXECUTION ORDER LISTS " << endl;
+	cout << endl << "==================================================" << endl;
+	cout << endl << "Player " << player1->getPlayerId() << " List: " << endl;
+	cout << *player1->getOrderList();
+	cout << endl << "Player " << player2->getPlayerId() << " List: " << endl;
+	cout << *player2->getOrderList();
+	engine->executeOrdersPhase();//after this function call, all orders are deleted
+	cout << endl << "==========================================" << endl;
+	cout << endl << " PART4 DEM0: SUBPART 10:ORDERLIST DEMO    " << endl;
+	cout << endl << "==========================================" << endl;
 	cout << endl << "===============================" << endl;
 	cout << endl << "        END PART 4 DEMO        " << endl;
 	cout << endl << "===============================" << endl;
