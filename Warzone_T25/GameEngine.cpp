@@ -25,7 +25,7 @@ GameEngine& GameEngine::operator=(const GameEngine& originalEngine) {
 	cout << endl << "In engine assignment operator" << endl;
 	//using map deep copy constructor
 	Map* map = new Map(*originalEngine.game_map);
-	this->setGameMap(map);
+	this->setGameMap(map);	
 	//using player deep copy constructors. side node: the player copy constructor does not copy player territories or orders
 	vector<Player*>ogPlayerVec = originalEngine.players;
 	//looping through all original players and adding territories based on their previous list and adding cards in hand based on their previous hands
@@ -71,16 +71,52 @@ vector<Player*> GameEngine::getPlayers()
 	return players;
 }
 
+void GameEngine::mainGameLoop() {
+	
+	int round = 1;
+
+	while (players.size() != 1) {
+		
+		cout << "******************** ROUND " << round << " ********************" << endl;
+		reinforcementPhase();
+		issueOrdersPhase();
+		executeOrdersPhase();
+
+		vector<Player*> activePlayers;
+		
+		for (int i = 0; i < players.size(); i++) {
+
+			if (players[i]->getPlayerTerritories().size() != 0) {
+				activePlayers.push_back(players[i]);
+			}
+			else {
+				cout << "Player => " << players[i]->getPlayerName() << " has been eliminated." << endl;
+			}
+
+		}
+
+		players = activePlayers;
+		round++;
+	
+	}
+
+}
+
 void GameEngine::reinforcementPhase()
 {
+	cout << "REINFORCEMENT PHASE:" << endl << endl;
+
 	//Loop through players
 	for (int i = 0; i < players.size(); i++) {
 		cout << endl << "Checking for player: " << players[i]->getPlayerName() << endl;
 		int armyCount = 3;
+		players[i]->addToArmiesToBePlaced(3);
 
 		//Army calculation based on territories
 		int territoryOwnedCount = (players[i])->getPlayerTerritories().size();
 		armyCount += floor(territoryOwnedCount / 3);
+		players[i]->addToArmiesToBePlaced(floor(territoryOwnedCount / 3));
+
 
 		//Determine if player controls a full continent
 		vector<Territory*> playerTerritories = (players[i])->getPlayerTerritories();
@@ -120,18 +156,87 @@ void GameEngine::reinforcementPhase()
 				//If sameTerritoryCount is equal to continent territory count then players owns all continent
 				if (sameTerritoryCount == continentTerritories.size()) {
 					armyCount += targetedContinent->getBonus();
+					players[i]->addToArmiesToBePlaced(targetedContinent->getBonus());
 				}
 			}
 
 		}
-		cout << players[i]->getPlayerName() << " will get " << armyCount << " new units." << endl;
-		players[i]->setArmyToBePlaced(armyCount);
+		cout << players[i]->getPlayerName() << " will get an additional " << armyCount << " new units." << endl;
+		
 	}
-	
 
 }
 
 void GameEngine::issueOrdersPhase(){
+	cout << "ISSUE ORDER PHASE:" << endl << endl;
+
+	//Update nonCommitedArmies count for all players;
+	for (int i = 0; i < players.size(); i++) {
+		
+		vector<Territory*> playerT = players[i]->getPlayerTerritories();
+
+		for (int j = 0; j < playerT.size(); j++) {
+			playerT[j]->setNonCommitedArmies(playerT[j]->getNumArmies());
+			//cout << "Noncommit => " << playerT[j]->getNonCommitedArmies() << " || Current => " << playerT[j]->getNumArmies()  << endl;
+		}
+
+	}
+
+	//Loop through players
+	int commitedPlayersCount = 0;
+	int index = 0;
+	
+	while (commitedPlayersCount != players.size()) {
+		
+		
+		//Player can't be commited already
+		if (!players[index]->getIsCommited()) {
+			players[index]->issueOrder();
+
+			//Check if last order is a commit
+			if (players[index]->getOrderList()->allOrders.size() > 0 && players[index]->getOrderList()->peekLastOrder() == "Commit") {
+				cout << "Player " << players[index]->getPlayerName() << " has commited their turn." << endl;
+				commitedPlayersCount++;
+				players[index]->setIsCommited(true);
+			}
+		}
+
+		index++;
+
+		//Reset index for round robin
+		if (index == players.size())
+			index = 0;
+	}
+
+	//Reset territories & Player bools && remove commit
+	for (int i = 0; i < players.size(); i++) {
+		
+		players[i]->getOrderList()->remove(players[i]->getOrderList()->numSize);
+
+		//set attack/defense/card to false
+		players[i]->setDefenseApplied(false);
+		players[i]->setAttackApplied(false);
+		players[i]->setIsCardPlayed(false);
+		players[i]->setIsCommited(false);
+
+		if (i == 0) {
+			
+			//Reset toAttack territories
+			vector<Territory*> attackableT = players[i]->toAttack();
+			for (int j = 0; j < attackableT.size(); j++) {
+				attackableT[j]->setWasAdvanced(false);
+				attackableT[j]->setIsAttacked(false);
+			}
+
+			//Reset toAttack territories
+			vector<Territory*> defendableT = players[i]->toDefend();
+			for (int j = 0; j < defendableT.size(); j++) {
+				defendableT[j]->setWasAdvanced(false);
+				defendableT[j]->setIsAttacked(false);
+			}
+
+		}
+	}
 
 }
 
@@ -164,6 +269,7 @@ void GameEngine::executeOrdersPhase(){
 		players[i]->clearDiplomacy();
 		players[i]->setConquererFlag(false);//conquererFlag is the variable that determines whether the player conquered or not a territory during a turn
 	}
+
 }
 
 void GameEngine::addPlayer(Player* player) {

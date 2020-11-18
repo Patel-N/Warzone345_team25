@@ -26,7 +26,6 @@ void Order::setorderState(bool flag) {
 Order::Order() {
 	setorderName("order");
 	setorderState(false);
-	cout << "Order Constructed: " << endl;
 }
 
 Order::Order(const Order& order) {
@@ -83,20 +82,17 @@ void Deploy::execute(int playerIndex) {
 Deploy::Deploy() {
 	setorderName("deploy");
 	setorderState(false);
-	cout << "Deploy Constructed: " << endl;
 }
 
 Deploy::Deploy(int armies, Territory* target_t, Player* player) {
 	setorderName("deploy");
 	setorderState(false);
-	cout << "Deploy Constructed: " << endl;
 	armiesToDeploy = armies;
 	target = target_t;
 	issuingPlayer = player;
 }
 
 Deploy::~Deploy() {
-	cout << "Deploy De-constructed: " << endl;
 }
 
 Deploy::Deploy(Order& order) {
@@ -946,6 +942,27 @@ Negotiate& Negotiate::operator=(Negotiate& negotiate) {
 	return *this;
 }
 
+//Commit
+bool Commit::validate() {
+	return true;
+}
+
+void Commit::execute(int playerIndex) {
+	if (validate()) {
+		cout << "Executing Player[" << playerIndex << "] Commit Order: " << endl;
+		setorderState(true); // Order Deploy is Executed
+	}
+}
+
+//Constructor 
+Commit::Commit() {
+	setorderName("Commit");
+	setorderState(false);
+}
+
+Commit::~Commit() {
+}
+
 ostream& operator << (ostream& output, Order& order) {
 	if (order.getorderState() == false) {
 		output << "The order name is: " << order.getorderName() << " and the order has not been exectuted yet. " << endl;
@@ -1135,6 +1152,11 @@ OrderList::~OrderList() {
 	for (unsigned int i = 0; i < allOrders.size(); i++) {
 		delete(allOrders[i]);
 	}
+}
+
+string OrderList::peekLastOrder()
+{
+	return allOrders[allOrders.size() - 1]->getorderName();
 }
 
 ostream& operator << (ostream& output, OrderList& orderlist) {

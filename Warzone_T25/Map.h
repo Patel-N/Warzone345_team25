@@ -10,35 +10,55 @@ class Territory {
 
 public:
 	//constructors and destructors
-	Territory(int id, std::string name,int continentID);
-	Territory(const Territory &territory);
 	Territory();
+	Territory(int id, std::string name, int continentID);
+	Territory(const Territory &territory);
+	Territory(int tId, Player* p, int numArmies, string tName, int continentId);
 	~Territory();
 	//getters
 	int getTerritoryID();
 	int getTerritoryContinentID();
 	int getNumArmies();
 	std::string getName();
-	Player* getTerritoryOccupant();
+	inline Player* getPlayer() { return player; }
+	inline bool getIsVisited() { return isVisited; }
+	inline int getNonCommitedArmies() { return nonComittedArmies; };
 	vector<Territory*> getAdjacentTerritories();
+	Player* getTerritoryOccupant();
+	inline bool getWasAdvanced() { return wasAdvanced; }
+	inline bool getIsAttacked() { return isAttacked; }
+
 	//setters
 	void setTerritoryID(int id);
 	void setTerritoryOccupant(Player*);
 	void setTerritoryName(std::string name);
-	void setNumArmies(int);
+	void setNumArmies(int num);
+	inline void setIsVisited(bool v) { isVisited = v; }
+	inline void setNonCommitedArmies(int count) { nonComittedArmies += count; }
+	inline void setWasAdvanced(bool adv) { wasAdvanced = adv; }
+	inline void setIsAttacked(bool b) { isAttacked = b; }
 
+	//Additional functions
 	void addNumArmies(int);
-	void addAdjacentTerritory(Territory*);
 	friend ostream& operator<<(ostream& outs, const Territory& theObject);
 	Territory& operator= (const Territory& territory);
+	void addAdjacentTerritory(Territory*);
+	static bool compByArmyCount(Territory* a, Territory* b);
+	static bool compById(Territory* a, Territory* b);
+	inline void incNonCommitedArmies(int count) { nonComittedArmies += count; }
+	inline void decNonCommitedArmies(int count) { nonComittedArmies -= count; }
+
 private:
 	int territoryId;
 	Player* player;
 	int numArmies;
+	int nonComittedArmies;
 	std::string territoryName;
 	int territory_continentID;
 	vector<Territory*> adjacentTerritories;
-
+	bool isVisited = false;
+	bool wasAdvanced = false;
+	bool isAttacked = false;
 };
 
 class Continent {
@@ -93,9 +113,11 @@ private:
 	std::vector<std::vector<Territory*>> map;
 	std::vector<Continent*> continents;
 	int size;
+
 	//helper vectors
 	std::vector<bool> visited;
 	std::vector<bool> continentsVisited;
+	
 	//helper functions
 	void dfs(int startNode, std::vector<std::vector<int>> adjacencyMatrix);
 	void continentDfs(int startNode, std::vector<std::vector<int>> adjacencyMatrix);	

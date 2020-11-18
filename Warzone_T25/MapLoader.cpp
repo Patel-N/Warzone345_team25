@@ -59,10 +59,11 @@ ostream& operator<<(ostream& outs, const MapLoader& mapLoaderObject)
 * Responsible of parsing the map when all elements of a map are found.
 * 
 */
-Map MapLoader::generateMap(string fn)
+Map* MapLoader::generateMap(string fn)
 {
-
-	Map gameMap("Map initialized\n");
+	Map* gameMap;
+	//Map gameMap("Map initialized\n");
+	gameMap = new Map("Map initialized\n");
 	bool continentCheck = false;
 	bool territoriesCheck = false;
 	bool bordersCheck = false;
@@ -102,7 +103,7 @@ Map MapLoader::generateMap(string fn)
 						std::vector<string> sepInfo = splitLine(line);
 
 						//Create new continents and add them to the Map
-						gameMap.addContinent(continentId, sepInfo[0], stoi(sepInfo[1]));
+						gameMap->addContinent(continentId, sepInfo[0], stoi(sepInfo[1]));
 						continentId++;
 					}
 
@@ -126,7 +127,7 @@ Map MapLoader::generateMap(string fn)
 						std::vector<string> sepInfo = splitLine(line);
 
 						//Create new territories and add them to the Map
-						gameMap.addTerritory(stoi(sepInfo[0]), sepInfo[1], stoi(sepInfo[2]));
+						gameMap->addTerritory(stoi(sepInfo[0]), sepInfo[1], stoi(sepInfo[2]));
 					}
 
 				}
@@ -155,7 +156,7 @@ Map MapLoader::generateMap(string fn)
 						}
 
 						//Add borders to map
-						gameMap.addBorder(borders);
+						gameMap->addBorder(borders);
 					}
 
 				}
@@ -165,6 +166,7 @@ Map MapLoader::generateMap(string fn)
 		}
 		else {
 			cout << "Couldn't read file." << endl;
+			return NULL;
 		}
 
 		//Throw an error if missing any info/wrong file structure
@@ -172,7 +174,7 @@ Map MapLoader::generateMap(string fn)
 			throw MissingElementException();
 		}
 		//Throw error if map is disconnected
-		if (!gameMap.validate()) {
+		if (!gameMap->validate()) {
 			throw DisconnectedMapException();
 		}
 		else {
@@ -182,15 +184,23 @@ Map MapLoader::generateMap(string fn)
 	}
 	catch (IncorrectFileException ife){
 		cout << "\n\nERROR: Incorrect file type.Please select a .map file." << endl << endl;
+		return NULL;
 	} 
 	catch (MissingElementException mee) {
 		cout << "ERROR: One of the required set of information was not found." << endl << endl;
+		return NULL;
 	}
 	catch (DisconnectedMapException dme) {
 		cout << "ERROR: The map has disconnected territories or continent." << endl << endl;
+		return NULL;
 	}
 		
 	return gameMap;
+}
+
+void MapLoader::createAdjTerrorityVector()
+{
+
 }
 
 /*

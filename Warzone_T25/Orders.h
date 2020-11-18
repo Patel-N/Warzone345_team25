@@ -154,6 +154,26 @@ private:
 	Player* targetPlayer;
 };
 
+class Commit : public Order {
+
+public:
+	bool validate();
+	void execute(int playerIndex);
+
+	//Ctor
+	Commit();
+
+	//Dtor
+	~Commit();
+
+	//Copy ctor
+	Commit(Order& commit);
+
+	//Overloaded Assignment Op
+	Commit& operator=(Commit& input);
+
+};
+
 class Reinforcement : public Order {
 public:
 	bool validate();
@@ -191,7 +211,7 @@ public:
 	//Deconstructor
 	~OrderList();
 
-
+	string peekLastOrder();
 	friend ostream& operator << (ostream& output, OrderList& orderlist);
 };
 ostream& operator << (ostream& output, Order& order);

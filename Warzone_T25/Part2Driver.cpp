@@ -8,8 +8,7 @@ using namespace std;
 void part_2::start()
 {
 	MapLoader* loader = new MapLoader();
-	Map* map;
-	map = new Map(loader->generateMap("./MapFiles/canada.map"));
+	Map* map = (loader->generateMap("./MapFiles/canada.map"));
 
 	GameEngine* engine = new GameEngine(map);
 	Player* player1 = new Player(1, "Yas", 0);
