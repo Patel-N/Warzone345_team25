@@ -25,6 +25,8 @@ public:
 	inline int getNonCommitedArmies() { return nonComittedArmies; };
 	vector<Territory*> getAdjacentTerritories();
 	Player* getTerritoryOccupant();
+	inline bool getWasAdvanced() { return wasAdvanced; }
+	inline bool getIsAttacked() { return isAttacked; }
 
 	//setters
 	void setTerritoryID(int id);
@@ -32,7 +34,9 @@ public:
 	void setTerritoryName(std::string name);
 	void setNumArmies(int num);
 	inline void setIsVisited(bool v) { isVisited = v; }
-	inline void setNonCommitedArmies(int count) { nonComittedArmies += count; };
+	inline void setNonCommitedArmies(int count) { nonComittedArmies += count; }
+	inline void setWasAdvanced(bool adv) { wasAdvanced = adv; }
+	inline void setIsAttacked(bool b) { isAttacked = b; }
 
 	//Additional functions
 	void addNumArmies(int);
@@ -53,6 +57,8 @@ private:
 	int territory_continentID;
 	vector<Territory*> adjacentTerritories;
 	bool isVisited = false;
+	bool wasAdvanced = false;
+	bool isAttacked = false;
 };
 
 class Continent {

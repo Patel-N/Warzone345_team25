@@ -7,6 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <stdlib.h> 
 
 Deck* Player::common_deck = NULL; // initializing static class member. 
 
@@ -338,8 +339,128 @@ void Player::issueOrder() {
     }
     //No more army to deploy, followup with next order
     else {
-        Commit* c = new Commit();
-        orderlist->add(c);
+
+        //The reverse order of this are territories with the most army units to attack with
+        vector<Territory*> playerTerritories = toDefend();
+        vector<Territory*> ennemyTerritories = toAttack();
+
+        
+
+        //Handle advance orders
+        if (!getAttackApplied()) {
+
+            for (int i = 0; i < ennemyTerritories.size(); i++) {
+
+                for (int j = playerTerritories.size() - 1; j >= 0; j--) {
+
+                    //Compare unit count and check if territory wasnt attacked already
+                    if (!ennemyTerritories[i]->getIsAttacked() && ennemyTerritories[i]->getNonCommitedArmies() < playerTerritories[j]->getNonCommitedArmies()) {
+
+                        //Check if the territory is adjacent
+                        vector<Territory*> currentTerAdj = playerTerritories[j]->getAdjacentTerritories();
+                        bool isAdj = false;
+
+                        for (int k = 0; k < currentTerAdj.size(); k++) {
+                            if (currentTerAdj[k]->getTerritoryID() == ennemyTerritories[i]->getTerritoryID()) {
+                                isAdj = true;
+                                break;
+                            }
+                        }
+
+                        //Regular advance
+                        if (isAdj) {
+                            Advance* adv = new Advance(playerTerritories[j]->getNonCommitedArmies(), playerTerritories[j], ennemyTerritories[i], this);
+                            playerTerritories[j]->decNonCommitedArmies(playerTerritories[j]->getNonCommitedArmies());
+                            orderlist->add(adv);
+
+                            //Mark as the current territory as it moved its army already
+                            playerTerritories[j]->setWasAdvanced(true);
+
+                            //Mark the ennemy territory as being attacked already
+                            ennemyTerritories[i]->setIsAttacked(true);
+                        }
+                        else { //requires airlift
+                            
+                            //Check if player has an airlift card
+                            if (getPlayerHand()->getCardsInHand().size() != 0 && getPlayerHand()->isCardInHand(1)) {
+                                
+                                Airlift* alift = new Airlift(playerTerritories[j]->getNonCommitedArmies(), playerTerritories[j], ennemyTerritories[i], this);
+                                playerTerritories[j]->decNonCommitedArmies(playerTerritories[j]->getNonCommitedArmies());
+                                orderlist->add(alift);
+
+                                //Card returned back to deck
+                                getPlayerHand()->play(1, Player::common_deck);
+
+                                //Mark as the current territory as it moved its army already
+                                playerTerritories[j]->setWasAdvanced(true);
+
+                                //Mark the ennemy territory as being attacked already
+                                ennemyTerritories[i]->setIsAttacked(true);
+                            }
+                        }
+
+                    }
+
+                }
+
+                if (i == ennemyTerritories.size() - 1) {
+                    setAttackApplied(true);
+                }
+            }
+        
+        }
+        else if (!getDefenseApplied()) {
+        
+            //Check if there are armies available to be moved from one player territory to another
+            for (int i = 0; i < playerTerritories.size(); i++) {
+                
+                for (int j = playerTerritories.size() - 1; j >= 0; j--) {
+                    
+                    //Move armies if greater amount
+                    if (!playerTerritories[j]->getWasAdvanced() && playerTerritories[j]->getNonCommitedArmies() > playerTerritories[i]->getNonCommitedArmies()) {
+                        Advance* adv = new Advance(playerTerritories[j]->getNonCommitedArmies(), playerTerritories[j], playerTerritories[i], this);
+                        playerTerritories[j]->decNonCommitedArmies(playerTerritories[j]->getNonCommitedArmies());
+                        orderlist->add(adv);
+
+                        //Mark as the current territory as it moved its army already
+                        playerTerritories[j]->setWasAdvanced(true);
+                    }
+
+                }
+                
+                if (i == playerTerritories.size() - 1) {
+                    setDefenseApplied(true);
+                }
+
+            }
+            
+        //} else if(!getIsCardPlayed()){
+        //    
+        //    //Won't do anything if hand is empty
+        //    if (getPlayerHand()->getCardsInHand().size() != 0) {
+        //        
+        //        //Pick a random card
+        //        int indexOfCardToPlay = rand() % getPlayerHand()->getCardsInHand().size();
+        //        Card* c = getPlayerHand()->getCardsInHand()[indexOfCardToPlay];
+
+        //        switch (c->get_type()) {
+        //        case 1:
+
+        //        
+        //        }
+
+        //    }
+        //    else {
+        //        setIsCardPlayed(true);
+        //    }
+
+
+        }
+        else {
+            Commit* c = new Commit();
+            orderlist->add(c);
+        }
+        
     }
     
 

@@ -32,7 +32,7 @@ public:
 	//Assignment Operator
 	MapLoader& operator= (const MapLoader& mlObj);
 
-	Map generateMap(std::string fn);
+	Map* generateMap(std::string fn);
 
 	void createAdjTerrorityVector();
 

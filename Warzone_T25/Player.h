@@ -27,6 +27,9 @@ private:
 	bool isConquerer;
 	vector<int> diplomacy;//this member variable serves to add target players for the negotiate order
 	void deployCreation(vector<Territory*> playerWeakestTerritories, int armyCount);
+	bool defenseApplied = false;
+	bool attackApplied = false;
+	bool isCardPlayed = false;
 
 
 public:
@@ -64,25 +67,31 @@ public:
 	inline bool getIsCommited() { return isCommited; }
 	inline bool getConquererFlag() { return isConquerer; }
 	inline OrderList* getOrderList() { return orderlist; }
+	inline bool getDefenseApplied() { return defenseApplied; }
+	inline bool getAttackApplied() { return attackApplied; }
+	inline bool getIsCardPlayed() { return isCardPlayed; }
 
 	//Setters
 	void setArmyToBePlaced(int count);
 	inline void setIsCommited(bool com) { isCommited = com; }
 	void setConquererFlag(bool);
 	void setOrderList(OrderList*);
-	
+	inline void setDefenseApplied(bool b) { defenseApplied = b; }
+	inline void setAttackApplied(bool b) { attackApplied = b; }
 	void addToArmiesToBePlaced(int);
-	vector<Territory*> toDefend(); // returns list of territory pointers to defend
-	vector<Territory*> toAttack();// returns list of territory pointers to defend
 	void setPlayerHand(Hand*);
 	void removeTerritoryFromList(int playerIndex);
 	void sortOrderList();
 	Order* getNextOrder();
+	inline void setIsCardPlayed(bool b) { isCardPlayed = b; }
+
 	//functions
 	void declareDiplomacy(Player* player);
 	void clearDiplomacy();
 	void addPlayerToDiplomacyList(int);
 	vector<int> getDiplomacies();
+	vector<Territory*> toDefend(); // returns list of territory pointers to defend
+	vector<Territory*> toAttack();// returns list of territory pointers to defend
 
 	void assignTerritoryToPlayer(Territory* newTerritory);
 	vector<Territory*> allTerritoryVectorBuilder(Territory* origin);

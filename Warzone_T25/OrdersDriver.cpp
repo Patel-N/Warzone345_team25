@@ -9,8 +9,7 @@
 void part_4::start() {
 	//creating game engine, creating map, loading canada map
 	MapLoader* loader = new MapLoader();
-	Map* map;
-	map = new Map(loader->generateMap("./MapFiles/canada.map"));
+	Map* map = (loader->generateMap("./MapFiles/canada.map"));
 	GameEngine* engine = new GameEngine(map);
 	//creating deck and initializing static player variable common_deck
 	Deck* deck = new Deck();

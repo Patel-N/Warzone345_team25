@@ -9,14 +9,32 @@
 int main()
 {
 	MapLoader* loader = new MapLoader();
-	Map* map;
-	map = new Map(loader->generateMap("./MapFiles/canada.map"));
+	Map* map = (loader->generateMap("./MapFiles/canada.map"));
 	GameEngine* engine = new GameEngine(map);
 	Player* player1 = new Player(1,"Yasser");
 	Player* player2 = new Player(2, "Neil");
+
+	//Adding cards
+	Deck* d = new Deck();
+	Player::common_deck = d;
+	Card* c1 = new Card(1);
+	Card* c2 = new Card(2);
+	Card* c3 = new Card(3);
+	Card* c4 = new Card(4);
+	Player::common_deck->addCardToDeck(c1);
+	Player::common_deck->addCardToDeck(c2);
+	Player::common_deck->addCardToDeck(c3);
+	Player::common_deck->addCardToDeck(c4);
+
+	//Setup hand
+	Hand* h1 = new Hand();
+	Hand* h2 = new Hand();
+	player1->setPlayerHand(h1);
+	player2->setPlayerHand(h2);
+
+
 	engine->addPlayer(player1);
 	engine->addPlayer(player2);
-
 	//cont 1
 	map->assignOccupantToTerritory(1, player1);
 	Territory* territory = map->getTerritory(1);

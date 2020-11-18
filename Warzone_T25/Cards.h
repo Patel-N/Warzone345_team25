@@ -101,6 +101,7 @@ public:
 	bool isCardInHand(int);
 	// Gets card from hand, plays it and returns it to deck.
 	void play(int, Deck*);
+	void removeCardFromHand(int id);
 	Card* hand_getCard();
 
 
