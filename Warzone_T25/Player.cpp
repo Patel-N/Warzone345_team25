@@ -226,10 +226,10 @@ vector<Territory*> Player::toAttack() {// returns list of territory pointers to 
 
     sort(attackableTerritories.begin(), attackableTerritories.end(), Territory::compByArmyCount);
 
-    cout << "For " << getPlayerName() << " he can possibly attack " << attackableTerritories.size() << " territories." << endl;
+    /*cout << "For " << getPlayerName() << " he can possibly attack " << attackableTerritories.size() << " territories." << endl;
     for (int i = 0; i < attackableTerritories.size(); i++) {
         cout << "Terri id => " << attackableTerritories[i]->getTerritoryID() << "\t || Name => " << attackableTerritories[i]->getName() << "\t || Army count =>" << attackableTerritories[i]->getNumArmies() << endl;
-    }
+    }*/
 
     return attackableTerritories;
 }
@@ -369,6 +369,7 @@ void Player::issueOrder() {
 
                         //Regular advance
                         if (isAdj) {
+                            cout << "Advance(Attack) ==> " << getPlayerName() << " is moving " << playerTerritories[j]->getNonCommitedArmies() << " units to territory -> " << ennemyTerritories[i]->getTerritoryID() << " from ID " << playerTerritories[j]->getTerritoryID() << endl;
                             Advance* adv = new Advance(playerTerritories[j]->getNonCommitedArmies(), playerTerritories[j], ennemyTerritories[i], this);
                             playerTerritories[j]->decNonCommitedArmies(playerTerritories[j]->getNonCommitedArmies());
                             orderlist->add(adv);
@@ -383,7 +384,7 @@ void Player::issueOrder() {
                             
                             //Check if player has an airlift card
                             if (getPlayerHand()->getCardsInHand().size() != 0 && getPlayerHand()->isCardInHand(1)) {
-                                
+                                cout << "Airlift ==> " << getPlayerName() << " is moving " << playerTerritories[j]->getNonCommitedArmies() << " units to territory -> " << ennemyTerritories[i]->getTerritoryID() << " from ID " << playerTerritories[j]->getTerritoryID() << endl;
                                 Airlift* alift = new Airlift(playerTerritories[j]->getNonCommitedArmies(), playerTerritories[j], ennemyTerritories[i], this);
                                 playerTerritories[j]->decNonCommitedArmies(playerTerritories[j]->getNonCommitedArmies());
                                 orderlist->add(alift);
@@ -418,8 +419,11 @@ void Player::issueOrder() {
                     
                     //Move armies if greater amount
                     if (!playerTerritories[j]->getWasAdvanced() && playerTerritories[j]->getNonCommitedArmies() > playerTerritories[i]->getNonCommitedArmies()) {
+                        cout << "Advance(Defence) ==> " << getPlayerName() << " is moving " << playerTerritories[j]->getNonCommitedArmies() << " units to territory -> " << playerTerritories[i]->getTerritoryID() << " from ID " << playerTerritories[j]->getTerritoryID() << endl;
                         Advance* adv = new Advance(playerTerritories[j]->getNonCommitedArmies(), playerTerritories[j], playerTerritories[i], this);
+                        cout << playerTerritories[j]->getNonCommitedArmies() << endl;
                         playerTerritories[j]->decNonCommitedArmies(playerTerritories[j]->getNonCommitedArmies());
+                        cout << playerTerritories[j]->getNonCommitedArmies() << endl;
                         orderlist->add(adv);
 
                         //Mark as the current territory as it moved its army already
@@ -434,26 +438,104 @@ void Player::issueOrder() {
 
             }
             
-        //} else if(!getIsCardPlayed()){
-        //    
-        //    //Won't do anything if hand is empty
-        //    if (getPlayerHand()->getCardsInHand().size() != 0) {
-        //        
-        //        //Pick a random card
-        //        int indexOfCardToPlay = rand() % getPlayerHand()->getCardsInHand().size();
-        //        Card* c = getPlayerHand()->getCardsInHand()[indexOfCardToPlay];
+        } else if(!getIsCardPlayed()){
+            
+            //Won't do anything if hand is empty
+            if (getPlayerHand()->getCardsInHand().size() != 0) {
+                
+                int indexOfCardToPlay;
 
-        //        switch (c->get_type()) {
-        //        case 1:
+                //Pick a random card that isn't an airlift
+                do {
+                    indexOfCardToPlay = rand() % getPlayerHand()->getCardsInHand().size();
+                } while (indexOfCardToPlay != 1);
 
-        //        
-        //        }
+                
+                Card* card = handPtr->getCardsInHand()[indexOfCardToPlay];
 
-        //    }
-        //    else {
-        //        setIsCardPlayed(true);
-        //    }
+                //Bomb
+                if (card->get_type() == 2) {
 
+                    vector<Territory*> possibleAttack = toAttack();
+                    Territory* t = new Territory();
+
+                    //Get the highest unit count ennemy territory
+                    for (int i = possibleAttack.size() - 1; i >= 0; i-- ) {
+                        if (!possibleAttack[i]->getIsAttacked()) {
+                            t = possibleAttack[i];
+                            possibleAttack[i]->setIsAttacked(true);
+                            break;
+                        }
+                    }
+
+                    cout << "Bomb ==> " << getPlayerName() << " is bombing " << t->getTerritoryID() << endl;
+                    Bomb* bAttack = new Bomb(this,t);
+                    orderlist->add(bAttack);
+
+                    //Card returned back to deck
+                    getPlayerHand()->play(2, Player::common_deck);
+                    setIsCardPlayed(true);
+
+                }//Blockade
+                else if (card->get_type() == 3) {
+
+                    Territory* t = territoryPtr[0];
+
+                    //Loop through player territory to find the biggest value of army
+                    for (int i = 1; i < territoryPtr.size(); i++) {
+                        if (t->getNonCommitedArmies() < territoryPtr[i]->getNonCommitedArmies()) {
+                            t = territoryPtr[i];
+                        }
+                    }
+
+                    cout << "Blockade ==> " << getPlayerName() << " is blockading " << t->getTerritoryID() << endl;
+                    Blockade* blockade = new Blockade(this, t);
+                    orderlist->add(blockade);
+
+                    //Card returned back to deck
+                    getPlayerHand()->play(3, Player::common_deck);
+                    setIsCardPlayed(true);
+                
+                }//Diplomacy
+                else if (card->get_type() == 4) {
+                    
+                    vector<Territory*> possibleAttack = toAttack();
+                    Territory* t = new Territory();
+
+                    //Get the highest unit count ennemy territory
+                    for (int i = possibleAttack.size() - 1; i >= 0; i--) {
+                        if (!possibleAttack[i]->getIsAttacked()) {
+                            t = possibleAttack[i];
+                            possibleAttack[i]->setIsAttacked(true);
+                            break;
+                        }
+                    }
+
+                    cout << "Negotiate ==> " << getPlayerName() << " is negotiating with " << t->getPlayer()->getPlayerName() << endl;
+                    Negotiate* negotiate = new Negotiate(this, t->getPlayer());
+                    orderlist->add(negotiate);
+
+                    //Card returned back to deck
+                    getPlayerHand()->play(4, Player::common_deck);
+                    setIsCardPlayed(true);
+
+                }//Reinforcement
+                else if (card->get_type() == 5) {
+
+                    //cout << "Reinforcement ==> " << getPlayerName() << " is getting an additional 5 units." << endl;
+                    //Reinforcement* rein = new Reinforcement(this);
+                    //orderlist->add(rein);
+
+                    ////Card returned back to deck
+                    //getPlayerHand()->play(5, Player::common_deck);
+                    //setIsCardPlayed(true);
+
+                }
+
+            }
+            else {
+                setIsCardPlayed(true);
+            }
 
         }
         else {

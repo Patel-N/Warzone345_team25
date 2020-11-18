@@ -24,6 +24,8 @@ public:
 
 	//getters
 	vector<Player*> getPlayers();
+
+	void mainGameLoop();
 private:
 	vector<Player*> players;
 	Map* game_map;

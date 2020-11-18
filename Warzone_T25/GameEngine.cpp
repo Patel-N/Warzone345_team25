@@ -70,16 +70,50 @@ vector<Player*> GameEngine::getPlayers()
 	return players;
 }
 
+void GameEngine::mainGameLoop() {
+	
+	int round = 1;
+
+	while (players.size() != 1) {
+		
+		cout << "******************** ROUND " << round << " ********************" << endl;
+		reinforcementPhase();
+		issueOrdersPhase();
+		executeOrdersPhase();
+
+		vector<Player*> activePlayers;
+		
+		for (int i = 0; i < players.size(); i++) {
+
+			if (players[i]->getPlayerTerritories().size() != 0) {
+				activePlayers.push_back(players[i]);
+			}
+			else {
+				cout << "Player => " << players[i]->getPlayerName() << " has been eliminated." << endl;
+			}
+
+		}
+
+		players = activePlayers;
+		round++;
+	
+	}
+
+}
+
 void GameEngine::reinforcementPhase()
 {
 	//Loop through players
 	for (int i = 0; i < players.size(); i++) {
 		cout << endl << "Checking for player: " << players[i]->getPlayerName() << endl;
 		int armyCount = 3;
+		players[i]->addToArmiesToBePlaced(3);
 
 		//Army calculation based on territories
 		int territoryOwnedCount = (players[i])->getPlayerTerritories().size();
 		armyCount += floor(territoryOwnedCount / 3);
+		players[i]->addToArmiesToBePlaced(floor(territoryOwnedCount / 3));
+
 
 		//Determine if player controls a full continent
 		vector<Territory*> playerTerritories = (players[i])->getPlayerTerritories();
@@ -119,12 +153,13 @@ void GameEngine::reinforcementPhase()
 				//If sameTerritoryCount is equal to continent territory count then players owns all continent
 				if (sameTerritoryCount == continentTerritories.size()) {
 					armyCount += targetedContinent->getBonus();
+					players[i]->addToArmiesToBePlaced(targetedContinent->getBonus());
 				}
 			}
 
 		}
-		cout << players[i]->getPlayerName() << " will get " << armyCount << " new units." << endl;
-		players[i]->setArmyToBePlaced(armyCount);
+		cout << players[i]->getPlayerName() << " will get an additional " << armyCount << " new units." << endl;
+		
 	}
 
 }
@@ -169,7 +204,35 @@ void GameEngine::issueOrdersPhase(){
 			index = 0;
 	}
 
-	//Reset territories & Player bools
+	//Reset territories & Player bools && remove commit
+	for (int i = 0; i < players.size(); i++) {
+		
+		players[i]->getOrderList()->remove(players[i]->getOrderList()->numSize);
+
+		//set attack/defense/card to false
+		players[i]->setDefenseApplied(false);
+		players[i]->setAttackApplied(false);
+		players[i]->setIsCardPlayed(false);
+		players[i]->setIsCommited(false);
+
+		if (i == 0) {
+			
+			//Reset toAttack territories
+			vector<Territory*> attackableT = players[i]->toAttack();
+			for (int j = 0; i < attackableT.size(); j++) {
+				attackableT[j]->setWasAdvanced(false);
+				attackableT[j]->setIsAttacked(false);
+			}
+
+			//Reset toAttack territories
+			vector<Territory*> defendableT = players[i]->toDefend();
+			for (int j = 0; i < defendableT.size(); j++) {
+				defendableT[j]->setWasAdvanced(false);
+				defendableT[j]->setIsAttacked(false);
+			}
+
+		}
+	}
 
 }
 
