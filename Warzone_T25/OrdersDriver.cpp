@@ -254,6 +254,73 @@ void part_4::start() {
 	Order* order27 = new Bomb(player2, engine->getGameMap()->getTerritory(8));
 	player2->issueOrder(order27);
 	engine->executeOrdersPhase();//after this function call, all orders are deleted
+	//DEMO STEP9: create and issue Reinforcement orders. attempt 1 will work and 2 will fail
+	cout << endl << "==========================================" << endl;
+	cout << endl << " PART4 DEM0: SUBPART 9:REINFORCEMENT DEMO    " << endl;
+	cout << endl << "==========================================" << endl;
+	//create reinforcement order 1: will fail because player does not have card
+	Order* order28 = new Reinforcement(player2);
+	player2->issueOrder(order28);
+	engine->executeOrdersPhase();//after this function call, all orders are deleted
+	//create reinforcement order 2: will succeed because player has the card
+	Card* card13 = new Card(5);
+	hand_p2->addCardToHand(card13);
+	cout << endl << "Player has now added a REINFORCEMENT  card in hand" << endl;
+	Order* order29 = new Reinforcement(player2);
+	player2->issueOrder(order29);
+	engine->executeOrdersPhase();//after this function call, all orders are deleted
+	cout << endl << "===================================" << endl;
+	cout << endl << "  DISPLAYING STARTS AFTER PART 9   " << endl;
+	cout << endl << "===================================" << endl;
+	cout << endl << "TERRITORIES IN DEMO" << endl;
+	cout << endl << "=============================" << endl;
+	cout << *engine->getGameMap()->getTerritory(1) << endl;
+	cout << *engine->getGameMap()->getTerritory(2) << endl;
+	cout << *engine->getGameMap()->getTerritory(3) << endl;
+	cout << *engine->getGameMap()->getTerritory(4) << endl;
+	cout << *engine->getGameMap()->getTerritory(7) << endl;
+	cout << *engine->getGameMap()->getTerritory(8) << endl;
+	//DEMO STEP10: create and issue orders in random orders and display how they get executed  in priority
+	//adding armies in player 1 and 2 pool:
+	player1->setArmyToBePlaced(10);
+	player2->setArmyToBePlaced(15);
+	Order* order30 = new Airlift(2, engine->getGameMap()->getTerritory(1), engine->getGameMap()->getTerritory(7), player1);
+	Order* order31 = new Blockade(player2, engine->getGameMap()->getTerritory(2));
+	Order* order32 = new Deploy(10, engine->getGameMap()->getTerritory(1), player1);
+	Order* order33 = new Deploy(15, engine->getGameMap()->getTerritory(2), player2);
+	Order* order34 = new Deploy(8, engine->getGameMap()->getTerritory(1), player1);
+	Order* order35 = new Bomb(player2,engine->getGameMap()->getTerritory(1));
+	Order* order36 = new Negotiate(player1, player2);
+	Order* order37 = new Reinforcement(player2);
+	Card* card14 = new Card(1);
+	Card* card15 = new Card(2);
+	Card* card16 = new Card(3);
+	Card* card17 = new Card(4);
+	Card* card18 = new Card(5);
+	hand_p1->addCardToHand(card14);
+	hand_p1->addCardToHand(card17);
+	hand_p2->addCardToHand(card15);
+	hand_p2->addCardToHand(card16);
+	hand_p2->addCardToHand(card18);
+	player1->issueOrder(order30);
+	player2->issueOrder(order31);
+	player1->issueOrder(order32);
+	player2->issueOrder(order33);
+	player1->issueOrder(order34);
+	player2->issueOrder(order35);
+	player1->issueOrder(order36);
+	player2->issueOrder(order37);
+	cout << endl << "==================================================" << endl;
+	cout << endl << " PART4 DEM0: SUBPART 10:PRE EXECUTION ORDER LISTS " << endl;
+	cout << endl << "==================================================" << endl;
+	cout << endl << "Player " << player1->getPlayerId() << " List: " << endl;
+	cout << *player1->getOrderList();
+	cout << endl << "Player " << player2->getPlayerId() << " List: " << endl;
+	cout << *player2->getOrderList();
+	engine->executeOrdersPhase();//after this function call, all orders are deleted
+	cout << endl << "==========================================" << endl;
+	cout << endl << " PART4 DEM0: SUBPART 10:ORDERLIST DEMO    " << endl;
+	cout << endl << "==========================================" << endl;
 	cout << endl << "===============================" << endl;
 	cout << endl << "        END PART 4 DEMO        " << endl;
 	cout << endl << "===============================" << endl;

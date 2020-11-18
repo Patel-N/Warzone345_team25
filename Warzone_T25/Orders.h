@@ -154,6 +154,18 @@ private:
 	Player* targetPlayer;
 };
 
+class Reinforcement : public Order {
+public:
+	bool validate();
+	void execute(int);
+	Reinforcement();
+	Reinforcement(Player*);
+private:
+	Player* issuingPlayer;
+	int defaultInsertArmies;
+
+};
+
 
 
 class OrderList {

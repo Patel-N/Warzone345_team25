@@ -1097,6 +1097,45 @@ OrderList& OrderList::operator=(const OrderList& orderlist) {
 	}
 	return *this;
 }
+Reinforcement::Reinforcement(){
+	setorderName("reinforcement");
+}
+
+Reinforcement::Reinforcement(Player* player) {
+	setorderName("reinforcement");
+	issuingPlayer = player;
+	defaultInsertArmies = 5;
+}
+
+bool Reinforcement::validate() {
+	//step 1: validate if player has an airlift card. if yes: play card and continue to step 2. if not, return false.
+	cout << endl << "Executing Reinforcement order...STEP1: Looking for Reinforcement card in hand" << endl;
+	if (!issuingPlayer->getPlayerHand()->isCardInHand(5)) {
+		cout << endl << "STEP1 FAIL.Card not found... Cannot execute order" << endl;
+		return false;
+	}
+	else {
+		cout << endl << "STEP1 SUCCESS. Reinforcement Card found...Playing card" << endl;
+		issuingPlayer->getPlayerHand()->play(5, Player::common_deck);
+		return true;
+	}
+
+}
+void Reinforcement::execute(int playerIndex) {
+	if (validate()) {
+		cout << "Reinforcement order Validated. Commencing execution of Reinforcement order for player # " << issuingPlayer->getPlayerId() << endl;
+		cout << endl << "Adding " << defaultInsertArmies << " armies to the reinforcement pool. Player will have to play them next trun " << endl;
+		issuingPlayer->addToArmiesToBePlaced(defaultInsertArmies);
+		setorderState(true); // Order Deploy is Executed
+		cout << endl << "==========================" << endl;
+		cout << endl << "     NEW PLAYER STATE     " << endl;
+		cout << endl << "==========================" << endl;
+		cout << *issuingPlayer;
+	}
+	else {
+		cout << endl << "Cannot execute Reinforcement order... Order invalid" << endl;
+	}
+}
 
 // Destructor
 OrderList::~OrderList() {
