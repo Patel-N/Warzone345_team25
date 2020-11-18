@@ -81,7 +81,7 @@ ostream& operator<<(ostream& outs, const Territory& theObject) {
 				
 		}
 		else {
-			outs << "Territory occupant: VACANT " << endl;
+			outs << "Territory occupant: NEUTRAL PLAYER " << endl;
 		}
 		outs << "# of armies " << theObject.numArmies << endl;
 
@@ -625,3 +625,4 @@ bool Map::validate() {
 		return false;
 	}
 }
+

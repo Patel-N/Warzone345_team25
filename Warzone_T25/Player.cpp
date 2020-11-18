@@ -38,15 +38,28 @@ Player::Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<O
     orderlist = new OrderList();
 }
 
+
+//destructor
+Player::~Player() {
+    // IMPORTANT: none of the objects player could be holding are deleted
+    cout << this->getPlayerName()<<"player destroyed" << endl;
+}
+
+
 //copy constructor
 Player::Player(const Player& input) {
 
-    //IMPORTANT: assignment operator and copy constructor will only copy playerId,playerName,armyToBePlaced,
-    // or else we will have to duplicate territories objects, card objects, and order objects and might break the game
-    playerId = input.playerId;
-    playerName = input.playerName;
-    armyToBePlaced = input.armyToBePlaced;
+    //IMPORTANT: assignment operator and copy constructor will do a shallow copy. duplicated player
+    // will point to the orginal objects, like Territory, Hand, Orders, cards or else it might break the game.
 
+     territoryPtr = input.territoryPtr;
+     handPtr = input.handPtr;
+     orderlist = input.orderlist;
+     playerId = input.playerId;
+     playerName = input.playerName;
+     armyToBePlaced = input.armyToBePlaced;
+     isConquerer = input.isConquerer;
+     diplomacy = input.diplomacy;//this member variable serves to add target players for the negotiate order
 }
 
 //stream input
@@ -102,11 +115,18 @@ ostream& operator << (ostream& output, Player& obj) { // ostream, outputs name o
 //assignment operator = overload
 Player& Player::operator = (const Player& input) {
 
-    //IMPORTANT: assignment operator and copy constructor will only copy playerId,playerName,armyToBePlaced,
-    // or else we will have to duplicate territories objects, card objects, and order objects and might break the game
+
+    //IMPORTANT: assignment operator and copy constructor will do a shallow copy. duplicated player
+    // will point to the orginal objects, like Territory, Hand, Orders, cards or else it might break the game.
+
+    territoryPtr = input.territoryPtr;
+    handPtr = input.handPtr;
+    orderlist = input.orderlist;
     playerId = input.playerId;
     playerName = input.playerName;
     armyToBePlaced = input.armyToBePlaced;
+    isConquerer = input.isConquerer;
+    diplomacy = input.diplomacy;//this member variable serves to add target players for the negotiate order
 
     return *this;
 }
@@ -264,6 +284,7 @@ void Player::setConquererFlag(bool conquererFlag) {
     isConquerer = conquererFlag;
 }
 
+
 void Player::setOrderList(OrderList* list) {
     this->orderlist = list;
 }
@@ -298,7 +319,7 @@ void Player::declareDiplomacy(Player* targetedPlayer) {
         return;
     }
     else {
-        this->addPlayerToDiplomacyList(targetedPlayer->getPlayerId());//by adding targeted player on the diplomacy list of the issuing player,we stop any possible attack from the targeted player
+       this->addPlayerToDiplomacyList(targetedPlayer->getPlayerId());//by adding targeted player on the diplomacy list of the issuing player,we stop any possible attack from the targeted player
        targetedPlayer->addPlayerToDiplomacyList(this->getPlayerId());//diplomacy goes both ways and hence the issuing player should also not be able to attack target
     }
 }

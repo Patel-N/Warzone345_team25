@@ -5,13 +5,15 @@
 using namespace std;
 class GameEngine {
 public:
+	//constructors
 	GameEngine();
 
 	GameEngine(Map* map);
 	GameEngine(const GameEngine& engine);
 
-	//Setters Getters
+	//Setters
 	void setGameMap(Map* map);
+
 
 
 	Map* getGameMap();
@@ -19,8 +21,10 @@ public:
 	void issueOrdersPhase();
 	void executeOrdersPhase();
 	void addPlayer(Player*);
+  void startUpPhase();// PART2 assign players territories in round robin, and give them armies in  int armyToBePlaced in player class
 	friend ostream& operator<<(ostream& outs, const GameEngine& theObject);
 	GameEngine& operator= (const GameEngine& engine);
+
 
 	//getters
 	vector<Player*> getPlayers();

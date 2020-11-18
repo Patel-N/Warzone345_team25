@@ -6,6 +6,9 @@
 #include "MapLoader.h"
 #include"Player.h"
 #include"GameEngine.h"
+#include "Part2Driver.h"
+
+
 int main()
 {
 	MapLoader* loader = new MapLoader();
@@ -90,23 +93,14 @@ int main()
 	player2->assignTerritoryToPlayer(territory23);
 	territory23->setNumArmies(8);
 
-	cout << "REINFORCEMENT PHASE:" << endl;
-	engine->reinforcementPhase();
-	cout << endl << endl;
-	cout << "ISSUE ORDER PHASE:" << endl;
-	engine->issueOrdersPhase();
-	//cout << *player1;
+	engine->mainGameLoop();
+
 	//part_1::start();  
-	//part_2::start();
+	//part_2::start(); 
 	//part_3::start();
 	//part_4::start();
 	//part_5::start();
-	
-	
-	/*	Player:
-		Go through everything with Martin
-		Outputstream needs to be updated
-	*/
-}
 
+	return 0;
+}
 
