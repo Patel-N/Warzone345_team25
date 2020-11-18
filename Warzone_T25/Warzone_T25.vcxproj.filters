@@ -16,6 +16,8 @@
     <ClCompile Include="Part2Driver.cpp" />
     <ClCompile Include="Part1GameEngine.cpp" />
     <ClCompile Include="Part1GameEngineDriver.cpp" />
+    <ClCompile Include="GameObservers.cpp" />
+    <ClCompile Include="GameObserversDriver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MapLoader.h" />
@@ -24,6 +26,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Cards.h" />
     <ClInclude Include="GameEngine.h" />
+    <ClInclude Include="GameObservers.h" />
     <ClInclude Include="Part2Driver.h" />
     <ClInclude Include="Part1GameEngine.h" />
   </ItemGroup>
