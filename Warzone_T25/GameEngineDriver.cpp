@@ -1,6 +1,5 @@
 #include "GameEngine.h"
 #include "MapLoader.h"
-#include <Window.h>
 
 
 void part_3::start() {
@@ -75,7 +74,14 @@ void part_3::start() {
 	player2->assignTerritoryToPlayer(territory10);
 	territory10->setNumArmies(5);
 
+	engine->reinforcementPhase();
 
+	cout << endl << "Expected new units for Yasser = 3 + floor(9/3) + (3 + 4) = 13" << endl;
+	cout << "Expected new units for Yasser = 3 + floor(1/3) + (0) = 3" << endl;
+
+	engine->issueOrdersPhase();
+
+	engine->executeOrdersPhase();
 
 	engine->mainGameLoop();
 }

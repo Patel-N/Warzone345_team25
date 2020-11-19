@@ -106,7 +106,7 @@ void GameEngine::mainGameLoop() {
 
 void GameEngine::reinforcementPhase()
 {
-	cout << "REINFORCEMENT PHASE:" << endl << endl;
+	cout << "REINFORCEMENT PHASE:" << endl;
 
 	//Loop through players
 	for (int i = 0; i < players.size(); i++) {
@@ -169,7 +169,7 @@ void GameEngine::reinforcementPhase()
 }
 
 void GameEngine::issueOrdersPhase(){
-	cout << "ISSUE ORDER PHASE:" << endl << endl;
+	cout << endl << "ISSUE ORDER PHASE:" << endl << endl;
 
 	//Update nonCommitedArmies count for all players;
 	for (int i = 0; i < players.size(); i++) {
