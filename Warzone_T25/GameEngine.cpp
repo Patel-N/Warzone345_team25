@@ -72,18 +72,17 @@ vector<Player*> GameEngine::getPlayers()
 }
 
 void GameEngine::mainGameLoop() {
-	
 	int round = 1;
 
-	while (players.size() != 1) {
-		
+	while (players[0]->getPlayerTerritories().size() != game_map->getSize()) {
+
 		cout << "******************** ROUND " << round << " ********************" << endl;
 		reinforcementPhase();
 		issueOrdersPhase();
 		executeOrdersPhase();
 
 		vector<Player*> activePlayers;
-		
+
 		for (int i = 0; i < players.size(); i++) {
 
 			if (players[i]->getPlayerTerritories().size() != 0) {
@@ -97,9 +96,12 @@ void GameEngine::mainGameLoop() {
 
 		players = activePlayers;
 		round++;
-	
 	}
 
+	cout << endl << "*********************GAME IS OVER*********************" << endl;
+	cout << endl << "This game took " << round << " rounds!" << endl;
+	cout << endl<<"Congrats " << players[0]->getPlayerName() << " YOU WON!!"<<endl;
+	cout << endl << players[0]->getPlayerName() << " has conquered " << players[0]->getPlayerTerritories().size() << endl;
 }
 
 void GameEngine::reinforcementPhase()
@@ -141,12 +143,11 @@ void GameEngine::reinforcementPhase()
 
 				//Loop through players territories 
 				for (int j = 0; j < playerTerritories.size(); j++) {
-					//cout << "print 5 times" << endl;
+
 					for (int k = 0; k < continentTerritories.size(); k++) {
 					
 						//If a territory owned by the player is on the continent increment count
-
-						if (playerTerritories[j]->getTerritoryID() == continentTerritories[cId]->getTerritoryID()) {
+						if (playerTerritories[j]->getTerritoryID() == continentTerritories[k]->getTerritoryID()) {
 							sameTerritoryCount++;
 						}
 
@@ -172,7 +173,7 @@ void GameEngine::issueOrdersPhase(){
 
 	//Update nonCommitedArmies count for all players;
 	for (int i = 0; i < players.size(); i++) {
-		
+		cout << endl << "IN HERE" << endl;
 		vector<Territory*> playerT = players[i]->getPlayerTerritories();
 
 		for (int j = 0; j < playerT.size(); j++) {

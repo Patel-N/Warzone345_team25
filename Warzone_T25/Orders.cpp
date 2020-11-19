@@ -48,12 +48,6 @@ bool Deploy::validate() {
 		if (target->getTerritoryID() == issuingPlayer->getPlayerTerritories()[i]->getTerritoryID()) {
 			cout << endl << "STEP1: SUCCESS.Proceeding to next step..." << endl;
 			cout << endl << "STEP2: implicit step to verify if enough armies in player army pool" << endl;
-			//implicit verrification to see if there are enough armies in pool
-			if (armiesToDeploy > issuingPlayer->getArmyToBePlaced()) {
-				cout << endl << "STEP2: FAIL... Attempt at deploying "<< armiesToDeploy <<" armies" << endl;
-				cout << endl << "Avalable armies:  " << issuingPlayer->getArmyToBePlaced() << endl;
-				return false;
-			}
 			cout << endl << "STEP2: SUCCESS... There are enough armies in the army pool" << endl;
 			return true;
 		}
@@ -359,7 +353,8 @@ void Advance::DisplayBattleResult(vector<int> resultingStats) {
 
 void Advance::conquer(vector<int> resultingStats) {
 	cout << endl << "Attacker WINS !!!" << endl;
-	if (resultingStats[0] - resultingStats[2] <= 0) {//resultingStats[0] = armiesAttackedWith || resultingStats[2] = defenderEliminations 
+	if (resultingStats[0] - resultingStats[2] <= 0) {
+		//resultingStats[0] = armiesAttackedWith || resultingStats[2] = defenderEliminations 
 		//no armies to move to new territory. new territory will have 0 army by game design choice
 		target->setNumArmies(0);
 	}
@@ -371,7 +366,9 @@ void Advance::conquer(vector<int> resultingStats) {
 	}
 	//at this point, we first remove the territory from the list of territories of previous owner, then we set the new owner of the gained territory
 	//and finally we add that new territory to the issuing player's territory list
-	target->getTerritoryOccupant()->removeTerritoryFromList(target->getTerritoryID() - 1);//target->getTerritoryOccupant(): old territory occupant
+	if (target->getTerritoryOccupant() != NULL) {
+		target->getTerritoryOccupant()->removeTerritoryFromList(target->getTerritoryID() - 1);//target->getTerritoryOccupant(): old territory occupant
+	}
 	target->setTerritoryOccupant(issuingPlayer);//issuing player: new territory occupant
 	issuingPlayer->assignTerritoryToPlayer(target);
 	if (!issuingPlayer->getConquererFlag()) {
@@ -405,6 +402,7 @@ void Advance::conquer(vector<int> resultingStats) {
 	cout << endl << "======NEW TERRITORY COMPOSITION=====" << endl;
 	cout << endl << *source << endl << endl;
 	cout << endl << *target << endl << endl;
+	
 }
 
 void Advance::defeatDamageControl(vector<int> resultingStats) {
@@ -784,7 +782,9 @@ void Airlift::conquer(vector<int> resultingStats) {
 		target->setNumArmies(occupyingArmies);
 
 	}
-	target->getTerritoryOccupant()->removeTerritoryFromList(target->getTerritoryID() - 1);//target->getTerritoryOccupant(): old territory occupant
+	if (target->getTerritoryOccupant() != NULL) {
+		target->getTerritoryOccupant()->removeTerritoryFromList(target->getTerritoryID() - 1);//target->getTerritoryOccupant(): old territory occupant
+	}
 	target->setTerritoryOccupant(issuingPlayer);//issuing player: new territory occupant
 	issuingPlayer->assignTerritoryToPlayer(target);
 	if (!issuingPlayer->getConquererFlag()) {
@@ -861,8 +861,8 @@ Airlift& Airlift::operator=(Airlift& airlift) {
 // Negotiate
 bool Negotiate::validate() {
 	//step 1: validate if player has a negotiate card. if yes: play card and continue to step 2. if not, return false.
+	cout << endl << " STEP1 Verify if card is in hand" << endl;
 	cout << endl << "STEP1 SUCCESS card found. Playing card...Proceeding to next step " << endl;
-	issuingPlayer->getPlayerHand()->play(4, Player::common_deck);//we play card even if validate function returns false.
 	cout << endl << "STEP2: Verifying that both players are not the same... " << endl;
 	//step 2: validate to make sure target player is not same as issuingPlayer
 	if (issuingPlayer->getPlayerId() != targetPlayer->getPlayerId()) {
