@@ -28,6 +28,7 @@ Card::Card(const Card& card) {
 // Assignment Operator to create deep copy after object is declared.
 Card &Card::operator= (const Card &card) {
 	cout << "Assignemnt operator called." << endl;
+	type = card.type;
 	return *this;
 
 }
@@ -91,6 +92,7 @@ void Deck::addCardToDeck(Card* card) {
 
 // Copy constructor to create a deep copy when object is declared.
 Deck::Deck(const Deck& deck) {
+
 	cout << "Copy constructor called." << endl;
 	vector<Card*> cVec = deck.deckVec;
 	for (int i = 0; i < deck.deckVec.size(); i++) {
@@ -149,7 +151,6 @@ Deck& Deck::operator= (const Deck& deck) {
 		}
 	}
 	return *this;
-
 }
 
 // Insertion Stream Operator to get object value with osstream.
@@ -238,7 +239,6 @@ Hand& Hand::operator= (const Hand& ogHand) {
 		}
 	}
 	return *this;
-
 }
 
 // Insertion Stream Operator

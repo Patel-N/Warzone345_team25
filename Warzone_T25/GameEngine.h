@@ -40,3 +40,7 @@ private:
 	int phaseID;
 	string pName;
 };
+
+namespace part_3 {
+	void start();
+}

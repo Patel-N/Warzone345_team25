@@ -34,7 +34,6 @@ public:
 
 	Map* generateMap(std::string fn);
 
-	void createAdjTerrorityVector();
 
 
 private:	

@@ -198,11 +198,6 @@ Map* MapLoader::generateMap(string fn)
 	return gameMap;
 }
 
-void MapLoader::createAdjTerrorityVector()
-{
-
-}
-
 /*
 Helper class to split a string by a whitespace delimiter
 */

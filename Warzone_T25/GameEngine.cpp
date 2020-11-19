@@ -107,10 +107,16 @@ void GameEngine::mainGameLoop() {
 		round++;
 	}
 
+
+	cout << endl << "*********************GAME IS OVER*********************" << endl;
+	cout << endl << "This game took " << round << " rounds!" << endl;
+	cout << endl << "Congrats " << players[0]->getPlayerName() << " YOU WON!!" << endl;
+	cout << endl << players[0]->getPlayerName() << " has conquered all " << players[0]->getPlayerTerritories().size() << " territories." << endl;
 }
 
 void GameEngine::reinforcementPhase()
 {
+	cout << "REINFORCEMENT PHASE:" << endl;
 	phaseID = 1;
 
 	//Loop through players
@@ -178,16 +184,18 @@ void GameEngine::reinforcementPhase()
 }
 
 void GameEngine::issueOrdersPhase(){
+	cout << endl << "ISSUE ORDER PHASE:" << endl << endl;
+
 	phaseID = 2;
 	pName = players[0]->getPlayerName(); // IMPLEMENT WHEN YOU GET THE CODE
 	Notify(true);
+
 	//Update nonCommitedArmies count for all players;
 	for (int i = 0; i < players.size(); i++) {
 		vector<Territory*> playerT = players[i]->getPlayerTerritories();
 
 		for (int j = 0; j < playerT.size(); j++) {
 			playerT[j]->setNonCommitedArmies(playerT[j]->getNumArmies());
-			//cout << "Noncommit => " << playerT[j]->getNonCommitedArmies() << " || Current => " << playerT[j]->getNumArmies()  << endl;
 		}
 
 	}

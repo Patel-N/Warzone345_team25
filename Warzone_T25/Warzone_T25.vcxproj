@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameEngine.cpp" />
+    <ClCompile Include="GameEngineDriver.cpp" />
     <ClCompile Include="GameObservers.cpp" />
     <ClCompile Include="GameObserversDriver.cpp" />
     <ClCompile Include="Map.cpp" />

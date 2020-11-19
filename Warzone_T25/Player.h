@@ -21,7 +21,6 @@ private:
 	int playerId;
 	string playerName;
 	int armyToBePlaced;
-	vector<Territory*> getPlayerAdjacentTerritories();
 	bool isCommited = false;
 	bool isConquerer;
 	vector<int> diplomacy;//this member variable serves to add target players for the negotiate order
@@ -97,8 +96,6 @@ public:
 	void issueOrder();
 };
 
-namespace part_3 {
-
+namespace phase1_part3 {
 	void start();
-
 }

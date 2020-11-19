@@ -93,6 +93,9 @@ Territory& Territory::operator=(const Territory& territory) {
 		territoryId = territory.territoryId;
 		territoryName = territory.territoryName;
 		territory_continentID = territory.territory_continentID;
+		isVisited = territory.isVisited;
+		wasAdvanced = territory.wasAdvanced;
+		isAttacked = territory.isAttacked;
 
 		numArmies = territory.numArmies;
 		if (territory.player != NULL) {
