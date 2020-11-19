@@ -173,7 +173,6 @@ void GameEngine::issueOrdersPhase(){
 
 	//Update nonCommitedArmies count for all players;
 	for (int i = 0; i < players.size(); i++) {
-		cout << endl << "IN HERE" << endl;
 		vector<Territory*> playerT = players[i]->getPlayerTerritories();
 
 		for (int j = 0; j < playerT.size(); j++) {

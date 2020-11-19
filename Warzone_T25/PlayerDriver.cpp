@@ -9,7 +9,7 @@ using namespace std;
 
 
 
-void part_3::start() {
+void phase1_part3::start() {
 	/*
 		cout << "**********************PLAYER PART**********************" << endl;
 

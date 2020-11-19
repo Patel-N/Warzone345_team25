@@ -1,7 +1,9 @@
 #include "GameEngine.h"
 #include "MapLoader.h"
+#include <Window.h>
 
-void part_4::start() {
+
+void part_3::start() {
 
 	MapLoader* loader = new MapLoader();
 	Map* map = (loader->generateMap("./MapFiles/canada.map"));
@@ -73,21 +75,7 @@ void part_4::start() {
 	player2->assignTerritoryToPlayer(territory10);
 	territory10->setNumArmies(5);
 
-	map->assignOccupantToTerritory(11, player2);
-	Territory* territory11 = map->getTerritory(11);
-	player2->assignTerritoryToPlayer(territory11);
-	territory11->setNumArmies(15);
 
-	map->assignOccupantToTerritory(22, player2);
-	Territory* territory22 = map->getTerritory(22);
-	player2->assignTerritoryToPlayer(territory22);
-	territory22->setNumArmies(30);
 
-	map->assignOccupantToTerritory(23, player2);
-	Territory* territory23 = map->getTerritory(23);
-	player2->assignTerritoryToPlayer(territory23);
-	territory23->setNumArmies(8);
-
-	engine->issueOrdersPhase();
-
+	engine->mainGameLoop();
 }

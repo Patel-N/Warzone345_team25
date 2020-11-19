@@ -284,7 +284,8 @@ void Player::issueOrder() {
         //The reverse order of this are territories with the most army units to attack with
         vector<Territory*> playerTerritories = toDefend();
         vector<Territory*> ennemyTerritories = toAttack();
-
+        bool advDone = false;
+        bool advDefDone = false;
         
 
         //Handle advance orders
@@ -319,6 +320,10 @@ void Player::issueOrder() {
 
                             //Mark the ennemy territory as being attacked already
                             ennemyTerritories[i]->setIsAttacked(true);
+
+                            //Made an attack so I should exit
+                            advDone = true;
+                            break;
                         }
                         else { //requires airlift
                             
@@ -337,6 +342,10 @@ void Player::issueOrder() {
 
                                 //Mark the ennemy territory as being attacked already
                                 ennemyTerritories[i]->setIsAttacked(true);
+                                
+                                //Made an attack so I should exit
+                                advDone = true;
+                                break;
                             }
                         }
 
@@ -347,6 +356,11 @@ void Player::issueOrder() {
                 if (i == ennemyTerritories.size() - 1) {
                     setAttackApplied(true);
                 }
+
+                //exit if order is executed
+                if (advDone)
+                    break;
+
             }
         
         }
@@ -365,9 +379,15 @@ void Player::issueOrder() {
 
                         //Mark as the current territory as it moved its army already
                         playerTerritories[j]->setWasAdvanced(true);
+
+                        advDefDone = true;
                     }
 
                 }
+
+                //exit if order is executed
+                if (advDefDone)
+                    break;
                 
                 if (i == playerTerritories.size() - 1) {
                     setDefenseApplied(true);

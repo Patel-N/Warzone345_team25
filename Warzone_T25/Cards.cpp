@@ -28,6 +28,7 @@ Card::Card(const Card& card) {
 // Assignment Operator to create deep copy after object is declared.
 Card &Card::operator= (const Card &card) {
 	cout << "Assignemnt operator called." << endl;
+	type = card.type;
 	return *this;
 
 }
@@ -91,15 +92,66 @@ void Deck::addCardToDeck(Card* card) {
 
 // Copy constructor to create a deep copy when object is declared.
 Deck::Deck(const Deck& deck) {
-	cout << "Copy constructor called." << endl;
-	deckVec = deck.deckVec;
+
+	vector<Card*> cVec = deck.deckVec;
+	for (int i = 0; i < deck.deckVec.size(); i++) {
+
+		//Airlift
+		if (cVec[i]->get_type() == 1) {
+			Card* c = new Card(1);
+			this->addCardToDeck(c);
+		}
+		else if (cVec[i]->get_type() == 2) { //Bomb
+			Card* c = new Card(2);
+			this->addCardToDeck(c);
+		}
+		else if (cVec[i]->get_type() == 3) { //Blockade
+			Card* c = new Card(3);
+			this->addCardToDeck(c);
+		}
+		else if (cVec[i]->get_type() == 4) { //Negotiate
+			Card* c = new Card(4);
+			this->addCardToDeck(c);
+		}
+		else if (cVec[i]->get_type() == 5) { //Reinforcement
+			Card* c = new Card(5);
+			this->addCardToDeck(c);
+		}
+	}
 }
 
 // Assignment Operator to create a deep copy after object is declared.
 Deck& Deck::operator= (const Deck& deck) {
 	cout << "Assignemnt operator called." << endl;
-	return *this;
+	vector<Card*> cVec = deck.deckVec;
 
+
+
+	for (int i = 0; i < deck.deckVec.size(); i++) {
+
+		//Airlift
+		if (cVec[i]->get_type() == 1) {
+			Card* c = new Card(1);
+			this->addCardToDeck(c);
+		}
+		else if (cVec[i]->get_type() == 2) { //Bomb
+			Card* c = new Card(2);
+			this->addCardToDeck(c);
+		}
+		else if (cVec[i]->get_type() == 3) { //Blockade
+			Card* c = new Card(3);
+			this->addCardToDeck(c);
+		}
+		else if (cVec[i]->get_type() == 4) { //Negotiate
+			Card* c = new Card(4);
+			this->addCardToDeck(c);
+		}
+		else if (cVec[i]->get_type() == 5) { //Reinforcement
+			Card* c = new Card(5);
+			this->addCardToDeck(c);
+		}
+	}
+	return *this;
 }
 
 // Insertion Stream Operator to get object value with osstream.
@@ -188,7 +240,6 @@ Hand& Hand::operator= (const Hand& ogHand) {
 		}
 	}
 	return *this;
-
 }
 
 // Insertion Stream Operator

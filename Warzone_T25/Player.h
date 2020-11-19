@@ -96,8 +96,6 @@ public:
 	void issueOrder();
 };
 
-namespace part_3 {
-
+namespace phase1_part3 {
 	void start();
-
 }

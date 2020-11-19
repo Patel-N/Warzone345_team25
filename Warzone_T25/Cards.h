@@ -109,8 +109,6 @@ public:
 
 private:
 	std::vector<Card*> handCards;
-	//vector<Card*> playCards;
-
 };
 
 namespace part_5 {
