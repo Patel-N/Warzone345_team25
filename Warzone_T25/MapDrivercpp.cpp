@@ -2,7 +2,7 @@
 #include <iostream>
 #include"Map.h";
 using namespace std;
-void part_1::start() {
+void phase1_part_1::start() {
 	Map* map = new Map("Created map");
 		map->addContinent(1, "Skandinavien", 4);
 		map->addContinent(2, "Westeuropa", 5);
