@@ -394,7 +394,6 @@ void Player::issueOrder() {
                             Advance* adv = new Advance(playerTerritories[j]->getNonCommitedArmies(), playerTerritories[j], ennemyTerritories[i], this);
                             playerTerritories[j]->decNonCommitedArmies(playerTerritories[j]->getNonCommitedArmies());
                             orderlist->add(adv);
-
                             //Mark as the current territory as it moved its army already
                             playerTerritories[j]->setWasAdvanced(true);
 
@@ -437,7 +436,6 @@ void Player::issueOrder() {
             for (int i = 0; i < playerTerritories.size(); i++) {
                 
                 for (int j = playerTerritories.size() - 1; j >= 0; j--) {
-                    
                     //Move armies if greater amount
                     if (!playerTerritories[j]->getWasAdvanced() && playerTerritories[j]->getNonCommitedArmies() > playerTerritories[i]->getNonCommitedArmies()) {
                         cout << "Advance(Defence) ==> " << getPlayerName() << " is moving " << playerTerritories[j]->getNonCommitedArmies() << " units to territory -> " << playerTerritories[i]->getTerritoryID() << " from ID " << playerTerritories[j]->getTerritoryID() << endl;
@@ -456,20 +454,19 @@ void Player::issueOrder() {
                 }
 
             }
+
             
         } else if(!getIsCardPlayed()){
-            
             //Won't do anything if hand is empty
-            if (getPlayerHand()->getCardsInHand().size() != 0) {
-                
+            if (getPlayerHand()->getCardsInHand().size() != 0 && !(getPlayerHand()->getCardsInHand().size() == 1 && getPlayerHand()->getCardsInHand()[0]->get_type() == 1)) {
                 int indexOfCardToPlay;
-
                 //Pick a random card that isn't an airlift
-                do {
-                    indexOfCardToPlay = rand() % getPlayerHand()->getCardsInHand().size();
-                } while (indexOfCardToPlay != 1);
-
-                
+                for (int i = 0; i < getPlayerHand()->getCardsInHand().size(); i++) {
+                    if (getPlayerHand()->getCardsInHand()[i]->get_type() != 1) {
+                        indexOfCardToPlay = i;
+                    }
+                }
+               
                 Card* card = handPtr->getCardsInHand()[indexOfCardToPlay];
 
                 //Bomb
@@ -517,25 +514,26 @@ void Player::issueOrder() {
                 
                 }//Diplomacy
                 else if (card->get_type() == 4) {
-                    
                     vector<Territory*> possibleAttack = toAttack();
                     Territory* t = new Territory();
 
                     //Get the highest unit count ennemy territory
                     for (int i = possibleAttack.size() - 1; i >= 0; i--) {
-                        if (!possibleAttack[i]->getIsAttacked()) {
+                        if (!possibleAttack[i]->getIsAttacked() && possibleAttack[i]->getPlayer() != NULL) {
                             t = possibleAttack[i];
                             possibleAttack[i]->setIsAttacked(true);
                             break;
                         }
                     }
 
-                    cout << "Negotiate ==> " << getPlayerName() << " is negotiating with " << t->getPlayer()->getPlayerName() << endl;
-                    Negotiate* negotiate = new Negotiate(this, t->getPlayer());
-                    orderlist->add(negotiate);
+                    if (t->getTerritoryContinentID() != 0) {
+                        cout << "Negotiate ==> " << getPlayerName() << " is negotiating with " << t->getPlayer()->getPlayerName() << endl;
+                        Negotiate* negotiate = new Negotiate(this, t->getPlayer());
+                        orderlist->add(negotiate);
 
-                    //Card returned back to deck
-                    getPlayerHand()->play(4, Player::common_deck);
+                        //Card returned back to deck
+                        getPlayerHand()->play(4, Player::common_deck);
+                    }
                     setIsCardPlayed(true);
 
                 }//Reinforcement
