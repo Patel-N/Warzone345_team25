@@ -60,6 +60,9 @@ Player::Player(const Player& input) {
      armyToBePlaced = input.armyToBePlaced;
      isConquerer = input.isConquerer;
      diplomacy = input.diplomacy;//this member variable serves to add target players for the negotiate order
+     defenseApplied = input.defenseApplied;
+     attackApplied = input.attackApplied;
+     isCardPlayed = input.isCardPlayed;
 }
 
 //stream input
@@ -127,6 +130,9 @@ Player& Player::operator = (const Player& input) {
     armyToBePlaced = input.armyToBePlaced;
     isConquerer = input.isConquerer;
     diplomacy = input.diplomacy;//this member variable serves to add target players for the negotiate order
+    defenseApplied = input.defenseApplied;
+    attackApplied = input.attackApplied;
+    isCardPlayed = input.isCardPlayed;
 
     return *this;
 }
@@ -501,7 +507,6 @@ void Player::issueOrder() {
         }
         
     }
-    
 
 };
 

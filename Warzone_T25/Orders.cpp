@@ -963,6 +963,22 @@ Commit::Commit() {
 Commit::~Commit() {
 }
 
+Commit::Commit(Order& commit)
+{
+	(*this).setorderState(commit.getorderState());
+	(*this).setorderName(commit.getorderName());
+}
+
+Commit& Commit::operator=(Commit& input)
+{
+	if (this == &input) {
+		return *this;
+	}
+	(*this).setorderState(input.getorderState());
+	(*this).setorderName(input.getorderName());
+	return *this;
+}
+
 ostream& operator << (ostream& output, Order& order) {
 	if (order.getorderState() == false) {
 		output << "The order name is: " << order.getorderName() << " and the order has not been exectuted yet. " << endl;

@@ -15,6 +15,7 @@ public:
 	Territory(const Territory &territory);
 	Territory(int tId, Player* p, int numArmies, string tName, int continentId);
 	~Territory();
+
 	//getters
 	int getTerritoryID();
 	int getTerritoryContinentID();
@@ -29,7 +30,7 @@ public:
 	inline bool getIsAttacked() { return isAttacked; }
 
 	//setters
-	void setTerritoryID(int id);
+	inline void setTerritoryID(int id) { territoryId = id; }
 	void setTerritoryOccupant(Player*);
 	void setTerritoryName(std::string name);
 	void setNumArmies(int num);

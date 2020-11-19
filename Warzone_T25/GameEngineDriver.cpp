@@ -1,6 +1,5 @@
 #include "GameEngine.h"
 #include "MapLoader.h"
-#include <Window.h>
 
 
 void part_3::start() {
