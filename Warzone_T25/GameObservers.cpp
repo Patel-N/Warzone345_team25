@@ -206,7 +206,9 @@ void PhaseObserver::display() {
 			cout << name << ": " << "EXECUTION ORDERS PHASE\n" << endl;
 			for (int i = 0; i < players.size(); i++) {
 				// WAIT FOR ISSUE ORDERS BEFORE UNCOMMENTING
-				cout << players[i]->getPlayerName() << " executes " << players[i]->getNextOrder()->getorderName() << endl << endl;
+				if(players[i]->getOrderList()->numSize != 0 ) {
+					cout << players[i]->getPlayerName() << " executes " << players[i]->getNextOrder()->getorderName() << endl << endl;
+				}
 			}
 			
 			break;
