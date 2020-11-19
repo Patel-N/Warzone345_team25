@@ -515,7 +515,6 @@ void Player::deployCreation(vector<Territory*> playerWeakestTerritories,int army
     
     //Update nonCommitedCount
     for (int i = 0; i < playerWeakestTerritories.size(); i++) {
-        cout << "Territory ==> " << playerWeakestTerritories[i]->getName() << "Current => " << playerWeakestTerritories[i]->getNumArmies() << " || Predicted => " << playerWeakestTerritories[i]->getNonCommitedArmies() << endl;
         
         //Only add if territories hasn't had anything commited to it
         if (playerWeakestTerritories[i]->getNumArmies() == playerWeakestTerritories[i]->getNonCommitedArmies()) {

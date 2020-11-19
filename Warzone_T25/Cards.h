@@ -111,6 +111,6 @@ private:
 	std::vector<Card*> handCards;
 };
 
-namespace part_5 {
+namespace part5 {
 	void start();
 }

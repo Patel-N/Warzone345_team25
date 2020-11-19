@@ -7,7 +7,8 @@
 #include"Player.h"
 #include"GameEngine.h"
 #include "Part2Driver.h"
-
+#include"GameObservers.h"
+#include "Part1GameEngine.h"
 
 int main()
 {

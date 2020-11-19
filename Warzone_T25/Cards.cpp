@@ -93,9 +93,9 @@ void Deck::addCardToDeck(Card* card) {
 // Copy constructor to create a deep copy when object is declared.
 Deck::Deck(const Deck& deck) {
 
+	cout << "Copy constructor called." << endl;
 	vector<Card*> cVec = deck.deckVec;
 	for (int i = 0; i < deck.deckVec.size(); i++) {
-
 		//Airlift
 		if (cVec[i]->get_type() == 1) {
 			Card* c = new Card(1);
@@ -123,12 +123,11 @@ Deck::Deck(const Deck& deck) {
 // Assignment Operator to create a deep copy after object is declared.
 Deck& Deck::operator= (const Deck& deck) {
 	cout << "Assignemnt operator called." << endl;
+	if (this == &deck) {
+		return *this;
+	}
 	vector<Card*> cVec = deck.deckVec;
-
-
-
 	for (int i = 0; i < deck.deckVec.size(); i++) {
-
 		//Airlift
 		if (cVec[i]->get_type() == 1) {
 			Card* c = new Card(1);

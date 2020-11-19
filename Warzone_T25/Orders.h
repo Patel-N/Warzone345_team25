@@ -2,14 +2,14 @@
 #include<iostream>
 #include<string>
 #include<vector>
-
+#include"GameObservers.h"
 
 using namespace std;
 
 class Player;
 class Territory;
 
-class Order { // abstract class- no instantiation. // no pointer or objects so no requirement of assignment operator and copy constructor
+class Order : public Subject { // abstract class- no instantiation. // no pointer or objects so no requirement of assignment operator and copy constructor
 private:
 	string orderName;
 	bool orderState;

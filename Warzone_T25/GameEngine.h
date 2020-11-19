@@ -2,8 +2,10 @@
 #include<vector>
 #include"Player.h"
 #include"Map.h"
+#include "GameObservers.h"
+
 using namespace std;
-class GameEngine {
+class GameEngine : public Subject {
 public:
 	//constructors
 	GameEngine();
@@ -28,12 +30,15 @@ public:
 
 	//getters
 	vector<Player*> getPlayers();
+	int getPhase();
+	string getPName();
 
 	void mainGameLoop();
 private:
 	vector<Player*> players;
 	Map* game_map;
-
+	int phaseID;
+	string pName;
 };
 
 namespace part_3 {

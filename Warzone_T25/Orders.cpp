@@ -58,6 +58,7 @@ bool Deploy::validate() {
 
 void Deploy::execute(int playerIndex) {
 	if (validate()) {
+		Notify(true);
 		cout <<endl<< "Validation Complete...Commencing execution for player "<<issuingPlayer->getPlayerId()<<" deploy order..." << endl;
 		target->addNumArmies(armiesToDeploy);
 		setorderState(true); // Order Deploy is Executed
@@ -67,6 +68,7 @@ void Deploy::execute(int playerIndex) {
 		cout << "================================" << endl;
 	}
 	else {
+		Notify(true);
 		setorderState(false); // Order Has not been executed- as couldnt be validated
 		cout << endl << "Deploy order invalid. failed to execute" << endl;
 	}
@@ -368,7 +370,7 @@ void Advance::conquer(vector<int> resultingStats) {
 	//and finally we add that new territory to the issuing player's territory list
 	if (target->getTerritoryOccupant() != NULL) {
 		target->getTerritoryOccupant()->removeTerritoryFromList(target->getTerritoryID() - 1);//target->getTerritoryOccupant(): old territory occupant
-	}
+	}	
 	target->setTerritoryOccupant(issuingPlayer);//issuing player: new territory occupant
 	issuingPlayer->assignTerritoryToPlayer(target);
 	if (!issuingPlayer->getConquererFlag()) {
