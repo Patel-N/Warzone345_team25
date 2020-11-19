@@ -76,8 +76,8 @@ void part_3::start() {
 
 	engine->reinforcementPhase();
 
-	cout << endl << "Expected new units for Yasser = 3 + floor(9/3) + (3 + 4) = 13" << endl;
-	cout << "Expected new units for Yasser = 3 + floor(1/3) + (0) = 3" << endl;
+	cout << endl << "Expected new units for Yasser = 3 + floor(9/3) + (3) = 9" << endl;
+	cout << "Expected new units for Neil = 3 + floor(1/3) + (0) = 3" << endl;
 
 	engine->issueOrdersPhase();
 
