@@ -1,16 +1,29 @@
 #include <iostream> // for displaying to console
 #include "Part1GameEngine.h" //headerfile
-
+#include"GameEngine.h";
+#include"GameObservers.h";
 void part_1::start() {
 
 	cout << "//=======================================//\n";
 	cout << "		Creating Map\n";
 	cout << "//=======================================//\n";
-
 	SelectMap* selectmap = new SelectMap("C:/Users/pauru/Documents/Maps");
 	selectmap->printGameMaps();
 	selectmap->setMap(); // choose swiss.map to check the case of invalid map // spain map is showing runtime exception
 	selectmap->loadmap();
+	Map* map = selectmap->map;
+	GameEngine* engine = new GameEngine(map);
+	PhaseObserver* phaseObserver = new PhaseObserver(engine);
+	StatsObserver* statsObserver = new StatsObserver(engine);
+	int phaseObserverOn = 0;
+	int statsObserverOn = 0;
+	cout << endl << "Pleaser enter 1 if you wish to turn on the observer" << endl;
+	cin >> phaseObserverOn;
+	if (phaseObserverOn == 1) { phaseObserver->TurnOn(); }
+	cout << endl << "Pleaser enter 2 if you wish to turn on stats observer" << endl;
+	cin >> statsObserverOn;
+	if (statsObserverOn == 2) { statsObserver->TurnOn(); }
+
 	cout << *selectmap; // check insertion stream overload
 	cout << "\n";
 
