@@ -35,3 +35,7 @@ private:
 	Map* game_map;
 
 };
+
+namespace part_4 {
+	void start();
+}

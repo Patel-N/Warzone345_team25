@@ -178,7 +178,6 @@ void GameEngine::issueOrdersPhase(){
 
 		for (int j = 0; j < playerT.size(); j++) {
 			playerT[j]->setNonCommitedArmies(playerT[j]->getNumArmies());
-			//cout << "Noncommit => " << playerT[j]->getNonCommitedArmies() << " || Current => " << playerT[j]->getNumArmies()  << endl;
 		}
 
 	}

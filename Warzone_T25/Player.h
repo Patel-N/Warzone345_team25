@@ -21,7 +21,6 @@ private:
 	int playerId;
 	string playerName;
 	int armyToBePlaced;
-	vector<Territory*> getPlayerAdjacentTerritories();
 	bool isCommited = false;
 	bool isConquerer;
 	vector<int> diplomacy;//this member variable serves to add target players for the negotiate order
