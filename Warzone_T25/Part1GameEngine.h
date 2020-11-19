@@ -94,20 +94,6 @@ public:
 
 };
 
-//============================================================
-// This is commented not because we forgot- this is implementation pending for observer.cpp turnon and turnoff
-//============================================================
-//class ChangeObserver {
-//	Observer* observer;
-//
-//	ChangeObserver();
-//	void turnon(); //ob->changebserver();
-//		
-//	
-//	void turnoff(); //ob->changebserver();
-//	//friend ostream& operator<<(ostream& outs, const ChangeObserver& changeobserverobj);
-//};
-
 namespace part_1 {
 	void start();
 }

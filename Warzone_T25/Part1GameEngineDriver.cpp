@@ -7,7 +7,7 @@ void part_1::start() {
 	cout << "//=======================================//\n";
 	cout << "		Creating Map\n";
 	cout << "//=======================================//\n";
-	SelectMap* selectmap = new SelectMap("C:/Users/pauru/Documents/Maps");
+	SelectMap* selectmap = new SelectMap("./MapFiles/");
 	selectmap->printGameMaps();
 	selectmap->setMap(); // choose swiss.map to check the case of invalid map // spain map is showing runtime exception
 	selectmap->loadmap();
