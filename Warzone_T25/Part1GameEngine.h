@@ -108,6 +108,6 @@ public:
 //	//friend ostream& operator<<(ostream& outs, const ChangeObserver& changeobserverobj);
 //};
 
-namespace part_0 {
+namespace part_1 {
 	void start();
 }

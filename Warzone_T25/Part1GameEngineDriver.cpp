@@ -1,7 +1,7 @@
 #include <iostream> // for displaying to console
 #include "Part1GameEngine.h" //headerfile
 
-void part_0::start() {
+void part_1::start() {
 
 	cout << "//=======================================//\n";
 	cout << "		Creating Map\n";

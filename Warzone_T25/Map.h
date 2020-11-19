@@ -127,7 +127,7 @@ private:
 	bool areContinentsConnected();
 	int search(int);
 };
-namespace part_1{
+namespace phase1_part_1{
 	void start();
 }
 
