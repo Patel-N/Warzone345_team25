@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void part_5::start()
+void part5::start()
 {
 	// Created the deck
 	std::cout << "Creating deck: " << endl;

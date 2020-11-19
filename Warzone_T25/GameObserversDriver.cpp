@@ -1,5 +1,3 @@
-// Warzone_T25.cpp : This file contains the 'main' function. Program execution begins and ends there.
-
 #include <iostream>
 #include"Cards.h"
 #include"Map.h"
@@ -8,14 +6,30 @@
 #include"GameEngine.h"
 #include "Part2Driver.h"
 #include"GameObservers.h"
-#include "Part1GameEngine.h"
 
-int main()
+void part_5::start()
 {
+
+
+	//Player* player1 = new Player(1, "Yasser", 1);
+	//engine->addPlayer(player1);
+	//Player* player2 = new Player(1, "Neil", 1);
+	//engine->addPlayer(player2);
+	//GameEngine* sub = engine;
+	//PhaseObserver* view = new PhaseObserver(sub);
+	//view->TurnOn();
+	//StatsObserver* view2 = new StatsObserver(sub);
+	//view2->TurnOn();
+
+	//engine->startUpPhase();// assign territory to players randomly, give army to territory
+	////engine->reinforcementPhase();
+	//engine->issueOrdersPhase();
+	//engine->executeOrdersPhase();
+
 	MapLoader* loader = new MapLoader();
 	Map* map = (loader->generateMap("./MapFiles/canada.map"));
 	GameEngine* engine = new GameEngine(map);
-	Player* player1 = new Player(1,"Yasser");
+	Player* player1 = new Player(1, "Yasser");
 	Player* player2 = new Player(2, "Neil");
 
 	//Adding cards
@@ -61,7 +75,7 @@ int main()
 	map->assignOccupantToTerritory(5, player1);
 	Territory* territory5 = map->getTerritory(5);
 	player1->assignTerritoryToPlayer(territory5);
-	
+
 	//cont 2
 	map->assignOccupantToTerritory(6, player1);
 	Territory* territory6 = map->getTerritory(6);
@@ -102,12 +116,7 @@ int main()
 
 	engine->mainGameLoop();
 
-	//part_1::start();  
-	part_2::start(); 
-	//part_3::start();
-    //part_4::start();
-	//part_5::start();
+	delete view;
+	delete view2;
 
-	return 0;
 }
-
