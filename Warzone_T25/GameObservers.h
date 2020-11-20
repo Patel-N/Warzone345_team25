@@ -31,13 +31,13 @@ public:
     Subject(const Subject& s);
     //Overloaded Assignment Operator
     Subject& operator=(const Subject& s);
-   // Overloaded Stream Insertion Operator
+    // Overloaded Stream Insertion Operator
     friend ostream& operator<<(ostream& out, const Subject& s);
 
 
 protected:
-    list<Observer*>* phase_observers;
-    list<Observer*>* stats_observers;
+    list<Observer*> phase_observers;
+    list<Observer*> stats_observers;
 
 
 };
