@@ -13,6 +13,14 @@ GameEngine::GameEngine(Map* map)
 	game_map = map;
 }
 
+GameEngine::~GameEngine() {
+	for (int i = 0; i < players.size(); i++) {
+		delete players[i];
+	}
+	delete game_map;
+}
+
+
 GameEngine::GameEngine(const GameEngine& engine) {
 	cout << endl << "In engine Copy Constructor" << endl;
 	if (this != &engine) {
@@ -97,7 +105,7 @@ void GameEngine::mainGameLoop() {
 	int round = 1;
 
 	while (players[0]->getPlayerTerritories().size() != game_map->getSize()) {
-
+		if (round > 100) { break; }
 		cout << "******************** ROUND " << round << " ********************" << endl;
 		reinforcementPhase();
 		issueOrdersPhase();
@@ -119,9 +127,16 @@ void GameEngine::mainGameLoop() {
 		players = activePlayers;
 		round++;
 	}
-	phaseID = 6;
-	totalRounds = round;
-	Notify(false);
+	if (round > 100) {
+		cout << endl << "*********************GAME IS OVER*********************" << endl;
+		cout << endl << "NO ONE WON. IT WAS A DRAW." << endl;
+	}
+	else {
+		cout << endl << "*********************GAME IS OVER*********************" << endl;
+		cout << endl << "This game took " << round << " rounds!" << endl;
+		cout << endl << "Congrats " << players[0]->getPlayerName() << " YOU WON!!" << endl;
+		cout << endl << players[0]->getPlayerName() << " has conquered all " << players[0]->getPlayerTerritories().size() << " territories." << endl;
+	}
 }
 
 void GameEngine::reinforcementPhase()
@@ -132,6 +147,7 @@ void GameEngine::reinforcementPhase()
 	//Loop through players
 	for (int i = 0; i < players.size(); i++) {
 		pName = getPlayers().at(i)->getPlayerName();
+		Notify(true);
 		cout << endl << "Checking for player: " << players[i]->getPlayerName() << endl;
 		int armyCount = 3;
 		players[i]->addToArmiesToBePlaced(3);
@@ -196,6 +212,9 @@ void GameEngine::reinforcementPhase()
 void GameEngine::issueOrdersPhase(){
 	cout << endl << "ISSUE ORDER PHASE:" << endl << endl;
 	phaseID = 2;
+	pName = players[0]->getPlayerName(); // IMPLEMENT WHEN YOU GET THE CODE
+	Notify(true);
+
 	//Update nonCommitedArmies count for all players;
 	for (int i = 0; i < players.size(); i++) {
 		vector<Territory*> playerT = players[i]->getPlayerTerritories();
@@ -268,6 +287,9 @@ void GameEngine::issueOrdersPhase(){
 }
 
 void GameEngine::executeOrdersPhase(){
+	cout << endl << "===============================" << endl;
+	cout << endl << "   EXECUTE ORDER PHASE START   " << endl;
+	cout << endl << "===============================" << endl;
 	phaseID = 3;
 	vector<int> allOrdersFinished;
 	for (int i = 0; i < players.size(); i++) {
@@ -305,10 +327,14 @@ void GameEngine::executeOrdersPhase(){
 			}
 		}
 	}
+	//clearing diplomacies created during a turn and the conquerer's flag
 	for (int i = 0; i < players.size(); i++) {
 		players[i]->clearDiplomacy();
 		players[i]->setConquererFlag(false);//conquererFlag is the variable that determines whether the player conquered or not a territory during a turn
 	}
+	cout << endl << "===============================" << endl;
+	cout << endl << "   EXECUTE ORDER PHASE END     " << endl;
+	cout << endl << "===============================" << endl;
 }
 
 void GameEngine::addPlayer(Player* player) {
@@ -344,6 +370,7 @@ void GameEngine::startUpPhase()
 
 		for (int j = 0; j < numOfPlayers; j++) {// for the number of players, at the players array and give them territories from the temp terry array that was shuffled randomly
 			getPlayers().at(j)->assignTerritoryToPlayer(tempTerritoriesPtr.at(i));
+			tempTerritoriesPtr.at(i)->setTerritoryOccupant(getPlayers().at(j));
 			i++;
 			if (i >= numOfTerritories) { break; };
 		}

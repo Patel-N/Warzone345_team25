@@ -9,7 +9,7 @@ class GameEngine : public Subject {
 public:
 	//constructors
 	GameEngine();
-
+	~GameEngine();
 	GameEngine(Map* map);
 	GameEngine(const GameEngine& engine);
 

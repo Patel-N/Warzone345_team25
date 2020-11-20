@@ -6,11 +6,12 @@
 #include "Cards.h"
 #include "Orders.h"
 #include <string>
-
+#include "PlayerStrategies.h"
 
 using namespace std;
 
 class Territory;
+//class PlayerStrategies;
 
 class Player
 {
@@ -31,14 +32,19 @@ private:
 
 
 public:
+	PlayerStrategies *playerStrategy;
+	void assignStrategy(int strategy);
+	void setStrategy(int strategy);
+
 	static Deck* common_deck;//static because the deck is a shared object among all players in game
 
 	void issueOrder(Order* order) ;
 	
 	//Ctors
-	Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<Order*> o, int armyCount);
+	Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<Order*> o, int armyCount, int strategy);
 	Player(int,string);
 	Player(int,string,int);
+	Player(int, string, int,int);
 	Player();
 	//Dtors
 	~Player();
@@ -90,6 +96,10 @@ public:
 	vector<int> getDiplomacies();
 	vector<Territory*> toDefend(); // returns list of territory pointers to defend
 	vector<Territory*> toAttack();// returns list of territory pointers to defend
+	vector<Territory*> getAdjacentTerritoriesOfPlayer(Territory* playerTerritory);
+	vector<Territory*> getNonAdjacentTerritoriesOfPlayer(Territory* playerTerritory);
+	vector<Territory*> getAdjacentTerritoriesToAttack(Territory* playerTerritory);
+	vector<Territory*> getNonAdjacentTerritoriesToAttack(Territory* playerTerritory);
 
 	void assignTerritoryToPlayer(Territory* newTerritory);
 	vector<Territory*> allTerritoryVectorBuilder(Territory* origin);
