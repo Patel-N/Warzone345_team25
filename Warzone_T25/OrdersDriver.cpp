@@ -14,6 +14,16 @@ void part_4::start() {
 	//creating deck and initializing static player variable common_deck
 	Deck* deck = new Deck();
 	Player::common_deck = deck;
+	Card* card1 = new Card(1);
+	Card* card2 = new Card(2);
+	Card* card3 = new Card(3);
+	Card* card4 = new Card(4);
+	Card* card5 = new Card(5);
+	deck->addCardToDeck(card1);
+	deck->addCardToDeck(card2);
+	deck->addCardToDeck(card3);
+	deck->addCardToDeck(card4);
+	deck->addCardToDeck(card5);
 	//creating players, adding players to game engine
 	Player* player1 = new Player(1, "Vishal", 0);
 	Player* player2 = new Player(2, "Neil", 0);
@@ -59,7 +69,6 @@ void part_4::start() {
 	//player 2 successful deploy
 	Order* order2 = new Deploy(10, engine->getGameMap()->getTerritory(2), player2);
 	player2->issueOrder(order2);
-	//player 3 fail[not enough army in pool] deploy order attempt
 	Order* order3 = new Deploy(10, engine->getGameMap()->getTerritory(3), player3);//attempt at deploying 10 when only 5 is available
 	player3->issueOrder(order3);
 	//player 4 fail[territory does not belong to player] deploy order attempt
@@ -119,9 +128,9 @@ void part_4::start() {
 	player3->issueOrder(order12);
 	engine->executeOrdersPhase();//after this function call, all orders are deleted
 	//DEMO STEP5: create and issue airlift orders. order 1 and 2 will fail, 3,4 will succeed.
-	cout << endl << "============================================" << endl;
-	cout << endl << "    PART4 DEM0: SUBPART 5:AIRLIFT DEMO      " << endl;
-	cout << endl << "============================================" << endl;
+	cout << endl << "==============================================================" << endl;
+	cout << endl << "    PART4 DEM0: SUBPART 5:AIRLIFT DEMO [ALSO CARDS DEMO]      " << endl;
+	cout << endl << "==============================================================" << endl;
 	//creating airlift order 2: player 1 will attempt at doing airlift from territory 8- which does not belong to him. attack will fail
 	//adding airlift card to hand
 	Order* order14 = new Airlift(10, engine->getGameMap()->getTerritory(8), engine->getGameMap()->getTerritory(4), player1);
@@ -258,8 +267,6 @@ void part_4::start() {
 	cout << endl << "        END PART 4 DEMO        " << endl;
 	cout << endl << "===============================" << endl;
 	cout << endl << "DEMO ENGINE COPY CONSTRUCTOR" << endl;
-	GameEngine* newEngine = new GameEngine(*engine);
-	cout << *newEngine;
 
 	delete loader;
 	delete map;
