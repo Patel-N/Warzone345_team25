@@ -6,7 +6,7 @@
 #include "Cards.h"
 #include "Orders.h"
 #include <string>
-
+#include "PlayerStrategies.h"
 
 using namespace std;
 
@@ -15,6 +15,7 @@ class Territory;
 class Player
 {
 private:
+	PlayerStrategies *st;
 	vector<Territory*> territoryPtr; 
 	Hand* handPtr;
 	OrderList* orderlist;
