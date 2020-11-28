@@ -9,8 +9,8 @@ class PlayerStrategies {
 public:
 
 	virtual void  issueOrder() = 0;
-	virtual vector<Territory> toDefend() = 0; // returns list of territory pointers to defend
-	virtual vector<Territory> toAttack() = 0;// returns list of territory pointers to defend
+	virtual vector<Territory*> toDefend() = 0; // returns list of territory pointers to defend
+	virtual vector<Territory*> toAttack() = 0;// returns list of territory pointers to defend
 
 };
 
@@ -18,8 +18,8 @@ class HumanPlayerStrategy: public PlayerStrategies {
 public:
 	HumanPlayerStrategy(Player*);
 	void issueOrder();
-	vector<Territory> toDefend();
-	vector<Territory>  toAttack();
+	vector<Territory*> toDefend();
+	vector<Territory*>  toAttack();
 private:
 	Player* strategyExecuter;
 };
@@ -28,8 +28,8 @@ class AggressivePlayerStrategy : public PlayerStrategies {
 public:
 	AggressivePlayerStrategy(Player*);
 	void issueOrder();
-	vector<Territory> toDefend();
-	vector<Territory> toAttack();
+	vector<Territory*> toDefend();
+	vector<Territory*> toAttack();
 	//getters
 	inline Player*  getStrategyExecuter() { return strategyExecuter; }
 private:
@@ -40,8 +40,8 @@ class BenevolentPlayerStrategy : public PlayerStrategies {
 public:
 	BenevolentPlayerStrategy(Player*);
 	void issueOrder();
-	vector<Territory> toDefend();
-	vector<Territory> toAttack();
+	vector<Territory*> toDefend();
+	vector<Territory*> toAttack();
 	//getters
 	inline Player* getStrategyExecuter() { return strategyExecuter; }
 private:
@@ -52,8 +52,8 @@ class NeutralPlayerStrategy : public PlayerStrategies {
 public:
 	NeutralPlayerStrategy(Player*);
 	void issueOrder();
-	vector<Territory> toDefend();
-	vector<Territory> toAttack();
+	vector<Territory*> toDefend();
+	vector<Territory*> toAttack();
 	//getters
 	inline Player* getStrategyExecuter() { return strategyExecuter; }
 private:

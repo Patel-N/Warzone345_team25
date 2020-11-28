@@ -10,21 +10,33 @@ AggressivePlayerStrategy::AggressivePlayerStrategy(Player* executer) {
 void AggressivePlayerStrategy::issueOrder() {
     cout << endl << "Aggressive issue order called" << endl;
     //  this->strategyExecuter->getArmyToBePlaced();
-      //this->strategyExecuter->toDefend();
+      vector<Territory*> toDefendTerr = this->strategyExecuter->toDefend();
+      cout << endl << "TERRITORIES TO DEFEND FOR AGGRESSIVE PLAYERS" << endl;
+      for (int i = 0; i < toDefendTerr.size(); i++) {
+          cout << *toDefendTerr[i] << endl;
+      }
      // this->strategyExecuter->toAttack();
-      /*if (this->strategyExecuter->getArmyToBePlaced() != 0) {
+      if (this->strategyExecuter->getArmyToBePlaced() != 0) {
 
-          vector<Territory*> playerWeakestTerritories = this->strategyExecuter->toDefend();
+          vector<Territory*> playerTerritoriesToDefend = this->strategyExecuter->toDefend();
 
           //the aggressive player would want to advance on its stronger territory
           int maxArmyTerritoryIndex = 0;
           int maxArmy = 0;
-          for (int i = 0; i < playerWeakestTerritories.size(); i++) {
-              if (playerWeakestTerritories[i]->getNumArmies() > maxArmy) {
-                  maxArmy = playerWeakestTerritories[i]->getNumArmies();
+          for (int i = 0; i < playerTerritoriesToDefend.size(); i++) {
+              if (playerTerritoriesToDefend[i]->getNumArmies() > maxArmy) {
+                  maxArmy = playerTerritoriesToDefend[i]->getNumArmies();
                   maxArmyTerritoryIndex = i;
               }
-          }*/
+          }
+          Deploy* d = new Deploy(this->strategyExecuter->getArmyToBePlaced(), playerTerritoriesToDefend[maxArmyTerritoryIndex], strategyExecuter);
+          strategyExecuter->getOrderList()->add(d);
+          strategyExecuter->addToArmiesToBePlaced(-this->strategyExecuter->getArmyToBePlaced());
+          cout << endl << "AFTER DEPLOY" << endl;
+          for (int i = 0; i < toDefendTerr.size(); i++) {
+              cout << *toDefendTerr[i] << endl;
+          }
+      }    
           /* //Split through the least having territories
            int splitCount = getArmyToBePlaced() / territoryPtr.size();
            //Determine if you want to assign a split amount of territories or the full amount
@@ -280,25 +292,23 @@ void AggressivePlayerStrategy::issueOrder() {
            }*/
 }
 
-vector<Territory> AggressivePlayerStrategy::toDefend()
+vector<Territory*> AggressivePlayerStrategy::toDefend()
 {
-    /*
-    vector<Territory> territoryToBeDefended;
+    
+    vector<Territory*> territoryToBeDefended;
     for (int i = 0; i < strategyExecuter->getPlayerTerritories().size(); i++) {
-        territoryToBeDefended.push_back(*strategyExecuter->getPlayerTerritories()[i]);
+        territoryToBeDefended.push_back(strategyExecuter->getPlayerTerritories()[i]);
     }
 
     sort(territoryToBeDefended.begin(), territoryToBeDefended.end(), Territory::compByArmyCount);
 
-    return territoryToBeDefended;*/
-    vector<Territory> vec;
-    return  vec;
+    return territoryToBeDefended;
 }
 
 
-vector<Territory> AggressivePlayerStrategy::toAttack()
+vector<Territory*> AggressivePlayerStrategy::toAttack()
 {
-    vector<Territory> vec;
+    vector<Territory*> vec;
     return  vec;
 
 }
@@ -311,18 +321,29 @@ HumanPlayerStrategy::HumanPlayerStrategy(Player* executer)
 
 void HumanPlayerStrategy::issueOrder()
 {
+    vector<Territory*> toDefendTerr = this->strategyExecuter->toDefend();
+    cout << endl << "TERRITORIES TO DEFEND FOR HUMANPLAYERSTRATEGY PLAYERS" << endl;
+    for (int i = 0; i < toDefendTerr.size(); i++) {
+        cout << *toDefendTerr[i] << endl;
+    }
     cout << endl << "Human issue order called" << endl;
 }
 
-vector<Territory> HumanPlayerStrategy::toDefend()
+vector<Territory*> HumanPlayerStrategy::toDefend()
 {
-    vector<Territory> vec;
-    return  vec;
+    vector<Territory*> territoryToBeDefended;
+    for (int i = 0; i < strategyExecuter->getPlayerTerritories().size(); i++) {
+        territoryToBeDefended.push_back(strategyExecuter->getPlayerTerritories()[i]);
+    }
+
+    sort(territoryToBeDefended.begin(), territoryToBeDefended.end(), Territory::compByArmyCount);
+
+    return territoryToBeDefended;
 }
 
-vector<Territory> HumanPlayerStrategy::toAttack()
+vector<Territory*> HumanPlayerStrategy::toAttack()
 {
-    vector<Territory> vec;
+    vector<Territory*> vec;
     return  vec;
 }
 
@@ -334,18 +355,29 @@ BenevolentPlayerStrategy::BenevolentPlayerStrategy(Player* executer)
 
 void BenevolentPlayerStrategy::issueOrder()
 {
+    vector<Territory*> toDefendTerr = this->strategyExecuter->toDefend();
+    cout << endl << "TERRITORIES TO DEFEND FOR BENEVOLENT PLAYERS" << endl;
+    for (int i = 0; i < toDefendTerr.size(); i++) {
+        cout << *toDefendTerr[i] << endl;
+    }
     cout << endl << "Benevolent issue order called" << endl;
 }
 
-vector<Territory> BenevolentPlayerStrategy::toDefend()
+vector<Territory*> BenevolentPlayerStrategy::toDefend()
 {
-    vector<Territory> vec;
-    return  vec;
+    vector<Territory*> territoryToBeDefended;
+    for (int i = 0; i < strategyExecuter->getPlayerTerritories().size(); i++) {
+        territoryToBeDefended.push_back(strategyExecuter->getPlayerTerritories()[i]);
+    }
+
+    sort(territoryToBeDefended.begin(), territoryToBeDefended.end(), Territory::compByArmyCount);
+
+    return territoryToBeDefended;
 }
 
-vector<Territory> BenevolentPlayerStrategy::toAttack()
+vector<Territory*> BenevolentPlayerStrategy::toAttack()
 {
-    vector<Territory> vec;
+    vector<Territory*> vec;
     return  vec;
 }
 
@@ -357,17 +389,28 @@ NeutralPlayerStrategy::NeutralPlayerStrategy(Player* executer)
 
 void NeutralPlayerStrategy::issueOrder()
 {
+    vector<Territory*> toDefendTerr = this->strategyExecuter->toDefend();
+    cout << endl << "TERRITORIES TO DEFEND FOR NEUTRAL PLAYERS" << endl;
+    for (int i = 0; i < toDefendTerr.size(); i++) {
+        cout << *toDefendTerr[i] << endl;
+    }
     cout << endl << "Neutral issue order called" << endl;
 }
 
-vector<Territory> NeutralPlayerStrategy::toDefend()
+vector<Territory*> NeutralPlayerStrategy::toDefend()
 {
-    vector<Territory> vec;
-    return  vec;
+    vector<Territory*> territoryToBeDefended;
+    for (int i = 0; i < strategyExecuter->getPlayerTerritories().size(); i++) {
+        territoryToBeDefended.push_back(strategyExecuter->getPlayerTerritories()[i]);
+    }
+
+    sort(territoryToBeDefended.begin(), territoryToBeDefended.end(), Territory::compByArmyCount);
+
+    return territoryToBeDefended;
 }
 
-vector<Territory> NeutralPlayerStrategy::toAttack()
+vector<Territory*> NeutralPlayerStrategy::toAttack()
 {
-    vector<Territory> vec;
+    vector<Territory*> vec;
     return  vec;
 }

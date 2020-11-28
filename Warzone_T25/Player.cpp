@@ -257,15 +257,8 @@ void Player::addToArmiesToBePlaced(int additionalArmies) {
 
 
 vector<Territory*> Player::toDefend() {// returns list of territory pointers to defend
-    
-    vector<Territory*> territoryToBeDefended;
-    for (int i = 0; i < territoryPtr.size(); i++) {
-        territoryToBeDefended.push_back(territoryPtr[i]);
-    }
-
-    sort(territoryToBeDefended.begin(), territoryToBeDefended.end(), Territory::compByArmyCount);
-
-    return territoryToBeDefended;
+    vector<Territory*> toDefendTerr = this->playerStrategy->toDefend();
+    return toDefendTerr;
 };
 
 void Player::removeTerritoryFromList(int territoryIndex) {
