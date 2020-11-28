@@ -9,39 +9,54 @@ class PlayerStrategies {
 public:
 
 	virtual void  issueOrder() = 0;
-	virtual void toDefend() = 0; // returns list of territory pointers to defend
-	virtual void toAttack() = 0;// returns list of territory pointers to defend
+	virtual vector<Territory> toDefend() = 0; // returns list of territory pointers to defend
+	virtual vector<Territory> toAttack() = 0;// returns list of territory pointers to defend
+
 };
 
 class HumanPlayerStrategy: public PlayerStrategies {
 public:
-	HumanPlayerStrategy();
+	HumanPlayerStrategy(Player*);
 	void issueOrder();
-	void toDefend();
-	void toAttack();
+	vector<Territory> toDefend();
+	vector<Territory>  toAttack();
+private:
+	Player* strategyExecuter;
 };
 
 class AggressivePlayerStrategy : public PlayerStrategies {
 public:
-	AggressivePlayerStrategy();
+	AggressivePlayerStrategy(Player*);
 	void issueOrder();
-	void toDefend();
-	void toAttack();
+	vector<Territory> toDefend();
+	vector<Territory> toAttack();
+	//getters
+	inline Player*  getStrategyExecuter() { return strategyExecuter; }
+private:
+	Player* strategyExecuter;
 };
 
 class BenevolentPlayerStrategy : public PlayerStrategies {
 public:
-	BenevolentPlayerStrategy();
+	BenevolentPlayerStrategy(Player*);
 	void issueOrder();
-	void toDefend();
-	void toAttack();
+	vector<Territory> toDefend();
+	vector<Territory> toAttack();
+	//getters
+	inline Player* getStrategyExecuter() { return strategyExecuter; }
+private:
+	Player* strategyExecuter;
 };
 
 class NeutralPlayerStrategy : public PlayerStrategies {
 public:
-	NeutralPlayerStrategy();
+	NeutralPlayerStrategy(Player*);
 	void issueOrder();
-	void toDefend();
-	void toAttack();
+	vector<Territory> toDefend();
+	vector<Territory> toAttack();
+	//getters
+	inline Player* getStrategyExecuter() { return strategyExecuter; }
+private:
+	 Player* strategyExecuter;
 };
 

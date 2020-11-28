@@ -55,19 +55,19 @@ void Player::assignStrategy(int strategy) {
     switch (strategy)
     {
     case 1:
-        playerStrategy = new HumanPlayerStrategy();
+        playerStrategy = new HumanPlayerStrategy(this);
         break;
 
     case 2:
-        playerStrategy = new AggressivePlayerStrategy();
+        playerStrategy = new AggressivePlayerStrategy(this);
         break;
 
     case 3:
-        playerStrategy = new BenevolentPlayerStrategy();
+        playerStrategy = new BenevolentPlayerStrategy(this);
         break;
 
     case 4:
-        playerStrategy = new NeutralPlayerStrategy();
+        playerStrategy = new NeutralPlayerStrategy(this);
         break;
 
     default:
