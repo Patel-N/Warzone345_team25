@@ -15,10 +15,11 @@ int main()
 	
 	//part_1::start();  
 	//part_2::start(); 
-	part_3::start();
+	//part_3::start();
     //part_4::start();
 	//part_5::start();
-
+	Player* player1 = new Player(1, "Yasser");
+	Player* player2 = new Player(2, "Neil");
 	return 0;
 }
 

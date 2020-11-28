@@ -2,15 +2,38 @@
 #include "Player.h"
 #include <algorithm>
 class PlayerStrategies {
-	void  issueOrder();
+public:
 
+	virtual void  issueOrder() = 0;
+	virtual vector<Territory> toDefend() = 0; // returns list of territory pointers to defend
+	virtual vector<Territory> toAttack() = 0;// returns list of territory pointers to defend
 };
 
-class HumanPlayerStrategy: PlayerStrategies {};
+class HumanPlayerStrategy: public PlayerStrategies {
+public:
+	void issueOrder();
+	vector<Territory> toDefend();
+	vector<Territory> toAttack();
+};
 
-class AggressivePlayerStrategy : PlayerStrategies {};
+class AggressivePlayerStrategy : public PlayerStrategies {
+public:
+	void issueOrder();
+    vector<Territory> toDefend();
+	vector<Territory> toAttack();
+};
 
-class BenevolentPlayerStrategy : PlayerStrategies {};
+class BenevolentPlayerStrategy : public PlayerStrategies {
+public:
+	void issueOrder();
+	vector<Territory> toDefend();
+	vector<Territory> toAttack();
+};
 
-class NeutralPlayerStrategy : PlayerStrategies {};
+class NeutralPlayerStrategy : public PlayerStrategies {
+public:
+	void issueOrder();
+	vector<Territory> toDefend();
+	vector<Territory> toAttack();
+};
 

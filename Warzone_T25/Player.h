@@ -11,11 +11,11 @@
 using namespace std;
 
 class Territory;
+class PlayerStrategies;
 
 class Player
 {
 private:
-	PlayerStrategies *st;
 	vector<Territory*> territoryPtr; 
 	Hand* handPtr;
 	OrderList* orderlist;
@@ -32,12 +32,15 @@ private:
 
 
 public:
+	PlayerStrategies *playerStrategy;
+	void assignStrategy(int strategy);
+
 	static Deck* common_deck;//static because the deck is a shared object among all players in game
 
 	void issueOrder(Order* order) ;
 	
 	//Ctors
-	Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<Order*> o, int armyCount);
+	Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<Order*> o, int armyCount, int strategy);
 	Player(int,string);
 	Player(int,string,int);
 	Player();
