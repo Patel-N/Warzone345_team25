@@ -33,4 +33,9 @@
     <ClInclude Include="Part1GameEngine.h" />
     <ClInclude Include="PlayerStrategies.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Filter Include="NewFilter1">
+      <UniqueIdentifier>{d3561917-629f-4a45-bd52-4ff022414211}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
 </Project>

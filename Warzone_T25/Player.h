@@ -11,7 +11,7 @@
 using namespace std;
 
 class Territory;
-class PlayerStrategies;
+//class PlayerStrategies;
 
 class Player
 {
@@ -43,6 +43,7 @@ public:
 	Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<Order*> o, int armyCount, int strategy);
 	Player(int,string);
 	Player(int,string,int);
+	Player(int, string, int,int);
 	Player();
 	//Dtors
 	~Player();

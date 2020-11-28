@@ -8,7 +8,8 @@
 #include <sstream>
 #include <algorithm>
 #include <stdlib.h> 
-
+//#include "PlayerStrategies.h"
+using namespace std;
 
 Deck* Player::common_deck = NULL; // initializing static class member. 
 
@@ -18,7 +19,14 @@ using namespace std;
 Player::Player(int id,string name,int initialArmyAmount) : playerId(id),playerName(name),armyToBePlaced(initialArmyAmount){
     orderlist = new OrderList();
     isConquerer = false;
-};
+}
+Player::Player(int id, string name, int strategy, int toRemove)
+{
+    playerName = name;
+    playerId = id;
+    orderlist = new OrderList();
+    assignStrategy(strategy);
+}
 
 Player::Player() {
     playerId = -1;
@@ -42,22 +50,23 @@ Player::Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<O
 }
 
 void Player::assignStrategy(int strategy) {
-
+    cout << endl << "IN STRATEGY" << endl;
+    
     switch (strategy)
     {
     case 1:
         playerStrategy = new HumanPlayerStrategy();
         break;
 
-    case2:
+    case 2:
         playerStrategy = new AggressivePlayerStrategy();
         break;
 
-    case3:
+    case 3:
         playerStrategy = new BenevolentPlayerStrategy();
         break;
 
-    case4:
+    case 4:
         playerStrategy = new NeutralPlayerStrategy();
         break;
 
@@ -294,7 +303,6 @@ void Player::assignTerritoryToPlayer(Territory* newTerritory)
 };
 
 void Player::issueOrder() {
-  
     this->playerStrategy->issueOrder();
 };
 

@@ -1,8 +1,15 @@
+
 #include "PlayerStrategies.h"
-
+#include "Player.h"
+#include<iostream>
+AggressivePlayerStrategy::AggressivePlayerStrategy()
+{
+    cout << endl << "AGGRESSIVE PLAYER STRATEGY CREATED" << endl;
+}
 void AggressivePlayerStrategy::issueOrder() {
+    cout << endl << "Aggressive issue order called" << endl;
 
-
+/*
 
     //Player shouldn't be able to call other orders if they still have deployable armies
     if (getArmyToBePlaced() != 0) {
@@ -243,5 +250,67 @@ void AggressivePlayerStrategy::issueOrder() {
             orderlist->add(c);
         }
 
-    }
+    }*/
+}
+
+void AggressivePlayerStrategy::toDefend()
+{
+}
+
+void AggressivePlayerStrategy::toAttack()
+{
+}
+
+HumanPlayerStrategy::HumanPlayerStrategy()
+{
+    cout << endl << "HUMAN PLAYER STRATEGY CREATED" << endl;
+}
+
+void HumanPlayerStrategy::issueOrder()
+{
+    cout << endl << "Human issue order called" << endl;
+}
+
+void HumanPlayerStrategy::toDefend()
+{
+}
+
+void HumanPlayerStrategy::toAttack()
+{
+}
+
+BenevolentPlayerStrategy::BenevolentPlayerStrategy()
+{
+    cout << endl << "BENEVOLENT PLAYER STRATEGY CREATED" << endl;
+}
+
+void BenevolentPlayerStrategy::issueOrder()
+{
+    cout << endl << "Benevolent issue order called" << endl;
+}
+
+void BenevolentPlayerStrategy::toDefend()
+{
+}
+
+void BenevolentPlayerStrategy::toAttack()
+{
+}
+
+NeutralPlayerStrategy::NeutralPlayerStrategy()
+{
+    cout << endl << "NEUTRAL PLAYER STRATEGY CREATED" << endl;
+}
+
+void NeutralPlayerStrategy::issueOrder()
+{
+    cout << endl << "Neutral issue order called" << endl;
+}
+
+void NeutralPlayerStrategy::toDefend()
+{
+}
+
+void NeutralPlayerStrategy::toAttack()
+{
 }
