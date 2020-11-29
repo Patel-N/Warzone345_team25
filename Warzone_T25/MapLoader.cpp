@@ -212,3 +212,114 @@ std::vector<std::string> MapLoader::splitLine(std::string line)
 
 	return splitLine;
 }
+
+
+
+ConquestFileReader::ConquestFileReader()
+{
+}
+
+ConquestFileReader::~ConquestFileReader()
+{
+}
+
+ConquestFileReader::ConquestFileReader(const ConquestFileReader& cml)
+{
+}
+
+void ConquestFileReader::setFileName(string fn)
+{
+	fileName = fn;
+}
+
+Map* ConquestFileReader::generateMap(string fn)
+{
+	Map* gameMap;
+	//Map gameMap("Map initialized\n");
+	gameMap = new Map("Map initialized\n");
+	bool continentCheck = false;
+	bool territoriesCheck = false;
+
+	try {
+
+		//File extension check
+		if (fn.substr(fn.find_last_of(".") + 1) != ("map")) {
+			throw IncorrectFileException();
+		}
+
+		setFileName(fn);
+
+		ifstream mapFile(getFileName()); //Automatically opens the file
+		if (mapFile.is_open()) {
+			string line;
+
+			//Populate continents
+			int continentId = 1;
+			while (getline(mapFile, line)) {
+
+				////Marks beginning of continent info
+				//if (line == "[continents]") {
+				//	getline(mapFile, line);
+				//	continentCheck = true;
+				//}
+
+				//if (continentCheck) {
+				//	//Marks end of continent info
+				//	if (line == "") {
+				//		break;
+				//	}
+				//	else {
+				//		std::vector<string> sepInfo = splitLine(line);
+
+				//		//Create new continents and add them to the Map
+				//		gameMap->addContinent(continentId, sepInfo[0], stoi(sepInfo[1]));
+				//		continentId++;
+				//	}
+
+				//}
+
+
+				//SETUP CONTINENTS
+				//SPLITLINE bool for equal or commas
+
+				//Territories
+				//vector size comparison
+				//Build territories
+				//1st loop terri
+				//2nd loop borders
+				//Bam map made
+
+			}
+		
+		}
+
+	
+	}
+	catch (IncorrectFileException ife) {
+		cout << "\n\nERROR: Incorrect file type.Please select a .map file." << endl << endl;
+		return NULL;
+	}
+	catch (MissingElementException mee) {
+		cout << "ERROR: One of the required set of information was not found." << endl << endl;
+		return NULL;
+	}
+	catch (DisconnectedMapException dme) {
+		cout << "ERROR: The map has disconnected territories or continent." << endl << endl;
+		return NULL;
+	}
+}
+
+string ConquestFileReader::getFileName()
+{
+	return fileName;
+}
+
+vector<string> ConquestFileReader::splitLine(string line)
+{
+	return vector<string>();
+}
+
+Map* ConquestFileReaderAdapter::generateMap(string fn)
+{
+	return nullptr;
+}

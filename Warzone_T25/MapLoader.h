@@ -32,7 +32,7 @@ public:
 	//Assignment Operator
 	MapLoader& operator= (const MapLoader& mlObj);
 
-	Map* generateMap(std::string fn);
+	virtual Map* generateMap(std::string fn);
 
 
 
@@ -53,3 +53,33 @@ class MissingElementException {
 class DisconnectedMapException {
 };
 
+class ConquestFileReader {
+
+public:
+	ConquestFileReader();
+
+	~ConquestFileReader();
+
+	ConquestFileReader(const ConquestFileReader &cml);
+
+	void setFileName(string fn);
+
+	virtual Map* generateMap(string fn);
+
+	string getFileName();
+
+private:
+	string fileName;
+
+	vector<string> splitLine(string line);
+
+};
+
+class ConquestFileReaderAdapter : public MapLoader{
+
+public:
+	Map* generateMap(string fn);
+
+private:
+	ConquestFileReader conquestFR;
+};
