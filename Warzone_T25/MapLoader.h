@@ -57,21 +57,19 @@ class ConquestFileReader {
 
 public:
 	ConquestFileReader();
-
 	~ConquestFileReader();
 
 	ConquestFileReader(const ConquestFileReader &cml);
 
+
 	void setFileName(string fn);
-
 	virtual Map* generateMap(string fn);
-
 	string getFileName();
 
 private:
 	string fileName;
 
-	vector<string> splitLine(string line);
+	vector<string> splitLine(string line, bool isEqualSeparator);
 
 };
 
@@ -82,4 +80,31 @@ public:
 
 private:
 	ConquestFileReader conquestFR;
+};
+
+class ConquestTerritoriesHolder {
+
+public:
+	ConquestTerritoriesHolder();
+	ConquestTerritoriesHolder(int i, string n, string c, vector<string> b);
+	~ConquestTerritoriesHolder();
+
+	//Insertion Operator
+	friend ostream& operator<<(ostream& outs, const ConquestTerritoriesHolder& obj);
+
+	inline int getId() { return id; };
+	inline string getName() { return name; };
+	inline string getContinent() { return continent; };
+	inline vector<string> getBorders() { return borders; };
+
+	inline void setId(int i) { id = i; }
+	inline void setName(string n) { name = n; };
+	inline void setContinent(string c) { continent = c; };
+	inline void setBorders(vector<string> b) { borders = b; };
+
+private:
+	int id;
+	string name;
+	string continent;
+	vector<string> borders;
 };

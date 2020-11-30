@@ -19,8 +19,10 @@ int main()
     part_4::start();
 	part_5::start();*/
 
+	ConquestFileReader* cfr = new ConquestFileReader();
+	cfr->generateMap("./MapFiles/ConquestFiles/Crab.map");
 
 
+	delete cfr;
 	return 0;
 }
-

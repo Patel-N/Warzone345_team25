@@ -54,6 +54,13 @@ ostream& operator<<(ostream& outs, const MapLoader& mapLoaderObject)
 	return outs;
 }
 
+ostream& operator<<(ostream& outs, const ConquestTerritoriesHolder& obj)
+{
+	outs << "Id: " << "Name: " << "Continent: " << "BorderCount: " << endl;
+	
+	return outs;
+}
+
 /*
 * 
 * Responsible of parsing the map when all elements of a map are found.
@@ -221,6 +228,7 @@ ConquestFileReader::ConquestFileReader()
 
 ConquestFileReader::~ConquestFileReader()
 {
+	cout << "Deleting conquest file reader" << endl;
 }
 
 ConquestFileReader::ConquestFileReader(const ConquestFileReader& cml)
@@ -232,13 +240,23 @@ void ConquestFileReader::setFileName(string fn)
 	fileName = fn;
 }
 
+
+bool is_number(const std::string& s)
+{
+	return !s.empty() && std::find_if(s.begin(),
+		s.end(), [](unsigned char c) { return !std::isdigit(c); }) == s.end();
+}
+
 Map* ConquestFileReader::generateMap(string fn)
 {
 	Map* gameMap;
 	//Map gameMap("Map initialized\n");
 	gameMap = new Map("Map initialized\n");
-	bool continentCheck = false;
-	bool territoriesCheck = false;
+	bool continentSection = false;
+	bool territoriesSection = false;
+	bool continentParsed = false;
+	bool territoriesParsed = false;
+	vector<ConquestTerritoriesHolder*> conquestTerritories;
 
 	try {
 
@@ -255,7 +273,72 @@ Map* ConquestFileReader::generateMap(string fn)
 
 			//Populate continents
 			int continentId = 1;
+			int territoryId = 1;
 			while (getline(mapFile, line)) {
+
+				//SKIP NEWLINES
+				if (!line.empty()) {
+					//Beginning of continent section
+					if (line == "[Continents]") {
+						getline(mapFile, line);
+						continentSection = true;
+					}
+
+					if (continentSection) {
+
+						//Check if we get to territories section 
+						if (line == "[Territories]") {
+							continentParsed = true;
+
+							continentSection = false;
+							territoriesSection = true;
+						}
+						else {
+							vector<string> sepInfo = splitLine(line, true);
+
+							//Create new continents and add them to the Map
+							gameMap->addContinent(continentId, sepInfo[0], stoi(sepInfo[1]));
+							continentId++;
+						}
+
+					}
+
+					//Territories section
+					if (territoriesSection) {
+
+						//Skip [Territories] line
+						if (line != "[Territories]") {
+
+							if (mapFile.eof()) {
+								territoriesParsed = true;
+							}
+							else {
+								vector<string> sepInfo = splitLine(line, false);
+								vector<string> borders;
+								
+								//Build borders vector
+								for (int i = 4; i < sepInfo.size(); i++) {
+									borders.push_back(sepInfo[i]);
+								}
+
+								ConquestTerritoriesHolder* cth = new ConquestTerritoriesHolder(territoryId, sepInfo[0], sepInfo[3], borders);
+								conquestTerritories.push_back(cth);
+
+								territoryId++;
+
+								//Determine if its number or name for continent 
+								//Get continent
+								//Add territory
+
+								//gameMap->addTerritory(cth->getId(), cth->getName(), cth->)
+							}
+						
+						
+						}
+
+					}
+				
+				}
 
 				////Marks beginning of continent info
 				//if (line == "[continents]") {
@@ -290,7 +373,6 @@ Map* ConquestFileReader::generateMap(string fn)
 				//Bam map made
 
 			}
-		
 		}
 
 	
@@ -314,12 +396,43 @@ string ConquestFileReader::getFileName()
 	return fileName;
 }
 
-vector<string> ConquestFileReader::splitLine(string line)
+vector<string> ConquestFileReader::splitLine(string line, bool isEqualSeparator)
 {
-	return vector<string>();
+	if (isEqualSeparator) {
+		regex reg("=");
+		
+		vector<string> splitLine(
+			sregex_token_iterator(line.begin(), line.end(), reg, -1),
+			sregex_token_iterator()
+		);
+
+		return splitLine;
+	}
+	else {
+		regex reg(",");
+
+		vector<string> splitLine(
+			sregex_token_iterator(line.begin(), line.end(), reg, -1),
+			sregex_token_iterator()
+		);
+
+		return splitLine;
+	}
 }
 
 Map* ConquestFileReaderAdapter::generateMap(string fn)
 {
 	return nullptr;
+}
+
+ConquestTerritoriesHolder::ConquestTerritoriesHolder()
+{
+}
+
+ConquestTerritoriesHolder::ConquestTerritoriesHolder(int i, string n, string c, vector<string> b) : id(i), name(n), continent(c), borders(b)
+{
+}
+
+ConquestTerritoriesHolder::~ConquestTerritoriesHolder()
+{
 }
