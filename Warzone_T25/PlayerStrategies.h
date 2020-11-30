@@ -32,6 +32,12 @@ public:
 	vector<Territory*> toAttack();
 	//getters
 	inline Player*  getStrategyExecuter() { return strategyExecuter; }
+	//other helper methods
+	bool deployStrategy(Territory*);
+	bool movingFriendlyTroopsAroundStrategy(Territory*);
+	bool movingAdjacentTroops(Territory*);
+	bool movingDistantTroops(Territory*);
+	bool attackStrategy(Territory*);
 private:
 	Player* strategyExecuter;
 };

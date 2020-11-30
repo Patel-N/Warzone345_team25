@@ -199,6 +199,7 @@ Card* Hand::hand_getCard() {
 }
 
 bool Hand::isCardInHand(int type) {
+	if (this == NULL) { return false; }
 	for (int i = 0; i < handCards.size(); i++) {
 		if (handCards[i]->get_type() == type) {
 			return true;
@@ -216,6 +217,7 @@ void Hand::play(int type, Deck* deck) {
 		}
 	}
 }
+
 // Copy constructor
 Hand::Hand(const Hand& hand) {
 	if (this != &hand) {

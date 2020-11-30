@@ -292,6 +292,7 @@ void GameEngine::executeOrdersPhase(){
 			}
 		}
 	}
+	//clearing diplomacies created during a turn and the conquerer's flag
 	for (int i = 0; i < players.size(); i++) {
 		players[i]->clearDiplomacy();
 		players[i]->setConquererFlag(false);//conquererFlag is the variable that determines whether the player conquered or not a territory during a turn

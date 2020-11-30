@@ -95,6 +95,8 @@ public:
 	vector<int> getDiplomacies();
 	vector<Territory*> toDefend(); // returns list of territory pointers to defend
 	vector<Territory*> toAttack();// returns list of territory pointers to defend
+	vector<Territory*> getAdjacentTerritoriesOfPlayer(Territory* playerTerritory);
+	vector<Territory*> getNonAdjacentTerritoriesOfPlayer(Territory* playerTerritory);
 
 	void assignTerritoryToPlayer(Territory* newTerritory);
 	vector<Territory*> allTerritoryVectorBuilder(Territory* origin);
