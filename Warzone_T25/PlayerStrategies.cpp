@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Map.h"
 #include<iostream>
+#include<windows.h>
 AggressivePlayerStrategy::AggressivePlayerStrategy(Player* executer) {
     this->strategyExecuter = executer;
     cout << endl << "AGGRESSIVE PLAYER STRATEGY CREATED" << endl;
@@ -208,26 +209,43 @@ void HumanPlayerStrategy::issueOrder() {
     }
 
    //move troops (attack/defend) step ------------------------------
-    cout << "-Hello "<<strategyExecuter->getPlayerName()<<"!-" <<endl;
+    cout << endl<< "-Hello " << strategyExecuter->getPlayerName() << "!-" << endl;
     cout << "Do you wish to move your troops to another territory? yes/no" << endl;
+    cout << "if you type yes, will display your territories and territories next to them." << endl << endl;
     cin >> UserInput;
+    cout << endl;
     if (UserInput.compare("yes") == 0) {//if user wants to move troops, display mini UI
                                         // mini UI works in 3 steps, 1.display his current territory, 2.display enemy territories user can attack, 3. prompt user and move troops
-        cout << "here are the territories you own and the territories next to them:"<<endl<<endl;
+        cout << "-----------------------you own territories: -------------------------------"<< endl << endl;
         vector<Territory*> toDefendTerr = this->strategyExecuter->toDefend();
         for (int i = 0; i < toDefendTerr.size(); i++) {// 1.display all territory user has
             cout << *toDefendTerr[i] << endl;
             //TODO: show territories next to this one example: adjacent territory id: 2,5,7,8
+            Sleep(100);
         }
-        cout << "to show enemy territories that can be attacked this turn type: attack" << endl << endl;
+        cout << "to show enemy territories info that can be attacked this turn type: show" << endl << endl;
         cin >> UserInput;
-        if (UserInput.compare("attack") == 0){//2.display enemy territory user can attack
-            //TODO
+        if (UserInput.compare("show") == 0){//2.display enemy territory user can attack
+            cout << "-------------here is the information of the territories you can attack:------------------------" << endl << endl;
+            vector<Territory*> territoriesAvailableToBeAttacked = this->strategyExecuter->toAttack();
+            for (int i = 0; i < territoriesAvailableToBeAttacked.size(); i++) {// 1.display all territory to  available to attack
+                cout << *territoriesAvailableToBeAttacked[i] << endl;
+                Sleep(70);
+            }
         }
-        //TODO :3.prompt user to show wich territory to attack, and parse the input and turn it into orders
+        //3.prompt user to show wich territory to attack, and parse the input and turn it into orders
+        cout <<endl<<endl<< "Now please indicate where do you want to move your armies using ID's" << endl;
+        cout << "if you move armies into enemy territory, it will be considered as an attack!" << endl;
+        cout << "to move armies, TYPE IN THE FOLLOWING FORMAT: (2,3,4),(8,5,10),(2,4,7)" << endl;
+        cout << " example meaning: " << endl;
+        cout << "move 2 armies from territory 3 to territory 4" << endl;
+        cout << "move 8 armies from territory 5 to territory 10" << endl;
+        cout << "move 2 armies from territory 4 to territory 7" << endl;
+        cin >> UserInput;
+        //TODO: parse user input to move armies around
     }
-
-
+    cout <<endl<< "this is the end of your turn, press any key to continue, Goodluck " << strategyExecuter->getPlayerName()<<"!!!"<< endl;
+    cin >> UserInput;
     //commit, end of issue orders step------------------------------
     cout << endl << "Human issue order called" << endl;
     Commit* commit = new Commit();
