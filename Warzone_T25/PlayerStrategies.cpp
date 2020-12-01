@@ -164,7 +164,7 @@ void HumanPlayerStrategy::issueOrder() {
 
     cout << "here are the territories you currently own:" << endl << endl;
     vector<Territory*> toDefendTerr = this->strategyExecuter->toDefend();
-    for (int i = 0; i < toDefendTerr.size(); i++) {// display all territory use has
+    for (int i = 0; i < toDefendTerr.size(); i++) {// display all territory user has
         cout << *toDefendTerr[i] << endl;
     }
     cout << "you have : * " << strategyExecuter->getArmyToBePlaced() << " * armies to place" << endl;
@@ -198,8 +198,7 @@ void HumanPlayerStrategy::issueOrder() {
                 case 5: cardTypeString = "REINFORCEMENT CARD";
                     break;
                 }
-                cout << "card ID:"<<i <<": "<< cardTypeString << endl;
-
+                cout << "card ID : "<<i <<" : "<< cardTypeString << endl;
             }
             cout << "please enter the ID of the card you wish to play"<<endl;
             cout << "if you wish to play no cards type: no card" << endl;
@@ -207,15 +206,24 @@ void HumanPlayerStrategy::issueOrder() {
             //TODO: card play for each type
         }
     }
+
    //move troops (attack/defend) step ------------------------------
     cout << "-Hello "<<strategyExecuter->getPlayerName()<<"!-" <<endl;
     cout << "Do you wish to move your troops to another territory? yes/no" << endl;
-
-
-
-    if (UserInput.compare("yes") == 0) {
-
-
+    cin >> UserInput;
+    if (UserInput.compare("yes") == 0) {//if user wants to move troops, display mini UI
+                                        // mini UI works in 3 steps, 1.display his current territory, 2.display enemy territories, 3. prompt user and move troops
+        cout << "here are the territories you own and the territories next to them:"<<endl<<endl;
+        vector<Territory*> toDefendTerr = this->strategyExecuter->toDefend();
+        for (int i = 0; i < toDefendTerr.size(); i++) {// display all territory user has
+            cout << *toDefendTerr[i] << endl;
+            //TODO: show territories next to this one example: adjacent territory id: 2,5,7,8
+        }
+        cout << "to show enemy territories that can be attacked this turn type: attack" << endl << endl;
+        cin >> UserInput;
+        if (UserInput.compare("attack") == 0){
+            
+        }
     }
 
 
