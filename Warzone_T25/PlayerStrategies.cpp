@@ -151,17 +151,80 @@ HumanPlayerStrategy::HumanPlayerStrategy(Player* executer)
     cout << endl << "HUMAN PLAYER STRATEGY CREATED" << endl;
 }
 
-void HumanPlayerStrategy::issueOrder()
-{
+void HumanPlayerStrategy::issueOrder() {
+    // this function is in 4 steps: deploy army, play cards, move troops (attack/defend). marked with --------
+    // for every of these steps the user will get prompted and will insert a value
+    // at the end of function commit object is added to order list, indicating that player has finish issuing orders
+
+    string UserInput;// variable used to store user input
+
+    //deploy army step------------------------------
+    cout << endl << "---Hello " << strategyExecuter->getPlayerName() << "!---" << endl;
+    cout << "where do you wish to deploy your armies?" << endl;
+
+    cout << "here are the territories you currently own:" << endl << endl;
     vector<Territory*> toDefendTerr = this->strategyExecuter->toDefend();
-    cout << endl << "TERRITORIES TO DEFEND FOR HUMANPLAYERSTRATEGY PLAYERS" << endl;
-    for (int i = 0; i < toDefendTerr.size(); i++) {
+    for (int i = 0; i < toDefendTerr.size(); i++) {// display all territory use has
         cout << *toDefendTerr[i] << endl;
     }
+    cout << "you have : * " << strategyExecuter->getArmyToBePlaced() << " * armies to place" << endl;
+    cout << "to deploy your army, use the following format: (1,2),(5,6),(10,3)" << endl;
+    cout << "meaning: place 1 army to territory of ID 2, 5 army to territory of ID 6, and 10 army to territory ID 3" << endl;
+    cin >> UserInput;
+    // TODO : parsing userInput and placing armies
+
+
+    //play card step------------------------------
+    if (strategyExecuter->getPlayerHand()->getCardsInHand().size() > 0) {// if player has atleast a card prompt him
+       
+        cout << endl << "--Hello " << strategyExecuter->getPlayerName() << "--!" << endl;
+        cout << "Do you wish to play one of your cards? yes/no" << endl;
+        cin >> UserInput;
+        if (UserInput.compare("yes") == 0) {// if player wants to play cards, display his cards 
+            cout << "here are the cards you currently have:" << endl << endl;;
+            for (int i = 0; i < strategyExecuter->getPlayerHand()->getCardsInHand().size(); i++) {//displaying cards
+                int cardTypeINT=0;// card types are in int, so displaying into string so the player can understand better, maybe wil be implemented in cards.cpp instead
+                string cardTypeString = "";
+                cardTypeINT = strategyExecuter->getPlayerHand()->getCardsInHand().at(i)->get_type();
+                switch (cardTypeINT) {
+                case 1: cardTypeString = "AIRLIFT CARD";
+                    break;
+                case 2: cardTypeString = "BOMB CARD" ;
+                    break;
+                case 3: cardTypeString = "BLOCKADE CARD";
+                    break;
+                case 4: cardTypeString = "DIPLOMACY CARD";
+                    break;
+                case 5: cardTypeString = "REINFORCEMENT CARD";
+                    break;
+                }
+                cout << "card ID:"<<i <<": "<< cardTypeString << endl;
+
+            }
+            cout << "please enter the ID of the card you wish to play"<<endl;
+            cout << "if you wish to play no cards type: no card" << endl;
+             cin >> UserInput;
+            //TODO: card play for each type
+        }
+    }
+   //move troops (attack/defend) step ------------------------------
+    cout << "-Hello "<<strategyExecuter->getPlayerName()<<"!-" <<endl;
+    cout << "Do you wish to move your troops to another territory? yes/no" << endl;
+
+
+
+    if (UserInput.compare("yes") == 0) {
+
+
+    }
+
+
+    //commit, end of issue orders step------------------------------
     cout << endl << "Human issue order called" << endl;
     Commit* commit = new Commit();
     strategyExecuter->getOrderList()->add(commit);
-}
+
+}//end of void HumanPlayerStrategy::issueOrder() 
 
 vector<Territory*> HumanPlayerStrategy::toDefend()
 {
@@ -252,3 +315,4 @@ vector<Territory*> NeutralPlayerStrategy::toAttack()
     vector<Territory*> vec;
     return  vec;
 }
+

@@ -5,7 +5,7 @@ using namespace std;
 
 class Player;
 
-class PlayerStrategies {
+class PlayerStrategies { //abstract class
 public:
 
 	virtual void  issueOrder() = 0;
