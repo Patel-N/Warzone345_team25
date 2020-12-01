@@ -3,6 +3,7 @@
 #include "Map.h"
 #include<iostream>
 #include<windows.h>
+//using namespace std;
 AggressivePlayerStrategy::AggressivePlayerStrategy(Player* executer) {
     this->strategyExecuter = executer;
     cout << endl << "AGGRESSIVE PLAYER STRATEGY CREATED" << endl;
@@ -148,7 +149,7 @@ vector<Territory*> AggressivePlayerStrategy::toAttack()
 
 HumanPlayerStrategy::HumanPlayerStrategy(Player* executer)
 {
-    this->strategyExecuter = executer;
+    this->strategyExecuter = executer;// this is just the player object currently using his strategy
     cout << endl << "HUMAN PLAYER STRATEGY CREATED" << endl;
 }
 
@@ -172,7 +173,22 @@ void HumanPlayerStrategy::issueOrder() {
     cout << "to deploy your army, use the following format: (1,2),(5,6),(10,3)" << endl;
     cout << "meaning: place 1 army to territory of ID 2, 5 army to territory of ID 6, and 10 army to territory ID 3" << endl;
     cin >> UserInput;
-    // TODO : parsing userInput and placing armies
+    //parsing userInput and placing armies
+    int const tempVectorSize = count(UserInput.begin(), UserInput.end(), '(');//counting num of '(' to findout size of temp vector
+    vector<string> tempVector;
+    for (int i = 0; i < tempVectorSize; i++) {
+        string s = UserInput;
+        string delimiter = ")";
+
+        size_t pos = 0;
+        string token;
+        while ((pos = s.find(delimiter)) != string::npos) {
+            token = s.substr(0, pos+1);
+            cout << "token: "<<token << endl;
+            s.erase(0, pos+1 + delimiter.length());
+        }
+        cout << s << endl;
+    }
 
 
     //play card step------------------------------
