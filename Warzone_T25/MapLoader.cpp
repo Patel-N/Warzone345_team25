@@ -309,7 +309,7 @@ Map* ConquestFileReader::generateMap(string fn)
 						//Skip [Territories] line
 						if (line != "[Territories]") {
 
-							if (mapFile.eof()) {
+							if (mapFile.eof() && line.empty()) {
 								territoriesParsed = true;
 							}
 							else {
@@ -326,42 +326,28 @@ Map* ConquestFileReader::generateMap(string fn)
 
 								territoryId++;
 
-								//Determine if its number or name for continent 
-								//Get continent
-								//Add territory
+								//Determine if its number or name for continent
+								vector<Continent*> conts = gameMap->getContinents();
+								int cId = -1;
 
-								//gameMap->addTerritory(cth->getId(), cth->getName(), cth->)
+								for (int i = 0; i < conts.size(); i++) {
+									if (cth->getContinent() == conts[i]->getContinentName()) {
+										cId = conts[i]->getContinentID();
+										break;
+									}
+								}
+								cout << "Adding " << cth->getName() << " || cId: " << cId << endl;
+								gameMap->addTerritory(cth->getId(), cth->getName(), cId);
+
+								//Set territories parsed flag to true
+								if (mapFile.eof())
+									territoriesParsed = true;
 							}
-						
-						
 						}
 
 					}
 				
 				}
-
-				////Marks beginning of continent info
-				//if (line == "[continents]") {
-				//	getline(mapFile, line);
-				//	continentCheck = true;
-				//}
-
-				//if (continentCheck) {
-				//	//Marks end of continent info
-				//	if (line == "") {
-				//		break;
-				//	}
-				//	else {
-				//		std::vector<string> sepInfo = splitLine(line);
-
-				//		//Create new continents and add them to the Map
-				//		gameMap->addContinent(continentId, sepInfo[0], stoi(sepInfo[1]));
-				//		continentId++;
-				//	}
-
-				//}
-
-
 				//SETUP CONTINENTS
 				//SPLITLINE bool for equal or commas
 
@@ -373,21 +359,39 @@ Map* ConquestFileReader::generateMap(string fn)
 				//Bam map made
 
 			}
+
+			//Build borders
+			for (int i = 0; i < conquestTerritories.size(); i++) {
+				vector<int> borders;
+				borders.push_back(conquestTerritories[i]->getId());
+				vector<string> cTerritoryBorders = conquestTerritories[i]->getBorders();
+
+				for (int j = 0; j < cTerritoryBorders.size(); j++) {
+				
+				}
+			}
+		}
+		else {
+			throw FileNotFoundException();
 		}
 
 	
 	}
+	catch (FileNotFoundException fnf) {
+		cout << "ERROR: File was not found." << endl << endl;
+		return nullptr;
+	}
 	catch (IncorrectFileException ife) {
 		cout << "\n\nERROR: Incorrect file type.Please select a .map file." << endl << endl;
-		return NULL;
+		return nullptr;
 	}
 	catch (MissingElementException mee) {
 		cout << "ERROR: One of the required set of information was not found." << endl << endl;
-		return NULL;
+		return nullptr;
 	}
 	catch (DisconnectedMapException dme) {
 		cout << "ERROR: The map has disconnected territories or continent." << endl << endl;
-		return NULL;
+		return nullptr;
 	}
 }
 

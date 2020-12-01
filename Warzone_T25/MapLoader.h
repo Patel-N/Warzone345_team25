@@ -53,6 +53,9 @@ class MissingElementException {
 class DisconnectedMapException {
 };
 
+class FileNotFoundException {
+};
+
 class ConquestFileReader {
 
 public:
