@@ -212,18 +212,19 @@ void HumanPlayerStrategy::issueOrder() {
     cout << "Do you wish to move your troops to another territory? yes/no" << endl;
     cin >> UserInput;
     if (UserInput.compare("yes") == 0) {//if user wants to move troops, display mini UI
-                                        // mini UI works in 3 steps, 1.display his current territory, 2.display enemy territories, 3. prompt user and move troops
+                                        // mini UI works in 3 steps, 1.display his current territory, 2.display enemy territories user can attack, 3. prompt user and move troops
         cout << "here are the territories you own and the territories next to them:"<<endl<<endl;
         vector<Territory*> toDefendTerr = this->strategyExecuter->toDefend();
-        for (int i = 0; i < toDefendTerr.size(); i++) {// display all territory user has
+        for (int i = 0; i < toDefendTerr.size(); i++) {// 1.display all territory user has
             cout << *toDefendTerr[i] << endl;
             //TODO: show territories next to this one example: adjacent territory id: 2,5,7,8
         }
         cout << "to show enemy territories that can be attacked this turn type: attack" << endl << endl;
         cin >> UserInput;
-        if (UserInput.compare("attack") == 0){
-            
+        if (UserInput.compare("attack") == 0){//2.display enemy territory user can attack
+            //TODO
         }
+        //TODO :3.prompt user to show wich territory to attack, and parse the input and turn it into orders
     }
 
 
