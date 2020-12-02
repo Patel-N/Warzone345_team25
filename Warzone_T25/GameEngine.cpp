@@ -260,6 +260,9 @@ void GameEngine::issueOrdersPhase(){
 }
 
 void GameEngine::executeOrdersPhase(){
+	cout << endl << "===============================" << endl;
+	cout << endl << "   EXECUTE ORDER PHASE START   " << endl;
+	cout << endl << "===============================" << endl;
 	phaseID = 3;
 	vector<int> allOrdersFinished;
 	for (int i = 0; i < players.size(); i++) {
@@ -296,6 +299,9 @@ void GameEngine::executeOrdersPhase(){
 		players[i]->clearDiplomacy();
 		players[i]->setConquererFlag(false);//conquererFlag is the variable that determines whether the player conquered or not a territory during a turn
 	}
+	cout << endl << "===============================" << endl;
+	cout << endl << "   EXECUTE ORDER PHASE END     " << endl;
+	cout << endl << "===============================" << endl;
 }
 
 void GameEngine::addPlayer(Player* player) {

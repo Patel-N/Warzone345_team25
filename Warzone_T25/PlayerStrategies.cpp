@@ -32,11 +32,15 @@ void AggressivePlayerStrategy::issueOrder() {
           Deploy* d = new Deploy(this->strategyExecuter->getArmyToBePlaced(), playerTerritoriesToDefend[maxArmyTerritoryIndex], strategyExecuter);
           strategyExecuter->getOrderList()->add(d);
           strategyExecuter->addToArmiesToBePlaced(-this->strategyExecuter->getArmyToBePlaced());
-          cout << endl << "AFTER DEPLOY" << endl;
+          cout << endl << "AFTER AGGRESSIVE DEPLOY" << endl;
           for (int i = 0; i < toDefendTerr.size(); i++) {
               cout << *toDefendTerr[i] << endl;
           }
       }    
+      else {
+          Commit* commit = new Commit();
+          strategyExecuter->getOrderList()->add(commit);
+      }
           /* //Split through the least having territories
            int splitCount = getArmyToBePlaced() / territoryPtr.size();
            //Determine if you want to assign a split amount of territories or the full amount
@@ -327,6 +331,8 @@ void HumanPlayerStrategy::issueOrder()
         cout << *toDefendTerr[i] << endl;
     }
     cout << endl << "Human issue order called" << endl;
+    Commit* commit = new Commit();
+    strategyExecuter->getOrderList()->add(commit);
 }
 
 vector<Territory*> HumanPlayerStrategy::toDefend()
@@ -355,12 +361,59 @@ BenevolentPlayerStrategy::BenevolentPlayerStrategy(Player* executer)
 
 void BenevolentPlayerStrategy::issueOrder()
 {
-    vector<Territory*> toDefendTerr = this->strategyExecuter->toDefend();
-    cout << endl << "TERRITORIES TO DEFEND FOR BENEVOLENT PLAYERS" << endl;
-    for (int i = 0; i < toDefendTerr.size(); i++) {
-        cout << *toDefendTerr[i] << endl;
-    }
     cout << endl << "Benevolent issue order called" << endl;
+    //  this->strategyExecuter->getArmyToBePlaced();
+        vector<Territory*> playerTerritoriesToDefend = this->strategyExecuter->toDefend();
+    cout << endl << "TERRITORIES TO DEFEND FOR BENEVOLENT PLAYERS" << endl;
+    for (int i = 0; i < playerTerritoriesToDefend.size(); i++) {
+        cout << *playerTerritoriesToDefend[i] << endl;
+    }
+    // this->strategyExecuter->toAttack();
+    if (this->strategyExecuter->getArmyToBePlaced() != 0) {
+
+
+        //IMPLEMENTATION STARTS HERE
+        sort(playerTerritoriesToDefend.begin(), playerTerritoriesToDefend.end(), Territory::compByincomingArmies);
+        int numWeakTerrs = playerTerritoriesToDefend.size() / 2;
+        int pool = this->strategyExecuter->getArmyToBePlaced();
+        int armiesPerTerr = pool / numWeakTerrs;
+
+        if (pool == 1) {
+            Deploy* d = new Deploy(pool, playerTerritoriesToDefend[0], strategyExecuter);
+            playerTerritoriesToDefend[0]->incomingArmies = armiesPerTerr + playerTerritoriesToDefend[0]->getNumArmies();
+            //playerTerritoriesToDefend[0]->addNumArmies(pool);
+            strategyExecuter->setArmyToBePlaced(0);
+            strategyExecuter->getOrderList()->add(d);
+            pool = 0;
+        }
+        else {
+
+        
+        Deploy* d = new Deploy(armiesPerTerr, playerTerritoriesToDefend[0], strategyExecuter);
+        playerTerritoriesToDefend[0]->incomingArmies = armiesPerTerr + playerTerritoriesToDefend[0]->getNumArmies();
+        //playerTerritoriesToDefend[0]->addNumArmies(armiesPerTerr);
+        pool -= armiesPerTerr;
+
+        strategyExecuter->getOrderList()->add(d);
+        
+
+        strategyExecuter->setArmyToBePlaced(pool);
+        cout << endl << "POOL: " << pool << endl;
+        cout << endl << "POOLTERR: " << armiesPerTerr << endl;
+        cout << endl << "WEAKTERR: " << numWeakTerrs << endl;
+        cout << endl << "VECTORSIZE: " << playerTerritoriesToDefend.size() << endl;
+        }
+
+        cout << endl << "AFTER BENEVOLANT DEPLOY" << endl;
+        for (int i = 0; i < playerTerritoriesToDefend.size(); i++) {
+            cout << *playerTerritoriesToDefend[i] << endl;
+        }
+    }
+
+    else {
+        Commit* commit = new Commit();
+        strategyExecuter->getOrderList()->add(commit);
+    }
 }
 
 vector<Territory*> BenevolentPlayerStrategy::toDefend()
@@ -395,6 +448,10 @@ void NeutralPlayerStrategy::issueOrder()
         cout << *toDefendTerr[i] << endl;
     }
     cout << endl << "Neutral issue order called" << endl;
+     
+     Commit* commit = new Commit();
+     strategyExecuter->getOrderList()->add(commit);
+      
 }
 
 vector<Territory*> NeutralPlayerStrategy::toDefend()

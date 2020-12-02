@@ -126,6 +126,10 @@ bool Territory::compByArmyCount(Territory* a, Territory* b) {
 	return a->getNumArmies() < b->getNumArmies();
 }
 
+bool Territory::compByincomingArmies(Territory* a, Territory* b) {
+	return a->incomingArmies < b->incomingArmies;
+}
+
 bool Territory::compById(Territory* a, Territory* b) {
 	return a->getTerritoryID() < b->getTerritoryID();
 }
