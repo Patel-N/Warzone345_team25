@@ -39,6 +39,7 @@ void part_5::start()
 	Card* c2 = new Card(2);
 	Card* c3 = new Card(3);
 	Card* c4 = new Card(4);
+
 	Player::common_deck->addCardToDeck(c1);
 	Player::common_deck->addCardToDeck(c2);
 	Player::common_deck->addCardToDeck(c3);
@@ -114,8 +115,8 @@ void part_5::start()
 	player2->assignTerritoryToPlayer(territory23);
 	territory23->setNumArmies(8);
 
+	engine->startUpPhase();
 	engine->mainGameLoop();
-
 	delete view;
 	delete view2;
 

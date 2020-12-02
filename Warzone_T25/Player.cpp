@@ -8,6 +8,8 @@
 #include <sstream>
 #include <algorithm>
 #include <stdlib.h> 
+//#include "PlayerStrategies.h"
+using namespace std;
 
 Deck* Player::common_deck = NULL; // initializing static class member. 
 
@@ -17,7 +19,14 @@ using namespace std;
 Player::Player(int id,string name,int initialArmyAmount) : playerId(id),playerName(name),armyToBePlaced(initialArmyAmount){
     orderlist = new OrderList();
     isConquerer = false;
-};
+}
+Player::Player(int id, string name, int strategy, int toRemove)
+{
+    playerName = name;
+    playerId = id;
+    orderlist = new OrderList();
+    assignStrategy(strategy);
+}
 
 Player::Player() {
     playerId = -1;
@@ -31,18 +40,57 @@ Player::Player(int id, string name){
     orderlist = new OrderList();
 };
 
-Player::Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<Order*> o, int armyCount) {
+Player::Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<Order*> o, int armyCount, int strategy) {
     playerId = id;
     this->playerName = name;
     this->handPtr = h;
     orderlist = new OrderList();
+
+    assignStrategy(strategy);
 }
+
+void Player::setStrategy(int strategy) {
+    assignStrategy(strategy);
+}
+
+void Player::assignStrategy(int strategy) {
+    cout << endl << "IN STRATEGY" << endl;
+    //if the player already has a strategy , we delete before assigning a new one
+    if (playerStrategy != NULL) {
+        delete playerStrategy;
+        playerStrategy = NULL;
+    }
+    switch (strategy)
+    {
+    case 1:
+        playerStrategy = new HumanPlayerStrategy(this);
+        break;
+
+    case 2:
+        playerStrategy = new AggressivePlayerStrategy(this);
+        break;
+
+    case 3:
+        playerStrategy = new BenevolentPlayerStrategy(this);
+        break;
+
+    case 4:
+        playerStrategy = new NeutralPlayerStrategy(this);
+        break;
+
+    default:
+        break;
+    }
+}
+
 
 
 //destructor
 Player::~Player() {
     // IMPORTANT: none of the objects player could be holding are deleted
     cout << this->getPlayerName()<<"player destroyed" << endl;
+    delete playerStrategy;
+    delete handPtr;
 }
 
 
@@ -145,39 +193,8 @@ void Player::setArmyToBePlaced(int count) {
 
 vector<Territory*> Player::toAttack() {// returns list of territory pointers to defend
     
-  
-    //Build a vector of source territory attacking a target territory
-    vector<Territory*> attackableTerritories;
-   
-
-    vector<Territory*> allTerritories = allTerritoryVectorBuilder(territoryPtr[0]);
-
-
-    //Remove territories that already belong to the players from the appropriate vector
-    for (int i = 0; i < allTerritories.size(); i++) {
-    
-        bool isEnnemyTerritory = true;
-
-        for (int j = 0; j < territoryPtr.size(); j++) {
-        
-            if (allTerritories[i]->getTerritoryID() == territoryPtr[j]->getTerritoryID())
-                isEnnemyTerritory = false;
-        }
-
-        if (isEnnemyTerritory) {
-            attackableTerritories.push_back(allTerritories[i]);
-        }
-
-    }
-
-    //Set the state of all the territories to not visited
-    for (int i = 0; i < allTerritories.size(); i++) {
-        allTerritories[i]->setIsVisited(false);
-    }
-
-    sort(attackableTerritories.begin(), attackableTerritories.end(), Territory::compByArmyCount);
-
-    return attackableTerritories;
+    vector<Territory*> toAttackTerr = playerStrategy->toAttack();
+    return toAttackTerr;
 }
 
 vector<Territory*> Player::allTerritoryVectorBuilder(Territory* origin) {
@@ -220,17 +237,107 @@ void Player::addToArmiesToBePlaced(int additionalArmies) {
 
 
 vector<Territory*> Player::toDefend() {// returns list of territory pointers to defend
-    
-    vector<Territory*> territoryToBeDefended;
-    for (int i = 0; i < territoryPtr.size(); i++) {
-        territoryToBeDefended.push_back(territoryPtr[i]);
-    }
-
-    sort(territoryToBeDefended.begin(), territoryToBeDefended.end(), Territory::compByArmyCount);
-
-    return territoryToBeDefended;
+    vector<Territory*> toDefendTerr = this->playerStrategy->toDefend();
+    return toDefendTerr;
 };
 
+vector<Territory*> Player::getAdjacentTerritoriesOfPlayer(Territory* playerTerritory) {
+    vector<Territory*> adjacentTerritoriesOfPlayer;
+    if (playerTerritory == NULL || playerTerritory->getTerritoryOccupant() == NULL) { return adjacentTerritoriesOfPlayer; }
+    if (this->getPlayerId() != playerTerritory->getTerritoryOccupant()->getPlayerId()) {
+        return adjacentTerritoriesOfPlayer;
+    }
+    else {
+        vector<Territory*> adjacentTerritories = playerTerritory->getAdjacentTerritories();
+        for (int i = 0; i < adjacentTerritories.size(); i++) {
+            if (adjacentTerritories[i]->getTerritoryOccupant() == NULL) { continue; }
+            if (adjacentTerritories[i]->getTerritoryOccupant()->getPlayerId() == this->getPlayerId()) {
+                adjacentTerritoriesOfPlayer.push_back(adjacentTerritories[i]);
+            }
+        }
+    }
+    return adjacentTerritoriesOfPlayer;
+}
+
+vector<Territory*> Player::getNonAdjacentTerritoriesOfPlayer(Territory* playerTerritory) {
+    vector<Territory*> nonAdjacentTerritoriesOfPlayer;
+    if (playerTerritory == NULL || playerTerritory->getTerritoryOccupant() == NULL) { return nonAdjacentTerritoriesOfPlayer; }
+    if (this->getPlayerId() != playerTerritory->getTerritoryOccupant()->getPlayerId()) {
+        return nonAdjacentTerritoriesOfPlayer;
+    }
+    else {
+        vector<Territory*> playerTerritoriesToDefend = this->toDefend();
+        vector<Territory*> adjacentTerritoriesOfPlayer = getAdjacentTerritoriesOfPlayer(playerTerritory);
+        bool isAdj = false;
+        for (int i = 0; i < playerTerritoriesToDefend.size(); i++) {
+            Territory* territoryInAllFriendlyTerritoryList = playerTerritoriesToDefend[i];
+            for (int j = 0; j < adjacentTerritoriesOfPlayer.size(); j++) {
+                Territory* territoryInAdjacentFriendlyTerritories = adjacentTerritoriesOfPlayer[j];
+                if ((territoryInAllFriendlyTerritoryList->getTerritoryID() == territoryInAdjacentFriendlyTerritories->getTerritoryID())) {
+                    isAdj = true;
+                    continue;
+                }
+            }
+            //we make sure the territory we are adding is not adjacent nor the same as the strongest territory
+            if (!isAdj && playerTerritoriesToDefend[i]->getTerritoryID() != playerTerritory->getTerritoryID()) {
+                nonAdjacentTerritoriesOfPlayer.push_back(playerTerritoriesToDefend[i]);
+            }
+            isAdj = false;
+        }
+    }
+    return nonAdjacentTerritoriesOfPlayer;
+}
+vector<Territory*> Player::getAdjacentTerritoriesToAttack(Territory* playerTerritory)
+{
+    vector<Territory*> adjTerritoriesToAttack;
+    if (playerTerritory == NULL || playerTerritory->getTerritoryOccupant() == NULL) { return adjTerritoriesToAttack; }
+    if (this->getPlayerId() != playerTerritory->getTerritoryOccupant()->getPlayerId()) {
+        return adjTerritoriesToAttack;
+    }
+    else {
+        vector<Territory*> toAttack = this->toAttack();
+        vector<Territory*> adjTerr = playerTerritory->getAdjacentTerritories();
+        for (int i = 0; i < toAttack.size(); i++) {
+            Territory* territoryToAttackInAllEnemyTerritories = toAttack[i];
+            for (int j = 0; j < adjTerr.size(); j++) {
+                Territory* adjacenTerritory = adjTerr[j];
+                if (territoryToAttackInAllEnemyTerritories->getTerritoryID() == adjacenTerritory->getTerritoryID()) {
+                    if (territoryToAttackInAllEnemyTerritories->getTerritoryID() == 7) { cout << endl << "PUSHING THE WRONG TERR " << endl; }
+                    adjTerritoriesToAttack.push_back(territoryToAttackInAllEnemyTerritories);
+                }
+            }
+        }
+    }
+    return adjTerritoriesToAttack;
+}
+vector<Territory*>Player::getNonAdjacentTerritoriesToAttack(Territory* playerTerritory) {
+    vector<Territory*> nonAdjacentTerritoriesToAttack;
+    if (playerTerritory == NULL || playerTerritory->getTerritoryOccupant() == NULL) { return nonAdjacentTerritoriesToAttack; }
+    if (this->getPlayerId() != playerTerritory->getTerritoryOccupant()->getPlayerId()) {
+        return nonAdjacentTerritoriesToAttack;
+    }
+    else {
+        vector<Territory*> playerTerritoriesToAttack = this->toAttack();
+        vector<Territory*> adjacentTerritoriesToAttack = getAdjacentTerritoriesToAttack(playerTerritory);
+        bool isAdj = false;
+        for (int i = 0; i < playerTerritoriesToAttack.size(); i++) {
+            Territory* territoryInAllEnemyTerritoryList = playerTerritoriesToAttack[i];
+            for (int j = 0; j < adjacentTerritoriesToAttack.size(); j++) {
+                Territory* territoryInAdjacentEnemyTerritories = adjacentTerritoriesToAttack[j];
+                if ((territoryInAllEnemyTerritoryList->getTerritoryID() == territoryInAdjacentEnemyTerritories->getTerritoryID())) {
+                    isAdj = true;
+                    continue;
+                }
+            }
+            //we make sure the territory we are adding is not adjacent nor the same as the strongest territory
+            if (!isAdj && playerTerritoriesToAttack[i]->getTerritoryID() != playerTerritory->getTerritoryID()) {
+                nonAdjacentTerritoriesToAttack.push_back(playerTerritoriesToAttack[i]);
+            }
+            isAdj = false;
+        }
+    }
+    return nonAdjacentTerritoriesToAttack;
+}
 void Player::removeTerritoryFromList(int territoryIndex) {
     for (int i = 0; i < territoryPtr.size();i++) {
         if (territoryPtr[i]->getTerritoryID() - 1 == territoryIndex) {
@@ -266,248 +373,7 @@ void Player::assignTerritoryToPlayer(Territory* newTerritory)
 };
 
 void Player::issueOrder() {
-    
-
-    //Player shouldn't be able to call other orders if they still have deployable armies
-    if (getArmyToBePlaced() != 0) {
-        
-        vector<Territory*> playerWeakestTerritories = toDefend();
-
-        //Split through the least having territories
-        int splitCount = getArmyToBePlaced() / territoryPtr.size();
-        //Determine if you want to assign a split amount of territories or the full amount
-        if (splitCount > getArmyToBePlaced()) {
-            deployCreation(playerWeakestTerritories, splitCount);
-        }
-        else { //Deploy every unit remaining
-            deployCreation(playerWeakestTerritories, getArmyToBePlaced());
-        }
-        
-    }
-    //No more army to deploy, followup with next order
-    else {
-
-        //The reverse order of this are territories with the most army units to attack with
-        vector<Territory*> playerTerritories = toDefend();
-        vector<Territory*> ennemyTerritories = toAttack();
-        bool advDone = false;
-        bool advDefDone = false;
-        
-
-        //Handle advance orders
-        if (!getAttackApplied()) {
-
-            for (int i = 0; i < ennemyTerritories.size(); i++) {
-
-                for (int j = playerTerritories.size() - 1; j >= 0; j--) {
-
-                    //Compare unit count and check if territory wasnt attacked already
-                    if (!ennemyTerritories[i]->getIsAttacked() && ennemyTerritories[i]->getNonCommitedArmies() < playerTerritories[j]->getNonCommitedArmies()) {
-
-                        //Check if the territory is adjacent
-                        vector<Territory*> currentTerAdj = playerTerritories[j]->getAdjacentTerritories();
-                        bool isAdj = false;
-
-                        for (int k = 0; k < currentTerAdj.size(); k++) {
-                            if (currentTerAdj[k]->getTerritoryID() == ennemyTerritories[i]->getTerritoryID()) {
-                                isAdj = true;
-                                break;
-                            }
-                        }
-
-                        //Regular advance
-                        if (isAdj) {
-                            cout << "Advance(Attack) ==> " << getPlayerName() << " is moving " << playerTerritories[j]->getNonCommitedArmies() << " units to territory -> " << ennemyTerritories[i]->getTerritoryID() << " from ID " << playerTerritories[j]->getTerritoryID() << endl;
-                            Advance* adv = new Advance(playerTerritories[j]->getNonCommitedArmies(), playerTerritories[j], ennemyTerritories[i], this);
-                            playerTerritories[j]->decNonCommitedArmies(playerTerritories[j]->getNonCommitedArmies());
-                            orderlist->add(adv);
-                            //Mark as the current territory as it moved its army already
-                            playerTerritories[j]->setWasAdvanced(true);
-
-                            //Mark the ennemy territory as being attacked already
-                            ennemyTerritories[i]->setIsAttacked(true);
-
-                            //Made an attack so I should exit
-                            advDone = true;
-                            break;
-                        }
-                        else { //requires airlift
-                            
-                            //Check if player has an airlift card
-                            if (getPlayerHand()->getCardsInHand().size() != 0 && getPlayerHand()->isCardInHand(1)) {
-                                cout << "Airlift ==> " << getPlayerName() << " is moving " << playerTerritories[j]->getNonCommitedArmies() << " units to territory -> " << ennemyTerritories[i]->getTerritoryID() << " from ID " << playerTerritories[j]->getTerritoryID() << endl;
-                                Airlift* alift = new Airlift(playerTerritories[j]->getNonCommitedArmies(), playerTerritories[j], ennemyTerritories[i], this);
-                                playerTerritories[j]->decNonCommitedArmies(playerTerritories[j]->getNonCommitedArmies());
-                                orderlist->add(alift);
-
-                                //Card returned back to deck
-                                getPlayerHand()->play(1, Player::common_deck);
-
-                                //Mark as the current territory as it moved its army already
-                                playerTerritories[j]->setWasAdvanced(true);
-
-                                //Mark the ennemy territory as being attacked already
-                                ennemyTerritories[i]->setIsAttacked(true);
-                                
-                                //Made an attack so I should exit
-                                advDone = true;
-                                break;
-                            }
-                        }
-
-                    }
-
-                }
-
-                if (i == ennemyTerritories.size() - 1) {
-                    setAttackApplied(true);
-                }
-
-                //exit if order is executed
-                if (advDone)
-                    break;
-
-            }
-        
-        }
-        else if (!getDefenseApplied()) {
-        
-            //Check if there are armies available to be moved from one player territory to another
-            for (int i = 0; i < playerTerritories.size(); i++) {
-                
-                for (int j = playerTerritories.size() - 1; j >= 0; j--) {
-                    //Move armies if greater amount
-                    if (!playerTerritories[j]->getWasAdvanced() && playerTerritories[j]->getNonCommitedArmies() > playerTerritories[i]->getNonCommitedArmies()) {
-                        cout << "Advance(Defence) ==> " << getPlayerName() << " is moving " << playerTerritories[j]->getNonCommitedArmies() << " units to territory -> " << playerTerritories[i]->getTerritoryID() << " from ID " << playerTerritories[j]->getTerritoryID() << endl;
-                        Advance* adv = new Advance(playerTerritories[j]->getNonCommitedArmies(), playerTerritories[j], playerTerritories[i], this);
-                        playerTerritories[j]->decNonCommitedArmies(playerTerritories[j]->getNonCommitedArmies());
-                        orderlist->add(adv);
-
-                        //Mark as the current territory as it moved its army already
-                        playerTerritories[j]->setWasAdvanced(true);
-
-                        advDefDone = true;
-                    }
-
-                }
-
-                //exit if order is executed
-                if (advDefDone)
-                    break;
-                
-                if (i == playerTerritories.size() - 1) {
-                    setDefenseApplied(true);
-                }
-
-            }
-
-            
-        } else if(!getIsCardPlayed()){
-            //Won't do anything if hand is empty
-            if (getPlayerHand()->getCardsInHand().size() != 0 && !(getPlayerHand()->getCardsInHand().size() == 1 && getPlayerHand()->getCardsInHand()[0]->get_type() == 1)) {
-                int indexOfCardToPlay;
-                //Pick a random card that isn't an airlift
-                for (int i = 0; i < getPlayerHand()->getCardsInHand().size(); i++) {
-                    if (getPlayerHand()->getCardsInHand()[i]->get_type() != 1) {
-                        indexOfCardToPlay = i;
-                    }
-                }
-               
-                Card* card = handPtr->getCardsInHand()[indexOfCardToPlay];
-
-                //Bomb
-                if (card->get_type() == 2) {
-
-                    vector<Territory*> possibleAttack = toAttack();
-                    Territory* t = new Territory();
-
-                    //Get the highest unit count ennemy territory
-                    for (int i = possibleAttack.size() - 1; i >= 0; i-- ) {
-                        if (!possibleAttack[i]->getIsAttacked()) {
-                            t = possibleAttack[i];
-                            possibleAttack[i]->setIsAttacked(true);
-                            break;
-                        }
-                    }
-
-                    cout << "Bomb ==> " << getPlayerName() << " is bombing " << t->getTerritoryID() << endl;
-                    Bomb* bAttack = new Bomb(this,t);
-                    orderlist->add(bAttack);
-
-                    //Card returned back to deck
-                    getPlayerHand()->play(2, Player::common_deck);
-                    setIsCardPlayed(true);
-
-                }//Blockade
-                else if (card->get_type() == 3) {
-
-                    Territory* t = territoryPtr[0];
-
-                    //Loop through player territory to find the biggest value of army
-                    for (int i = 1; i < territoryPtr.size(); i++) {
-                        if (t->getNonCommitedArmies() < territoryPtr[i]->getNonCommitedArmies()) {
-                            t = territoryPtr[i];
-                        }
-                    }
-
-                    cout << "Blockade ==> " << getPlayerName() << " is blockading " << t->getTerritoryID() << endl;
-                    Blockade* blockade = new Blockade(this, t);
-                    orderlist->add(blockade);
-
-                    //Card returned back to deck
-                    getPlayerHand()->play(3, Player::common_deck);
-                    setIsCardPlayed(true);
-                
-                }//Diplomacy
-                else if (card->get_type() == 4) {
-                    vector<Territory*> possibleAttack = toAttack();
-                    Territory* t = new Territory();
-
-                    //Get the highest unit count ennemy territory
-                    for (int i = possibleAttack.size() - 1; i >= 0; i--) {
-                        if (!possibleAttack[i]->getIsAttacked() && possibleAttack[i]->getPlayer() != NULL) {
-                            t = possibleAttack[i];
-                            possibleAttack[i]->setIsAttacked(true);
-                            break;
-                        }
-                    }
-
-                    if (t->getTerritoryContinentID() != 0) {
-                        cout << "Negotiate ==> " << getPlayerName() << " is negotiating with " << t->getPlayer()->getPlayerName() << endl;
-                        Negotiate* negotiate = new Negotiate(this, t->getPlayer());
-                        orderlist->add(negotiate);
-
-                        //Card returned back to deck
-                        getPlayerHand()->play(4, Player::common_deck);
-                    }
-                    setIsCardPlayed(true);
-
-                }//Reinforcement
-                else if (card->get_type() == 5) {
-
-                    cout << "Reinforcement ==> " << getPlayerName() << " is getting an additional 5 units." << endl;
-                    Reinforcement* rein = new Reinforcement(this);
-                    orderlist->add(rein);
-
-                    //Card returned back to deck
-                    getPlayerHand()->play(5, Player::common_deck);
-                    setIsCardPlayed(true);
-
-                }
-
-            }
-            else {
-                setIsCardPlayed(true);
-            }
-
-        }
-        else {
-            Commit* c = new Commit();
-            orderlist->add(c);
-        }
-        
-    }
-
+    this->playerStrategy->issueOrder();
 };
 
 void Player::deployCreation(vector<Territory*> playerWeakestTerritories,int armyCount) {

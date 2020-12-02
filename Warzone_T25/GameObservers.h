@@ -31,7 +31,7 @@ public:
     Subject(const Subject& s);
     //Overloaded Assignment Operator
     Subject& operator=(const Subject& s);
-   // Overloaded Stream Insertion Operator
+    // Overloaded Stream Insertion Operator
     friend ostream& operator<<(ostream& out, const Subject& s);
 
 
