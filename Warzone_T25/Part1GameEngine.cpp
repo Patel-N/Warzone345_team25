@@ -118,7 +118,6 @@ void SelectMap::setMapV2() {
 
 		for (int i = 0; i < allFiles.size(); i++) {
 			if (name == allFiles[i].substr(allFiles[i].find_last_of("/") + 1)) {
-				cout << allFiles[i] << "\t\t" << name << endl;
 				selectedPath = allFiles[i];
 				break;
 			}
