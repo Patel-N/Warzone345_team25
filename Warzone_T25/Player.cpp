@@ -49,9 +49,43 @@ Player::Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<O
     assignStrategy(strategy);
 }
 
+
 void Player::assignStrategy(int strategy) {
     cout << endl << "IN STRATEGY" << endl;
-    
+
+    switch (strategy)
+    {
+    case 1:
+        playerStrategy = new HumanPlayerStrategy(this);
+        break;
+
+    case 2:
+        playerStrategy = new AggressivePlayerStrategy(this);
+        break;
+
+    case 3:
+        playerStrategy = new BenevolentPlayerStrategy(this);
+        break;
+
+    case 4:
+        playerStrategy = new NeutralPlayerStrategy(this);
+        break;
+
+    default:
+        break;
+    }
+}
+void Player::setStrategy(int strategy) {
+    assignStrategy(strategy);
+}
+
+void Player::assignStrategy(int strategy) {
+    cout << endl << "IN STRATEGY" << endl;
+    //if the player already has a strategy , we delete before assigning a new one
+    if (playerStrategy != NULL) {
+        delete playerStrategy;
+        playerStrategy = NULL;
+    }
     switch (strategy)
     {
     case 1:
@@ -76,10 +110,13 @@ void Player::assignStrategy(int strategy) {
 }
 
 
+
 //destructor
 Player::~Player() {
     // IMPORTANT: none of the objects player could be holding are deleted
     cout << this->getPlayerName()<<"player destroyed" << endl;
+    delete playerStrategy;
+    delete handPtr;
 }
 
 
@@ -182,39 +219,8 @@ void Player::setArmyToBePlaced(int count) {
 
 vector<Territory*> Player::toAttack() {// returns list of territory pointers to defend
     
-  
-    //Build a vector of source territory attacking a target territory
-    vector<Territory*> attackableTerritories;
-   
-
-    vector<Territory*> allTerritories = allTerritoryVectorBuilder(territoryPtr[0]);
-
-
-    //Remove territories that already belong to the players from the appropriate vector
-    for (int i = 0; i < allTerritories.size(); i++) {
-    
-        bool isEnnemyTerritory = true;
-
-        for (int j = 0; j < territoryPtr.size(); j++) {
-        
-            if (allTerritories[i]->getTerritoryID() == territoryPtr[j]->getTerritoryID())
-                isEnnemyTerritory = false;
-        }
-
-        if (isEnnemyTerritory) {
-            attackableTerritories.push_back(allTerritories[i]);
-        }
-
-    }
-
-    //Set the state of all the territories to not visited
-    for (int i = 0; i < allTerritories.size(); i++) {
-        allTerritories[i]->setIsVisited(false);
-    }
-
-    sort(attackableTerritories.begin(), attackableTerritories.end(), Territory::compByArmyCount);
-
-    return attackableTerritories;
+    vector<Territory*> toAttackTerr = playerStrategy->toAttack();
+    return toAttackTerr;
 }
 
 vector<Territory*> Player::allTerritoryVectorBuilder(Territory* origin) {
@@ -261,6 +267,103 @@ vector<Territory*> Player::toDefend() {// returns list of territory pointers to 
     return toDefendTerr;
 };
 
+vector<Territory*> Player::getAdjacentTerritoriesOfPlayer(Territory* playerTerritory) {
+    vector<Territory*> adjacentTerritoriesOfPlayer;
+    if (playerTerritory == NULL || playerTerritory->getTerritoryOccupant() == NULL) { return adjacentTerritoriesOfPlayer; }
+    if (this->getPlayerId() != playerTerritory->getTerritoryOccupant()->getPlayerId()) {
+        return adjacentTerritoriesOfPlayer;
+    }
+    else {
+        vector<Territory*> adjacentTerritories = playerTerritory->getAdjacentTerritories();
+        for (int i = 0; i < adjacentTerritories.size(); i++) {
+            if (adjacentTerritories[i]->getTerritoryOccupant() == NULL) { continue; }
+            if (adjacentTerritories[i]->getTerritoryOccupant()->getPlayerId() == this->getPlayerId()) {
+                adjacentTerritoriesOfPlayer.push_back(adjacentTerritories[i]);
+            }
+        }
+    }
+    return adjacentTerritoriesOfPlayer;
+}
+
+vector<Territory*> Player::getNonAdjacentTerritoriesOfPlayer(Territory* playerTerritory) {
+    vector<Territory*> nonAdjacentTerritoriesOfPlayer;
+    if (playerTerritory == NULL || playerTerritory->getTerritoryOccupant() == NULL) { return nonAdjacentTerritoriesOfPlayer; }
+    if (this->getPlayerId() != playerTerritory->getTerritoryOccupant()->getPlayerId()) {
+        return nonAdjacentTerritoriesOfPlayer;
+    }
+    else {
+        vector<Territory*> playerTerritoriesToDefend = this->toDefend();
+        vector<Territory*> adjacentTerritoriesOfPlayer = getAdjacentTerritoriesOfPlayer(playerTerritory);
+        bool isAdj = false;
+        for (int i = 0; i < playerTerritoriesToDefend.size(); i++) {
+            Territory* territoryInAllFriendlyTerritoryList = playerTerritoriesToDefend[i];
+            for (int j = 0; j < adjacentTerritoriesOfPlayer.size(); j++) {
+                Territory* territoryInAdjacentFriendlyTerritories = adjacentTerritoriesOfPlayer[j];
+                if ((territoryInAllFriendlyTerritoryList->getTerritoryID() == territoryInAdjacentFriendlyTerritories->getTerritoryID())) {
+                    isAdj = true;
+                    continue;
+                }
+            }
+            //we make sure the territory we are adding is not adjacent nor the same as the strongest territory
+            if (!isAdj && playerTerritoriesToDefend[i]->getTerritoryID() != playerTerritory->getTerritoryID()) {
+                nonAdjacentTerritoriesOfPlayer.push_back(playerTerritoriesToDefend[i]);
+            }
+            isAdj = false;
+        }
+    }
+    return nonAdjacentTerritoriesOfPlayer;
+}
+vector<Territory*> Player::getAdjacentTerritoriesToAttack(Territory* playerTerritory)
+{
+    vector<Territory*> adjTerritoriesToAttack;
+    if (playerTerritory == NULL || playerTerritory->getTerritoryOccupant() == NULL) { return adjTerritoriesToAttack; }
+    if (this->getPlayerId() != playerTerritory->getTerritoryOccupant()->getPlayerId()) {
+        return adjTerritoriesToAttack;
+    }
+    else {
+        vector<Territory*> toAttack = this->toAttack();
+        vector<Territory*> adjTerr = playerTerritory->getAdjacentTerritories();
+        for (int i = 0; i < toAttack.size(); i++) {
+            Territory* territoryToAttackInAllEnemyTerritories = toAttack[i];
+            for (int j = 0; j < adjTerr.size(); j++) {
+                Territory* adjacenTerritory = adjTerr[j];
+                if (territoryToAttackInAllEnemyTerritories->getTerritoryID() == adjacenTerritory->getTerritoryID()) {
+                    if (territoryToAttackInAllEnemyTerritories->getTerritoryID() == 7) { cout << endl << "PUSHING THE WRONG TERR " << endl; }
+                    adjTerritoriesToAttack.push_back(territoryToAttackInAllEnemyTerritories);
+                }
+            }
+        }
+    }
+    return adjTerritoriesToAttack;
+}
+vector<Territory*>Player::getNonAdjacentTerritoriesToAttack(Territory* playerTerritory) {
+    vector<Territory*> nonAdjacentTerritoriesToAttack;
+    if (playerTerritory == NULL || playerTerritory->getTerritoryOccupant() == NULL) { return nonAdjacentTerritoriesToAttack; }
+    if (this->getPlayerId() != playerTerritory->getTerritoryOccupant()->getPlayerId()) {
+        return nonAdjacentTerritoriesToAttack;
+    }
+    else {
+        vector<Territory*> playerTerritoriesToAttack = this->toAttack();
+        vector<Territory*> adjacentTerritoriesToAttack = getAdjacentTerritoriesToAttack(playerTerritory);
+        bool isAdj = false;
+        for (int i = 0; i < playerTerritoriesToAttack.size(); i++) {
+            Territory* territoryInAllEnemyTerritoryList = playerTerritoriesToAttack[i];
+            for (int j = 0; j < adjacentTerritoriesToAttack.size(); j++) {
+                Territory* territoryInAdjacentEnemyTerritories = adjacentTerritoriesToAttack[j];
+                if ((territoryInAllEnemyTerritoryList->getTerritoryID() == territoryInAdjacentEnemyTerritories->getTerritoryID())) {
+                    isAdj = true;
+                    continue;
+                }
+            }
+            //we make sure the territory we are adding is not adjacent nor the same as the strongest territory
+            if (!isAdj && playerTerritoriesToAttack[i]->getTerritoryID() != playerTerritory->getTerritoryID()) {
+                nonAdjacentTerritoriesToAttack.push_back(playerTerritoriesToAttack[i]);
+            }
+            isAdj = false;
+        }
+    }
+    return nonAdjacentTerritoriesToAttack;
+}
 void Player::removeTerritoryFromList(int territoryIndex) {
     for (int i = 0; i < territoryPtr.size();i++) {
         if (territoryPtr[i]->getTerritoryID() - 1 == territoryIndex) {

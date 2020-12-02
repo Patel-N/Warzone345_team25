@@ -9,7 +9,7 @@ class GameEngine : public Subject {
 public:
 	//constructors
 	GameEngine();
-
+	~GameEngine();
 	GameEngine(Map* map);
 	GameEngine(const GameEngine& engine);
 
@@ -32,6 +32,9 @@ public:
 	vector<Player*> getPlayers();
 	int getPhase();
 	string getPName();
+	Player* getConquerer();
+	int getRounds();
+	int getArmyCount();
 
 	void mainGameLoop();
 private:
@@ -39,6 +42,9 @@ private:
 	Map* game_map;
 	int phaseID;
 	string pName;
+	int armyPool;
+	Player* conquerer;
+	int totalRounds;
 };
 
 namespace part_3 {

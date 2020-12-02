@@ -1,0 +1,77 @@
+; solli & jeguz
+; Swiss Map
+
+; Switzerland Game Map
+; Dimensions: 677 x 425 Pixels
+; Battle of swiss cantons
+
+[files]
+pic swiss_pic.jpg
+map swiss_map.gif
+crd swiss.cards
+
+[continents]
+GE-VD-NE-FR 3 red
+JU-BS-BL-SO 2 orange
+BE-VS-OW-NW-UR 4 grey
+AG-LU-ZH-ZG-SH 4 yellow
+TG-SG-AR-AI-LI 3 green
+SZ-GL-GR-TI 3 blue
+
+[countries]
+1 Waadt 1 115 224
+2 Neuenburg 1 149 185
+3 Fribourg 1 175 245
+4 Geneve 1 64 324
+5 Jura 2 187 85
+6 Baselstadt 2 256 41
+7 Baselland 2 278 81
+8 Solothurn 2 242 125
+9 Bern 3 250 210
+10 Wallis 3 285 310
+11 Uri 3 391 198
+12 Obwalden 3 336 185
+13 Nidwalden 3 365 184
+14 Luzern 4 315 165
+15 Aargau 4 326 67
+16 Zug 4 377 136
+17 Zuerich 4 405 95
+18 Schaffhausen 4 405 18
+19 Thurgau 5 467 50
+20 St-Gallen 5 487 133
+21 Appenzell-Ausserrhoden 5 500 81
+22 Appenzell-Innerrhoden 5 498 106
+23 Liechtenstein 5 532 126
+24 Schwyz 6 415 140
+25 Glarus 6 449 153
+26 Graubuenden 6 498 225
+27 Tessin 6 415 280
+
+[borders]
+1 
+2 3 5 9
+3 2 9
+4 
+5 
+6 
+7 
+8 
+9 
+10 
+11 
+12 9 11 13 14 
+13 
+14 
+15 
+16 14 15 17 24
+17 4
+18 19 
+19 17 18 20
+20 
+21 20 22
+22 20 21
+23 20 26
+24 
+25 11 20 24 26
+26 
+27 10 11 26

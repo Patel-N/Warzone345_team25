@@ -98,6 +98,7 @@ public:
 	//getters
 	int getSize();
 	std::vector<Continent*> getContinents();
+	vector<std::vector<Territory*>> getMap() { return map; }
 	Territory* getTerritory(int);
 	bool validate();
 
