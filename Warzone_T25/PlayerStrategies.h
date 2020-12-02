@@ -8,7 +8,7 @@ class Player;
 class PlayerStrategies {
 public:
 
-	virtual ~PlayerStrategies(){ }
+	virtual ~PlayerStrategies() { }
 
 	virtual void  issueOrder() = 0;
 	virtual vector<Territory*> toDefend() = 0; // returns list of territory pointers to defend
@@ -16,7 +16,7 @@ public:
 
 };
 
-class HumanPlayerStrategy: public PlayerStrategies {
+class HumanPlayerStrategy : public PlayerStrategies {
 public:
 	HumanPlayerStrategy(Player*);
 	void issueOrder();
@@ -36,7 +36,7 @@ public:
 	vector<Territory*> toDefend();
 	vector<Territory*> toAttack();
 	//getters
-	inline Player*  getStrategyExecuter() { return strategyExecuter; }
+	inline Player* getStrategyExecuter() { return strategyExecuter; }
 
 	//other helper methods
 	bool deployStrategy(Territory*);
@@ -51,11 +51,16 @@ private:
 class BenevolentPlayerStrategy : public PlayerStrategies {
 public:
 	BenevolentPlayerStrategy(Player*);
+	~BenevolentPlayerStrategy();
+	BenevolentPlayerStrategy(const BenevolentPlayerStrategy&);
+
 	void issueOrder();
 	vector<Territory*> toDefend();
 	vector<Territory*> toAttack();
 	//getters
 	inline Player* getStrategyExecuter() { return strategyExecuter; }
+	BenevolentPlayerStrategy& operator= (const BenevolentPlayerStrategy&);
+
 private:
 	Player* strategyExecuter;
 };
@@ -69,6 +74,6 @@ public:
 	//getters
 	inline Player* getStrategyExecuter() { return strategyExecuter; }
 private:
-	 Player* strategyExecuter;
+	Player* strategyExecuter;
 };
 

@@ -107,8 +107,8 @@ int main()
 	engine->executeOrdersPhase();
 	//Player* player2 = new Player(2, "Neil");
 
-	engine->startUpPhase();
-	engine->mainGameLoop();
+	/*engine->startUpPhase();
+	engine->mainGameLoop();*/
 	delete engine;
 	delete deck;
 

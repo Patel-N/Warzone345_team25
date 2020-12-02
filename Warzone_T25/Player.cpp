@@ -50,31 +50,7 @@ Player::Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<O
 }
 
 
-void Player::assignStrategy(int strategy) {
-    cout << endl << "IN STRATEGY" << endl;
 
-    switch (strategy)
-    {
-    case 1:
-        playerStrategy = new HumanPlayerStrategy(this);
-        break;
-
-    case 2:
-        playerStrategy = new AggressivePlayerStrategy(this);
-        break;
-
-    case 3:
-        playerStrategy = new BenevolentPlayerStrategy(this);
-        break;
-
-    case 4:
-        playerStrategy = new NeutralPlayerStrategy(this);
-        break;
-
-    default:
-        break;
-    }
-}
 void Player::setStrategy(int strategy) {
     assignStrategy(strategy);
 }

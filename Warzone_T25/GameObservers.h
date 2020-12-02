@@ -36,8 +36,8 @@ public:
 
 
 protected:
-    list<Observer*> phase_observers;
-    list<Observer*> stats_observers;
+    list<Observer*>* phase_observers;
+    list<Observer*>* stats_observers;
 
 
 };
