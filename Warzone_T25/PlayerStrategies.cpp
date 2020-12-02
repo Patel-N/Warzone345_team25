@@ -174,21 +174,48 @@ void HumanPlayerStrategy::issueOrder() {
     cout << "meaning: place 1 army to territory of ID 2, 5 army to territory of ID 6, and 10 army to territory ID 3" << endl;
     cin >> UserInput;
     //parsing userInput and placing armies
-    int const tempVectorSize = count(UserInput.begin(), UserInput.end(), '(');//counting num of '(' to findout size of temp vector
-    vector<string> tempVector;
-    for (int i = 0; i < tempVectorSize; i++) {
-        string s = UserInput;
-        string delimiter = ")";
-
-        size_t pos = 0;
-        string token;
-        while ((pos = s.find(delimiter)) != string::npos) {
-            token = s.substr(0, pos+1);
-            cout << "token: "<<token << endl;
-            s.erase(0, pos+1 + delimiter.length());
-        }
-        cout << s << endl;
+    std::string s = UserInput;//temp variables for parsin
+    std::string delimiter = "),";
+    size_t pos = 0;
+    vector<string> vectorOfUserInput;
+    std::string token;
+    while ((pos = s.find(delimiter)) != std::string::npos) {
+        token = s.substr(0, pos+1);
+        vectorOfUserInput.push_back(token);
+        s.erase(0, pos + delimiter.length());
     }
+    vectorOfUserInput.push_back(s);//user input parsed into this vector
+
+    vector<Territory*> playerTerritoriesToDefend = this->strategyExecuter->toDefend();// list of players current territories
+    for (int i = 0; i < vectorOfUserInput.size(); i++) {// for the size of the user input/size of vector parsed input
+        int armyToBePlaced = 0;//num army player wants to place
+        int territoryIDUserInput = 0;//ID player input
+        Territory* territoryPointer = NULL;//the pointer to the actual territory player wants to deploy army to
+
+        std::string s = vectorOfUserInput.at(i);//this chunck parses (armyToBePlaced,territoryIDUserInput) input
+        std::string delimiter = ",";
+        size_t pos = 0;
+        std::string token;
+        while ((pos = s.find(delimiter)) != std::string::npos) {
+            token = s.substr(1, pos);
+            armyToBePlaced = stoi(token);
+            s.erase(0, pos + delimiter.length());
+        }
+        territoryIDUserInput = stoi(s);
+
+        for (int i = 0; i < playerTerritoriesToDefend.size(); i++) {//this chunck looks for the territory by ID
+            if (playerTerritoriesToDefend.at(i)->getTerritoryID() == territoryIDUserInput) {
+                territoryPointer = playerTerritoriesToDefend.at(i); 
+                break;
+            }
+        }
+        Deploy* d = new Deploy(armyToBePlaced, territoryPointer, strategyExecuter);//sets order depending of user input
+        strategyExecuter->getOrderList()->add(d);// add to the list of orders of the player
+        cout << "you ordered : " << armyToBePlaced << " armie(s) to territory ID: " << territoryIDUserInput << endl;
+    }
+    cout << "army deployment sucessfull!" << endl;
+    strategyExecuter->addToArmiesToBePlaced(-this->strategyExecuter->getArmyToBePlaced());//sets army to be placed to 0
+
 
 
     //play card step------------------------------
