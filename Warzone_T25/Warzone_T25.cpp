@@ -20,7 +20,7 @@ int main()
 	part_5::start();*/
 
 	ConquestFileReader* cfr = new ConquestFileReader();
-	cfr->generateMap("./MapFiles/ConquestFiles/Spaceship.map");
+	cfr->generateMap("./MapFiles/ConquestFiles/Crab.map");
 
 
 	delete cfr;

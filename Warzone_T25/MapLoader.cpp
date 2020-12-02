@@ -172,8 +172,7 @@ Map* MapLoader::generateMap(string fn)
 			mapFile.close();
 		}
 		else {
-			cout << "Couldn't read file." << endl;
-			return NULL;
+			throw FileNotFoundException();
 		}
 
 		//Throw an error if missing any info/wrong file structure
@@ -295,10 +294,11 @@ Map* ConquestFileReader::generateMap(string fn)
 						}
 						else {
 							vector<string> sepInfo = splitLine(line, true);
-
-							//Create new continents and add them to the Map
-							gameMap->addContinent(continentId, sepInfo[0], stoi(sepInfo[1]));
-							continentId++;
+							if (sepInfo.size() == 2) {
+								//Create new continents and add them to the Map
+								gameMap->addContinent(continentId, sepInfo[0], stoi(sepInfo[1]));
+								continentId++;
+							}
 						}
 
 					}
@@ -336,28 +336,20 @@ Map* ConquestFileReader::generateMap(string fn)
 										break;
 									}
 								}
-								cout << "Adding " << cth->getName() << " || cId: " << cId << endl;
-								gameMap->addTerritory(cth->getId(), cth->getName(), cId);
 
+
+								gameMap->addTerritory(cth->getId(), cth->getName(), cId);
+								
 								//Set territories parsed flag to true
-								if (mapFile.eof())
+								if (mapFile.eof()) {
 									territoriesParsed = true;
-							}
+								}
+							} 
 						}
 
 					}
 				
 				}
-				//SETUP CONTINENTS
-				//SPLITLINE bool for equal or commas
-
-				//Territories
-				//vector size comparison
-				//Build territories
-				//1st loop terri
-				//2nd loop borders
-				//Bam map made
-
 			}
 
 			//Build borders
@@ -365,16 +357,37 @@ Map* ConquestFileReader::generateMap(string fn)
 				vector<int> borders;
 				borders.push_back(conquestTerritories[i]->getId());
 				vector<string> cTerritoryBorders = conquestTerritories[i]->getBorders();
-
 				for (int j = 0; j < cTerritoryBorders.size(); j++) {
 				
+					if (is_number(cTerritoryBorders[j])) {
+						borders.push_back(stoi(cTerritoryBorders[j]));
+					}
+					else {
+						Territory* bTerri = gameMap->getTerritory(cTerritoryBorders[j]);
+						borders.push_back(bTerri->getTerritoryID());
+					}
 				}
+
+				gameMap->addBorder(borders);
 			}
+
+			mapFile.close();
 		}
 		else {
 			throw FileNotFoundException();
 		}
 
+		//Throw an error if missing any info/wrong file structure
+		if (!continentParsed) {
+			throw MissingElementException();
+		}
+		//Throw error if map is disconnected
+		if (!gameMap->validate()) {
+			throw DisconnectedMapException();
+		}
+		else {
+			cout << "Map successfully generated!" << endl;
+		}
 	
 	}
 	catch (FileNotFoundException fnf) {

@@ -97,6 +97,7 @@ public:
 	int getSize();
 	std::vector<Continent*> getContinents();
 	Territory* getTerritory(int);
+	Territory* getTerritory(string tName);
 	bool validate();
 
 	//methods
