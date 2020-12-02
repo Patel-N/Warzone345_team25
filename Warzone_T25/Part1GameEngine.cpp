@@ -10,12 +10,15 @@
 //================================================================================//
 
 // Constructor
-SelectMap::SelectMap(string str) {
+SelectMap::SelectMap(string str, MapLoader* loader) {
 	cout << "SelectMap Constructor Called\n";
 	path = str;
-	maploader = new MapLoader();
+	maploader = loader;
 	//map = new Map("Map Creation Initialised");
 	map = NULL;
+
+	loaders[0] = new MapLoader();
+	loaders[1] = new ConquestFileReaderAdapter(new ConquestFileReader());
 }
 
 SelectMap::SelectMap() {
@@ -27,6 +30,9 @@ SelectMap::SelectMap() {
 
 // traverse all files in the map directory and display to console all map files
 void SelectMap::printGameMaps() {
+
+	vector<string> allFileName;
+
 	if (path.empty()) {
 		cout << "Map directory path is not set: \n";
 		return;
@@ -34,16 +40,41 @@ void SelectMap::printGameMaps() {
 	DIR* dp;
 	dirent* pdir;
 	char* ch_path = &path[0];
-	dp = opendir(ch_path);
+	dp = opendir("./MapFiles");
 	cout << "Game directory has all these maps:" << "\n";
 	if (dp) {
 		while ((pdir = readdir(dp)) != NULL) {
 			if (strcmp(pdir->d_name, ".") != 0 && strcmp(pdir->d_name, "..") != 0) {
-				cout << "\t" << pdir->d_name << "\n";
+				string s = pdir->d_name;
+				if (s.substr(s.find_last_of(".") + 1) == ("map")) {
+					string fName = "./MapFiles/" + s;
+					allFileName.push_back(fName);
+				}
+			}
+		}
+	}
+	DIR* dp2;
+	dp2 = opendir("./MapFiles/ConquestFiles");
+	if (dp2) {
+		while ((pdir = readdir(dp2)) != NULL) {
+			if (strcmp(pdir->d_name, ".") != 0 && strcmp(pdir->d_name, "..") != 0) {
+				string s = pdir->d_name;
+				if (s.substr(s.find_last_of(".") + 1) == ("map")) {
+					string fName = "./MapFiles/ConquestFiles/" + s;
+					allFileName.push_back(fName);
+				}
 			}
 		}
 	}
 	closedir(dp);
+	closedir(dp2);
+
+	//Print all Files
+	for (int i = 0; i < allFileName.size(); i++) {
+		cout << allFileName[i].substr(allFileName[i].find_last_of("/") + 1) << endl;
+	}
+	
+	setAllFiles(allFileName);
 }
 
 // take user inout to select the map file from directory and set to selectedmap (member variable)
@@ -65,8 +96,51 @@ void SelectMap::setMap() {
 	selectedmap = filename;
 }
 
+void SelectMap::setMapV2() {
+	string name;
+	cout << "\nEnter the map name (with extension) that you wish to play:\n";
+	cin >> name; //without spaces
+	
+	string selectedPath;
+	for (int i = 0; i < allFiles.size(); i++) {
+		if (name == allFiles[i].substr(allFiles[i].find_last_of("/")+1)) {
+			selectedPath = allFiles[i];
+			break;
+		}
+	}
+
+	ifstream filehandle;
+	filehandle.open(selectedPath);
+
+	while (!filehandle.is_open()) {
+		cout << "You entered wrong file name. Try Again! Enter map name (with extension) that you wish to play:\n";
+		cin >> name;
+
+		for (int i = 0; i < allFiles.size(); i++) {
+			if (name == allFiles[i].substr(allFiles[i].find_last_of("/") + 1)) {
+				cout << allFiles[i] << "\t\t" << name << endl;
+				selectedPath = allFiles[i];
+				break;
+			}
+		}
+
+		filehandle.open(selectedPath);
+	}
+	filehandle.close();
+
+	selectedmap = selectedPath;
+}
+
 // loadmap to map pointer until a validated map is selected by user
 void SelectMap::loadmap() {
+
+	//Determine which loader to use
+	if (getSelectedMap().find("ConquestFiles") == string::npos) {
+		setMapLoader(loaders[0]);
+	}
+	else {
+		setMapLoader(loaders[1]);
+	}
 
 	while (map == NULL) {
 		map = maploader->generateMap(getSelectedMap());

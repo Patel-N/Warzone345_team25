@@ -11,18 +11,19 @@ using namespace std;
 // methods to display map directory, open map, validate and load file
 class SelectMap {
 
-public:
+private:
 
 	string path; // directory path
 	string selectedmap; // userinput of map file
 	Map* map; // points to generated map after validation, null if not validated
 	MapLoader* maploader; // points to maploader object to access generatemap method with arguments of selectedmap
-
+	MapLoader* loaders[2];
+	vector<string> allFiles;
 
 public:
 
 	// Constructor
-	SelectMap(string str);
+	SelectMap(string str, MapLoader* loader);
 
 	// Empty Constructor
 	SelectMap();
@@ -32,12 +33,18 @@ public:
 
 	// take user inout to select the map file from directory and set to selectedmap (member variable)
 	void setMap();
+	void setMapV2();
 
 	// loadmap to map pointer until a validated map is selected by user
 	void loadmap();
 
 	// getter
 	string getSelectedMap();
+	inline Map* getMap() { return map; };
+
+	//Setter
+	inline void setAllFiles(vector<string> s) { allFiles = s; };
+	inline void setMapLoader(MapLoader* ml) { maploader = ml; };
 
 	// Deep Copy Constructor
 	SelectMap(const SelectMap& selectmap);

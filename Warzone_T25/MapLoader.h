@@ -79,10 +79,11 @@ private:
 class ConquestFileReaderAdapter : public MapLoader{
 
 public:
-	Map* generateMap(string fn);
+	ConquestFileReaderAdapter(ConquestFileReader* cFR); // added constructor here and in cpp with object on heap
+	Map* generateMap(string fn) override; // added override keyword
 
 private:
-	ConquestFileReader conquestFR;
+	ConquestFileReader* conquestFR; // changed to pointer
 };
 
 class ConquestTerritoriesHolder {

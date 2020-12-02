@@ -437,9 +437,13 @@ vector<string> ConquestFileReader::splitLine(string line, bool isEqualSeparator)
 	}
 }
 
+ConquestFileReaderAdapter::ConquestFileReaderAdapter(ConquestFileReader* cFR) {
+	conquestFR = cFR;
+} 
+
 Map* ConquestFileReaderAdapter::generateMap(string fn)
 {
-	return nullptr;
+	return conquestFR->generateMap(fn);
 }
 
 ConquestTerritoriesHolder::ConquestTerritoriesHolder()
