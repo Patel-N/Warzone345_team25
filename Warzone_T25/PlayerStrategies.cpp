@@ -6,7 +6,14 @@ AggressivePlayerStrategy::AggressivePlayerStrategy(Player* executer) {
     this->strategyExecuter = executer;
     cout << endl << "AGGRESSIVE PLAYER STRATEGY CREATED" << endl;
 }
+AggressivePlayerStrategy::AggressivePlayerStrategy(const AggressivePlayerStrategy& obj) {
+    *this = obj;
+}
 
+AggressivePlayerStrategy& AggressivePlayerStrategy::operator=(const AggressivePlayerStrategy& obj) {
+    this->strategyExecuter = obj.strategyExecuter;
+    return *this;
+}
 AggressivePlayerStrategy::~AggressivePlayerStrategy(){
     cout << endl << "Aggressive strategy object destroyed" << endl;
 }
@@ -41,6 +48,7 @@ void AggressivePlayerStrategy::issueOrder() {
         cout << endl << "Aggressive Player " << strategyExecuter->getPlayerName() << " attempting to move troops around..." << endl;
         moveFromFriendlyOrderCreated = movingFriendlyTroopsAroundStrategy(strongestTerritory);
         if (!moveFromFriendlyOrderCreated) {
+            cout << endl << "Aggressive Player " << strategyExecuter->getPlayerName() << " not able to move troops around" << endl;
             cout << endl << "Aggressive Player " << strategyExecuter->getPlayerName() << " Attempting to create attacks..." << endl;
            attackOrderCreated = attackStrategy(strongestTerritory);
            if (!attackOrderCreated) {
@@ -70,8 +78,8 @@ bool AggressivePlayerStrategy::deployStrategy(Territory* strongestTerritory) {
     if (this->strategyExecuter->getArmyToBePlaced() != 0) {
         vector<Territory*> playerTerritoriesToDefend = this->strategyExecuter->toDefend();
         //the aggressive player would want to advance on its stronger territory 
-        cout << endl << "Available armies in pool: " << this->strategyExecuter->getArmyToBePlaced() << endl;
-        cout << endl << "Deploying " << this->strategyExecuter->getArmyToBePlaced() << " on strongest territory " << strongestTerritory->getName() << " ID# " << strongestTerritory->getTerritoryID() << endl;
+        cout << endl << " Available armies in pool: " << this->strategyExecuter->getArmyToBePlaced() << endl;
+        cout << endl << " Deploying " << this->strategyExecuter->getArmyToBePlaced() << " on strongest territory " << strongestTerritory->getName() << " ID# " << strongestTerritory->getTerritoryID() << endl;
         Deploy* d = new Deploy(this->strategyExecuter->getArmyToBePlaced(), strongestTerritory, strategyExecuter);
         strategyExecuter->getOrderList()->add(d);
         strategyExecuter->addToArmiesToBePlaced(-this->strategyExecuter->getArmyToBePlaced());
@@ -83,7 +91,6 @@ bool AggressivePlayerStrategy::deployStrategy(Territory* strongestTerritory) {
 }
 
 bool AggressivePlayerStrategy::movingFriendlyTroopsAroundStrategy(Territory* strongestTerritory) {
-    cout << endl << "IN HERE" << endl;
     vector<Territory*> playerTerritoriesToDefend = this->strategyExecuter->toDefend();
     vector<Territory*> adjacentTerritories = strongestTerritory->getAdjacentTerritories();
     vector<Territory*> adjacentTerritoriesOfPlayer = strategyExecuter->getAdjacentTerritoriesOfPlayer(strongestTerritory);
@@ -138,7 +145,7 @@ bool AggressivePlayerStrategy::attackStrategy(Territory* strongestTerritory) {
             //randomnly picking the first adjacent territory in the list: the list is sorted so the first territory is garuantied to be weaker
             Territory* territoryToAttack = adjTerritoriesToAttack[0];
             int ArmiesToMarch = strongestTerritory->getNonCommitedArmies() - 1;
-            cout << endl << "Aggressive Player " << strategyExecuter->getPlayerName() << "About to issue attack order..." << endl;
+            cout << endl << "Aggressive Player " << strategyExecuter->getPlayerName() << " About to issue attack order..." << endl;
             cout << endl << "Available armies to attack with from strong territory: "<< strongestTerritory->getNonCommitedArmies()<<" armies " << endl;
             cout << endl << "Attacking with: "<< ArmiesToMarch <<" armies " << endl;
             strongestTerritory->decNonCommitedArmies(ArmiesToMarch);
@@ -308,15 +315,36 @@ NeutralPlayerStrategy::NeutralPlayerStrategy(Player* executer)
     cout << endl << "NEUTRAL PLAYER STRATEGY CREATED" << endl;
 }
 
+NeutralPlayerStrategy::NeutralPlayerStrategy(const NeutralPlayerStrategy& obj)
+{
+    *this = obj;
+}
+
+NeutralPlayerStrategy& NeutralPlayerStrategy::operator=(const NeutralPlayerStrategy& obj)
+{
+    this->strategyExecuter = obj.strategyExecuter;
+    return *this;
+}
+
+NeutralPlayerStrategy::~NeutralPlayerStrategy() {
+    cout << endl << "Neutral strategy object destroyed" << endl;
+}
+
 void NeutralPlayerStrategy::issueOrder()
 {
+    cout << endl << "===============================" << endl;
+    cout << endl << "  NEUTRAL ISSUE ORDER CALLED   " << endl;
+    cout << endl << "===============================" << endl;
     //the requirement is that the neutral player does not issue any order. for that reason, the neutral player remains with only 0 armies on
     //the territories he owns since he can't even issue deploy orders
     strategyExecuter->setArmyToBePlaced(0);
+    cout << endl << "neutral player does not issue any orders... Armies in pool have been removed for this turn" << endl;
     Commit* commit = new Commit();
     strategyExecuter->getOrderList()->add(commit);
     vector<Territory*> toDefendTerr = this->strategyExecuter->toDefend();
-    cout << endl << "Neutral issue order called" << endl;
+    cout << endl << "===============================" << endl;
+    cout << endl << "  NEUTRAL ISSUE ORDER DONE   " << endl;
+    cout << endl << "===============================" << endl;
 }
 
 vector<Territory*> NeutralPlayerStrategy::toDefend()
@@ -330,4 +358,16 @@ vector<Territory*> NeutralPlayerStrategy::toAttack()
     //for the time being , the neutral territory does not attack and therefore this function serves only as a place holder
     vector<Territory*> vec;
     return  vec;
+}
+
+ostream& operator<<(ostream& outs, const AggressivePlayerStrategy& theObject)
+{
+    outs << endl << "This player has an aggressive strategy" << endl;
+    return outs;
+}
+
+ostream& operator<<(ostream& outs, const NeutralPlayerStrategy& theObject)
+{
+    outs << endl << "This player has a neutral strategy" << endl;
+    return outs;
 }

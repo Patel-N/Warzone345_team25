@@ -4,7 +4,6 @@
 #include <Windows.h>
 #include <iostream>
 
-
 // OBSERVER CLASS
 
 // Observer Default Constructor
@@ -164,14 +163,14 @@ void PhaseObserver::display() {
 	int id = _subject->getPhase();
 	string name = _subject->getPName();
 	vector<Player*> players = _subject->getPlayers();
-	int aCount = _subject->getArmyCount();
+
 	// Displays info of phase depending on the phase ID. Using window library to use sleep method and delay output.
 	switch (id) {
 	case 0:
-		Sleep(1500);
-		system("cls");
+		/*Sleep(1500);
+		system("cls");*/
 
-		cout << endl << "STARTUP PHASE\n" << endl;
+		cout << "STARTUP PHASE\n" << endl;
 		for (int i = 0; i < players.size(); i++) {
 			name = players.at(i)->getPlayerName();
 
@@ -186,30 +185,27 @@ void PhaseObserver::display() {
 		break;
 
 	case 1:
-		/*	Sleep(1000);
+		/*	Sleep(1500);
 			system("cls");*/
 
-		cout << endl << name << ": " << "REINFORCEMENT PHASE\n" << endl;
-		cout << name << " will get an additional " << aCount << " new units." << endl;
+		cout << name << ": " << "REINFORCEMENT PHASE\n" << endl;
 		break;
 
 	case 2:
-		/*Sleep(1000);
-		system("cls");*/
+		/*		Sleep(1500);
+				system("cls");*/
 
-		cout << endl << name << ": " << "ISSUE ORDERS PHASE\n" << endl;
-		cout << "Player " << name << " has commited their turn." << endl;
-
+		cout << name << ": " << "ISSUE ORDERS PHASE\n" << endl;
 		break;
 
 	case 3:
-		/*	Sleep(5000);
+		/*	Sleep(1500);
 			system("cls");*/
 
 			// Loops the number of payers and displays the player and their order being executed.
-		cout << endl << name << ": " << "EXECUTION ORDERS PHASE\n" << endl;
+		cout << name << ": " << "EXECUTION ORDERS PHASE\n" << endl;
 		for (int i = 0; i < players.size(); i++) {
-
+			// WAIT FOR ISSUE ORDERS BEFORE UNCOMMENTING
 			if (players[i]->getOrderList()->numSize != 0) {
 				cout << players[i]->getPlayerName() << " executes " << players[i]->getNextOrder()->getorderName() << endl << endl;
 			}
@@ -282,35 +278,13 @@ void StatsObserver::display() {
 	vector<Player*> players = _subject->getPlayers();
 	string name = _subject->getPName();
 
-
 	// Gets the number of territories of each player and divides it by the total number of territories and
 	//multiplies by 100 to get the percentage.
-	int id = _subject->getPhase();
+	for (int i = 0; i < players.size(); i++) {
+		cout << players[i]->getPlayerName() << " controls " <<
+			(players[i]->getPlayerTerritories().size()) / mapSize * 100 << "% of the map." << endl;
 
-	switch (id) {
-	case 0:
-		for (int i = 0; i < players.size(); i++) {
-			cout << players[i]->getPlayerName() << " controls " <<
-				(players[i]->getPlayerTerritories().size()) / mapSize * 100 << "% of the map." << endl;
-		}
-		break;
-
-	case 1:
-		cout << endl << _subject->getConquerer()->getPlayerName() << " HAS CONQUERED!" << endl;
-		cout << endl << _subject->getConquerer()->getPlayerName() << " has conquered a territory." << endl;
-
-		break;
-
-	case 6:
-		int round = _subject->getRounds();
-		cout << endl << "*********************GAME IS OVER*********************" << endl;
-		cout << endl << "This game took " << round << " rounds!" << endl;
-		cout << endl << "Congrats " << players[0]->getPlayerName() << " YOU WON!!" << endl;
-		cout << endl << players[0]->getPlayerName() << " has conquered " << players[0]->getPlayerTerritories().size() << " territories." << endl;
-		break;
 	}
-
-
 
 
 };

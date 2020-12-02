@@ -8,9 +8,12 @@ class Player;
 class PlayerStrategies {
 public:
 	virtual ~PlayerStrategies(){ }
+	PlayerStrategies(){}
 	virtual void  issueOrder() = 0;
 	virtual vector<Territory*> toDefend() = 0; // returns list of territory pointers to defend
 	virtual vector<Territory*> toAttack() = 0;// returns list of territory pointers to defend
+private:
+	Player* strategyExecuter;
 
 };
 
@@ -27,6 +30,7 @@ private:
 class AggressivePlayerStrategy : public PlayerStrategies {
 public:
 	AggressivePlayerStrategy(Player*);
+	AggressivePlayerStrategy(const AggressivePlayerStrategy&);
 	~AggressivePlayerStrategy();
 	void issueOrder();
 	vector<Territory*> toDefend();
@@ -38,6 +42,8 @@ public:
 	bool movingFriendlyTroopsAroundStrategy(Territory*);
 	bool attackStrategy(Territory*);
 	bool playCardsStrategy(Territory*);
+	AggressivePlayerStrategy& operator= (const AggressivePlayerStrategy&);
+	friend ostream& operator<<(ostream& outs, const AggressivePlayerStrategy& theObject);
 private:
 	Player* strategyExecuter;
 };
@@ -57,11 +63,15 @@ private:
 class NeutralPlayerStrategy : public PlayerStrategies {
 public:
 	NeutralPlayerStrategy(Player*);
+	NeutralPlayerStrategy(const NeutralPlayerStrategy&);
+	~NeutralPlayerStrategy();
 	void issueOrder();
 	vector<Territory*> toDefend();
 	vector<Territory*> toAttack();
 	//getters
 	inline Player* getStrategyExecuter() { return strategyExecuter; }
+	NeutralPlayerStrategy& operator= (const NeutralPlayerStrategy&);
+	friend ostream& operator<<(ostream& outs, const NeutralPlayerStrategy& theObject);
 private:
 	 Player* strategyExecuter;
 };
