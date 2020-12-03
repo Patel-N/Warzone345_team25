@@ -259,9 +259,108 @@ void HumanPlayerStrategy::issueOrder() {
                      s.erase(0, pos + delimiter.length());
                  }        
                  parseInput.push_back(stoi(s));
+
+
                  for (int i = 0; i < parseInput.size(); i++) {//for the size of user input
-                    // strategyExecuter->getPlayerHand()->getCardsInHand().at(parseInput.at(i))->play();// plat the card user inputed
+                     int type =strategyExecuter->getPlayerHand()->getCardsInHand().at(i)->get_type();
+
+                     if (type == 1) {
+                         cout << "AIRLIFT CARD" << endl;
+                         int armiesToAirlift = 0;
+                         int friendlyTerritoryThatRequiresAirlift = 0;
+                         int targetTerritory = 0;
+                         Territory* friendlyTerritoryThatRequiresAirliftPointer = NULL;
+                         Territory* targetTerritoryPointer = NULL;
+                         cout << "enter number of armies you need lifting" << endl;
+                         cin >> armiesToAirlift;
+                         cout << "enter number ID of territory that you airlift from" << endl;
+                         cin >> friendlyTerritoryThatRequiresAirlift;
+                         cout << "enter number ID of target territory" << endl;
+                         cin >> targetTerritory;
+                         cout << endl;
+                         vector<Territory*>  currentPlayerTerritoryPointer1 = this->strategyExecuter->toDefend();// list of players current territories
+                         for (int i = 0; i < currentPlayerTerritoryPointer1.size(); i++) {//this  looks for the territory by ID
+                             if (currentPlayerTerritoryPointer1.at(i)->getTerritoryID() == friendlyTerritoryThatRequiresAirlift) {
+                                 friendlyTerritoryThatRequiresAirliftPointer = currentPlayerTerritoryPointer1.at(i);
+                                 break;
+                             }
+                         }
+                         for (int i = 0; i < currentPlayerTerritoryPointer1.size(); i++) {//this chunck looks for the territory by ID
+                             if (currentPlayerTerritoryPointer1.at(i)->getTerritoryID() == targetTerritory) {//this  looks for the territory by ID
+                                 targetTerritoryPointer = currentPlayerTerritoryPointer1.at(i);
+                                 break;
+                             }
+                         }
+
+                         Order* airliftOrder = new Airlift(armiesToAirlift, friendlyTerritoryThatRequiresAirliftPointer, targetTerritoryPointer, strategyExecuter);
+                         strategyExecuter->getOrderList()->add(airliftOrder);
+                         //removing card from hand
+                         strategyExecuter->getPlayerHand()->play(1, Player::common_deck);
+                     }
+                     if (type == 2) {
+                         cout << "BOMB CARD" << endl;
+                         vector<Territory*>  currentPlayerTerritoryPointer1 = this->strategyExecuter->toAttack();// list of players current territories
+                         for (int j = 0; j < currentPlayerTerritoryPointer1.size(); j++) {
+                         
+                         }
+
+                         int territoryToBomb = NULL;
+                         Territory* territoryToBombPOINTER = NULL;
+                         cout << "enter territoryID to bomb" << endl;
+                         cin >> territoryToBomb;
                      
+                         for (int i = 0; i < currentPlayerTerritoryPointer1.size(); i++) {//this  looks for the territory by ID
+                             if (currentPlayerTerritoryPointer1.at(i)->getTerritoryID() == territoryToBomb) {
+                                 territoryToBombPOINTER = currentPlayerTerritoryPointer1.at(i);
+                                 break;
+                             }
+                         }
+
+                         Order* BombOrder = new Bomb(strategyExecuter, territoryToBombPOINTER);
+                         strategyExecuter->getOrderList()->add(BombOrder);
+                         //removing card from hand
+                         strategyExecuter->getPlayerHand()->play(2, Player::common_deck);
+                     }
+                     if (type == 3) {
+                         cout << "BLOCKADE CARD" << endl;
+                         int targetTerritory = 0;
+                         Territory* targetTerritoryPointer = NULL;
+                         cout << "enter territoryID to blockade" << endl;
+                         cin >> targetTerritory;
+                         cout << endl;
+                         vector<Territory*>  currentPlayerTerritoryPointer1 = this->strategyExecuter->toDefend();// list of players current territories
+                         for (int i = 0; i < currentPlayerTerritoryPointer1.size(); i++) {//this chunck looks for the territory by ID
+                             if (currentPlayerTerritoryPointer1.at(i)->getTerritoryID() == targetTerritory) {//this  looks for the territory by ID
+                                 targetTerritoryPointer = currentPlayerTerritoryPointer1.at(i);
+                                 break;
+                             }
+                         }
+
+                         Order* blockadeOrder = new Blockade(strategyExecuter, targetTerritoryPointer);
+                         strategyExecuter->getOrderList()->add(blockadeOrder);
+                         //removing card from hand
+                         strategyExecuter->getPlayerHand()->play(3, Player::common_deck);
+                     }
+                     if (type == 4) {
+                         cout << "DIPLOMACY CARD" << endl;
+                         int playerIDtonegociate = 0;
+                         Player* playerIDtonegociatePointer = NULL;
+                         cout << "enter the playerID of the player you wish to negociate with" << endl;
+                         cin >> playerIDtonegociate;
+
+                     }
+                     if (type == 5) {
+                         cout << "REINFORCEMENT CARD" << endl;
+   
+                         Player *tempPointer = strategyExecuter;
+                       //  Order* ReinforcementOrder = new Airlift(tempPointer);
+                        // strategyExecuter->getOrderList()->add(ReinforcementOrder);
+                         //removing card from hand
+                         strategyExecuter->getPlayerHand()->play(1, Player::common_deck);
+                     }
+
+
+                   
                  }
              
                  
@@ -294,7 +393,7 @@ void HumanPlayerStrategy::issueOrder() {
         cout << "to show enemy territories info that can be attacked this turn type: show" << endl << endl;
         cin >> UserInput;
         if (UserInput.compare("show") == 0){//2.display enemy territory user can attack
-            cout << "-------------here is the information of the territories you can attack:------------------------" << endl << endl;
+            cout << "-------------here is the information of the territories you can attack/defend:--------------------" << endl << endl;
             vector<Territory*> territoriesAvailableToBeAttacked = this->strategyExecuter->toAttack();
             for (int i = 0; i < territoriesAvailableToBeAttacked.size(); i++) {// 1.display all territory to  available to attack
                 cout << *territoriesAvailableToBeAttacked[i] ;
