@@ -22,9 +22,6 @@ private:
 
 public:
 
-	// Constructor
-	SelectMap(string str, MapLoader* loader);
-
 	// Empty Constructor
 	SelectMap();
 
@@ -33,7 +30,6 @@ public:
 
 	// take user inout to select the map file from directory and set to selectedmap (member variable)
 	void setMap();
-	void setMapV2();
 
 	// loadmap to map pointer until a validated map is selected by user
 	void loadmap();

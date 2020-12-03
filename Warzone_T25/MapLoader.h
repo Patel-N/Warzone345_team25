@@ -18,7 +18,7 @@ public:
 	~MapLoader();
 
 	//Copy ctors
-	MapLoader(const MapLoader &ml);
+	MapLoader(const MapLoader& ml);
 
 	//Setter
 	void setFileName(std::string);
@@ -36,7 +36,7 @@ public:
 
 
 
-private:	
+private:
 	std::string fileName;
 
 	//Helper method
@@ -62,7 +62,7 @@ public:
 	ConquestFileReader();
 	~ConquestFileReader();
 
-	ConquestFileReader(const ConquestFileReader &cml);
+	ConquestFileReader(const ConquestFileReader& cml);
 
 
 	void setFileName(string fn);
@@ -76,14 +76,17 @@ private:
 
 };
 
-class ConquestFileReaderAdapter : public MapLoader{
+class ConquestFileReaderAdapter : public MapLoader {
 
 public:
-	ConquestFileReaderAdapter(ConquestFileReader* cFR); // added constructor here and in cpp with object on heap
-	Map* generateMap(string fn) override; // added override keyword
+	ConquestFileReaderAdapter(ConquestFileReader* cFR);
+	Map* generateMap(string fn) override;
 
+	ConquestFileReaderAdapter(const ConquestFileReaderAdapter& conquestfilereaderadapter); //copy constructor
+	~ConquestFileReaderAdapter(); //destructor
+	ConquestFileReaderAdapter& operator= (const ConquestFileReaderAdapter& cFRA); //Assignment Operator
 private:
-	ConquestFileReader* conquestFR; // changed to pointer
+	ConquestFileReader* conquestFR;
 };
 
 class ConquestTerritoriesHolder {

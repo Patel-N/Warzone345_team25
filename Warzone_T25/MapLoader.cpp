@@ -8,7 +8,7 @@
 
 //Ctors
 MapLoader::MapLoader() {
-	cout << "Map Loader initialized" << endl; 
+	cout << "Map Loader initialized" << endl;
 }
 
 MapLoader::~MapLoader()
@@ -17,7 +17,7 @@ MapLoader::~MapLoader()
 }
 
 //Copy ctor
-MapLoader::MapLoader(const MapLoader &ml) {
+MapLoader::MapLoader(const MapLoader& ml) {
 	setFileName(ml.fileName);
 }
 
@@ -57,14 +57,14 @@ ostream& operator<<(ostream& outs, const MapLoader& mapLoaderObject)
 ostream& operator<<(ostream& outs, const ConquestTerritoriesHolder& obj)
 {
 	outs << "Id: " << "Name: " << "Continent: " << "BorderCount: " << endl;
-	
+
 	return outs;
 }
 
 /*
-* 
+*
 * Responsible of parsing the map when all elements of a map are found.
-* 
+*
 */
 Map* MapLoader::generateMap(string fn)
 {
@@ -74,7 +74,7 @@ Map* MapLoader::generateMap(string fn)
 	bool continentCheck = false;
 	bool territoriesCheck = false;
 	bool bordersCheck = false;
-	
+
 	Player* p = new Player();
 
 	try {
@@ -188,10 +188,10 @@ Map* MapLoader::generateMap(string fn)
 		}
 
 	}
-	catch (IncorrectFileException ife){
+	catch (IncorrectFileException ife) {
 		cout << "\n\nERROR: Incorrect file type.Please select a .map file." << endl << endl;
 		return NULL;
-	} 
+	}
 	catch (MissingElementException mee) {
 		cout << "ERROR: One of the required set of information was not found." << endl << endl;
 		return NULL;
@@ -200,7 +200,7 @@ Map* MapLoader::generateMap(string fn)
 		cout << "ERROR: The map has disconnected territories or continent." << endl << endl;
 		return NULL;
 	}
-		
+
 	return gameMap;
 }
 
@@ -223,6 +223,7 @@ std::vector<std::string> MapLoader::splitLine(std::string line)
 
 ConquestFileReader::ConquestFileReader()
 {
+	cout << "Conquest Map Loader initialized\n";
 }
 
 ConquestFileReader::~ConquestFileReader()
@@ -315,7 +316,7 @@ Map* ConquestFileReader::generateMap(string fn)
 							else {
 								vector<string> sepInfo = splitLine(line, false);
 								vector<string> borders;
-								
+
 								//Build borders vector
 								for (int i = 4; i < sepInfo.size(); i++) {
 									borders.push_back(sepInfo[i]);
@@ -339,16 +340,16 @@ Map* ConquestFileReader::generateMap(string fn)
 
 
 								gameMap->addTerritory(cth->getId(), cth->getName(), cId);
-								
+
 								//Set territories parsed flag to true
 								if (mapFile.eof()) {
 									territoriesParsed = true;
 								}
-							} 
+							}
 						}
 
 					}
-				
+
 				}
 			}
 
@@ -358,7 +359,7 @@ Map* ConquestFileReader::generateMap(string fn)
 				borders.push_back(conquestTerritories[i]->getId());
 				vector<string> cTerritoryBorders = conquestTerritories[i]->getBorders();
 				for (int j = 0; j < cTerritoryBorders.size(); j++) {
-				
+
 					if (is_number(cTerritoryBorders[j])) {
 						borders.push_back(stoi(cTerritoryBorders[j]));
 					}
@@ -388,7 +389,7 @@ Map* ConquestFileReader::generateMap(string fn)
 		else {
 			cout << "Map successfully generated!" << endl;
 		}
-	
+
 	}
 	catch (FileNotFoundException fnf) {
 		cout << "ERROR: File was not found." << endl << endl;
@@ -417,7 +418,7 @@ vector<string> ConquestFileReader::splitLine(string line, bool isEqualSeparator)
 {
 	if (isEqualSeparator) {
 		regex reg("=");
-		
+
 		vector<string> splitLine(
 			sregex_token_iterator(line.begin(), line.end(), reg, -1),
 			sregex_token_iterator()
@@ -439,11 +440,31 @@ vector<string> ConquestFileReader::splitLine(string line, bool isEqualSeparator)
 
 ConquestFileReaderAdapter::ConquestFileReaderAdapter(ConquestFileReader* cFR) {
 	conquestFR = cFR;
-} 
+}
 
 Map* ConquestFileReaderAdapter::generateMap(string fn)
 {
 	return conquestFR->generateMap(fn);
+}
+
+ConquestFileReaderAdapter::ConquestFileReaderAdapter(const ConquestFileReaderAdapter& conquestfilereaderadapter) {
+	cout << "ConquestFileReaderAdapter Deep Copy Constructor called\n";
+	conquestFR = new ConquestFileReader(*conquestfilereaderadapter.conquestFR);
+}
+
+
+ConquestFileReaderAdapter::~ConquestFileReaderAdapter() {
+	delete conquestFR;
+}
+
+ConquestFileReaderAdapter& ConquestFileReaderAdapter:: operator= (const ConquestFileReaderAdapter& cFRA) {
+	if (this != &cFRA) {
+		return *this;
+	}
+	cout << "ConquestFileReaderAdapter Assignment Operload Overload called\n";
+	delete conquestFR;
+	conquestFR = new ConquestFileReader(*cFRA.conquestFR);
+	return *this;
 }
 
 ConquestTerritoriesHolder::ConquestTerritoriesHolder()

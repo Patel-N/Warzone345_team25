@@ -10,22 +10,10 @@
 //================================================================================//
 
 // Constructor
-SelectMap::SelectMap(string str, MapLoader* loader) {
-	cout << "SelectMap Constructor Called\n";
-	path = str;
-	maploader = loader;
-	//map = new Map("Map Creation Initialised");
-	map = NULL;
-
-	loaders[0] = new MapLoader();
-	loaders[1] = new ConquestFileReaderAdapter(new ConquestFileReader());
-}
-
 SelectMap::SelectMap() {
 	cout << "SelectMap Empty Constructor Called\n";
-	maploader = new MapLoader();
-	//map = new Map("Map Creation Initialised");
-	map = NULL;
+	loaders[0] = new MapLoader();
+	loaders[1] = new ConquestFileReaderAdapter(new ConquestFileReader());
 }
 
 // traverse all files in the map directory and display to console all map files
@@ -33,16 +21,13 @@ void SelectMap::printGameMaps() {
 
 	vector<string> allFileName;
 
-	if (path.empty()) {
-		cout << "Map directory path is not set: \n";
-		return;
-	}
 	DIR* dp;
 	dirent* pdir;
 	char* ch_path = &path[0];
 	dp = opendir("./MapFiles");
-	cout << "Game directory has all these maps:" << "\n";
+	cout << "\n\nGame directory has all these maps:" << "\n";
 	if (dp) {
+		allFileName.push_back("===============Domination Files===============");
 		while ((pdir = readdir(dp)) != NULL) {
 			if (strcmp(pdir->d_name, ".") != 0 && strcmp(pdir->d_name, "..") != 0) {
 				string s = pdir->d_name;
@@ -56,6 +41,7 @@ void SelectMap::printGameMaps() {
 	DIR* dp2;
 	dp2 = opendir("./MapFiles/ConquestFiles");
 	if (dp2) {
+		allFileName.push_back("===============Conquest Files===============");
 		while ((pdir = readdir(dp2)) != NULL) {
 			if (strcmp(pdir->d_name, ".") != 0 && strcmp(pdir->d_name, "..") != 0) {
 				string s = pdir->d_name;
@@ -71,39 +57,25 @@ void SelectMap::printGameMaps() {
 
 	//Print all Files
 	for (int i = 0; i < allFileName.size(); i++) {
-		cout << allFileName[i].substr(allFileName[i].find_last_of("/") + 1) << endl;
+		if (allFileName[i].find("===============") != string::npos) {
+			cout << allFileName[i] << endl;
+		}
+		else {
+			cout << allFileName[i].substr(allFileName[i].find_last_of("/") + 1) << endl;
+		}
 	}
-	
+
 	setAllFiles(allFileName);
 }
 
-// take user inout to select the map file from directory and set to selectedmap (member variable)
 void SelectMap::setMap() {
 	string name;
 	cout << "\nEnter the map name (with extension) that you wish to play:\n";
 	cin >> name; //without spaces
-	string filename = path + "/" + name;
-	ifstream filehandle;
-	filehandle.open(filename);
 
-	while (!filehandle.is_open()) {
-		cout << "You entered wrong file name. Try Again! Enter map name (with extension) that you wish to play:\n";
-		cin >> name;
-		filename = path + "/" + name;
-		filehandle.open(filename);
-	}
-	filehandle.close();
-	selectedmap = filename;
-}
-
-void SelectMap::setMapV2() {
-	string name;
-	cout << "\nEnter the map name (with extension) that you wish to play:\n";
-	cin >> name; //without spaces
-	
 	string selectedPath;
 	for (int i = 0; i < allFiles.size(); i++) {
-		if (name == allFiles[i].substr(allFiles[i].find_last_of("/")+1)) {
+		if (name == allFiles[i].substr(allFiles[i].find_last_of("/") + 1)) {
 			selectedPath = allFiles[i];
 			break;
 		}
@@ -135,9 +107,11 @@ void SelectMap::loadmap() {
 
 	//Determine which loader to use
 	if (getSelectedMap().find("ConquestFiles") == string::npos) {
+		cout << endl << endl << "Default Domination map loader is in use." << endl << endl;
 		setMapLoader(loaders[0]);
 	}
 	else {
+		cout << endl << endl << "Delegating the file loading to the adaptee." << endl << endl;
 		setMapLoader(loaders[1]);
 	}
 
@@ -197,7 +171,7 @@ ostream& operator << (ostream& output, const SelectMap& selectmapobj) {
 	return output;
 }
 
-// Overload - assignment operator - deep copy
+// Overload - assignment operator - dseep copy
 SelectMap& SelectMap::operator=(const SelectMap& selectmap) {
 	cout << "SelectMap Assignment Operator Copy Constructor (deep copy) called\n";
 	if (this == &selectmap) {
@@ -216,6 +190,8 @@ SelectMap& SelectMap::operator=(const SelectMap& selectmap) {
 
 	map = new Map(*selectmap.map);
 	maploader = new MapLoader(*selectmap.maploader);
+
+	return *this;
 }
 
 
@@ -356,7 +332,6 @@ SelectPlayers& SelectPlayers::operator=(const SelectPlayers& selectplayer) {
 		return *this;
 	}
 	numplayers = selectplayer.numplayers;
-	// to do- call destructor else memory leak for all players
 	for (unsigned int i = 0; i < allPlayers.size(); i++) {
 		if (allPlayers[i] != NULL) {
 			delete(allPlayers[i]);
@@ -371,15 +346,3 @@ SelectPlayers& SelectPlayers::operator=(const SelectPlayers& selectplayer) {
 	}
 	deck = new Deck(*selectplayer.deck);
 }
-
-// Observer
-//ChangeObserver::ChangeObserver() {
-//	Observer* observer = new StatObserver;
-//}
-//	ChangeObserver();
-//	void turnon(); //ob->changebserver();
-//
-//
-//	void turnoff(); //ob->changebserver();
-//	//friend ostream& operator<<(ostream& outs, const ChangeObserver& changeobserverobj);
-//};
