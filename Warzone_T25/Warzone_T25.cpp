@@ -15,7 +15,7 @@ int main()
 
 
 
-		part_1::start();
+		//part_1::start();
 
 	
 		//creating game engine, creating map, loading canada map
