@@ -643,8 +643,27 @@ vector<Territory*> HumanPlayerStrategy::toDefend()
 
 vector<Territory*> HumanPlayerStrategy::toAttack()
 {
-    vector<Territory*> vec;
-    return  vec;
+//Build a vector of source territory attacking a target territory
+    vector<Territory*> attackableTerritories;
+    vector<Territory*> allTerritories = strategyExecuter->allTerritoryVectorBuilder(strategyExecuter->getPlayerTerritories()[0]);
+    //Remove territories that already belong to the players from the appropriate vector
+    for (int i = 0; i < allTerritories.size(); i++) {
+        bool isEnnemyTerritory = true;
+        for (int j = 0; j < strategyExecuter->getPlayerTerritories().size(); j++) {
+            if (allTerritories[i]->getTerritoryID() == strategyExecuter->getPlayerTerritories()[j]->getTerritoryID())
+                isEnnemyTerritory = false;
+        }
+        if (isEnnemyTerritory) {
+            attackableTerritories.push_back(allTerritories[i]);
+        }
+    }
+    //Set the state of all the territories to not visited
+    for (int i = 0; i < allTerritories.size(); i++) {
+        allTerritories[i]->setIsVisited(false);
+    }
+    sort(attackableTerritories.begin(), attackableTerritories.end(), Territory::compByArmyCount);
+
+    return attackableTerritories;
 }
 
 // Benevolant constructor
