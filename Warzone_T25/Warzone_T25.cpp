@@ -19,8 +19,6 @@ int main()
 	//creating game engine, creating map
 	GameEngine* engine = new GameEngine();
 
-	
-
 	selectmap->printGameMaps();
 	selectmap->setMap(); // choose swiss.map to check the case of invalid map
 	engine->setGameMap(selectmap->loadmap());

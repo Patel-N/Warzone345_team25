@@ -385,6 +385,7 @@ Territory* Map::getTerritory(string tName)
 int Map::getSize() {
 	return size;
 }
+
 int Map::assignOccupantToTerritory(int territoryId,Player* player) {
 	int index = search(territoryId);
 	if (index == -1) {
