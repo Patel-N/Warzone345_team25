@@ -365,8 +365,8 @@ void BenevolentPlayerStrategy::issueOrder()
         int numWeakTerrs = playerTerritoriesToDefend.size() / 2;
         int pool = this->strategyExecuter->getArmyToBePlaced();
         int armiesPerTerr = pool / numWeakTerrs;
-
-        if (pool == 1 || pool < armiesPerTerr) {
+   
+        if (armiesPerTerr == 0) {
             cout << endl << "POOL EQUALS 1" << endl;
             Deploy* d = new Deploy(pool, playerTerritoriesToDefend[0], strategyExecuter);
             deployCreated = true;
