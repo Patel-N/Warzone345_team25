@@ -102,6 +102,9 @@ vector<Player*> GameEngine::getPlayers()
 }
 
 void GameEngine::mainGameLoop() {
+
+	
+
 	int round = 1;
 
 	while (players[0]->getPlayerTerritories().size() != game_map->getSize()) {

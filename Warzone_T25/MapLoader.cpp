@@ -407,6 +407,8 @@ Map* ConquestFileReader::generateMap(string fn)
 		cout << "ERROR: The map has disconnected territories or continent." << endl << endl;
 		return nullptr;
 	}
+
+	return gameMap;
 }
 
 string ConquestFileReader::getFileName()

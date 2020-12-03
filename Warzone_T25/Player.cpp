@@ -20,12 +20,13 @@ Player::Player(int id,string name,int initialArmyAmount) : playerId(id),playerNa
     orderlist = new OrderList();
     isConquerer = false;
 }
-Player::Player(int id, string name, int strategy, int toRemove)
+Player::Player(int id, string name, int strategy, int initArmyCount)
 {
     playerName = name;
     playerId = id;
     orderlist = new OrderList();
     assignStrategy(strategy);
+    armyToBePlaced = initArmyCount;
 }
 
 Player::Player() {

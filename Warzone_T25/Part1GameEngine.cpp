@@ -103,7 +103,7 @@ void SelectMap::setMap() {
 }
 
 // loadmap to map pointer until a validated map is selected by user
-void SelectMap::loadmap() {
+Map* SelectMap::loadmap() {
 
 	//Determine which loader to use
 	if (getSelectedMap().find("ConquestFiles") == string::npos) {
@@ -123,6 +123,8 @@ void SelectMap::loadmap() {
 			setMap();
 		}
 	}
+
+	return map;
 }
 
 // getter
@@ -225,8 +227,9 @@ void SelectPlayers::setnumPlayers() {
 }
 
 // create players with names and place them in vector
-void SelectPlayers::createPlayers() {
+vector<Player*> SelectPlayers::createPlayers() {
 	string playername;
+	string type;
 	int armystrength = 0;
 	if (getnumPlayers() == 2) {
 		armystrength = 40;
@@ -243,10 +246,38 @@ void SelectPlayers::createPlayers() {
 	for (int i = 0; i < getnumPlayers(); i++) {
 		cout << "Enter Player " << i << " name\n";
 		cin >> playername;
-		Player* player = new Player(i + 1, playername, armystrength); //army initial strength not known - to be discussed
-		player->setPlayerHand(NULL);
-		allPlayers.push_back(player);
+		cout << "Enter Player type: (Type the number corresponding to the wanted type)" << endl;
+		cout << "\t1 - Human Player" << endl;
+		cout << "\t2 - Aggressive Player" << endl;
+		cout << "\t3 - Benevolant Player" << endl;
+		cout << "\t4 - Neutral Player" << endl;
+		cin >> type;
+		Player* p = nullptr;
+		if(type == "1"){
+			p = new Player(i + 1, playername, 1, armystrength);
+			
+			cout << "HUMAN PLAYER CREATED." << endl;
+		}
+		if(type == "2") {
+			p = new Player(i + 1, playername, 2, armystrength);
+			cout << "AGGRESSIVE PLAYER CREATED." << endl;
+
+		}
+		if(type == "3") {
+			p = new Player(i + 1, playername, 3, armystrength);
+			cout << "BENEVOLANT PLAYER CREATED." << endl;
+
+		}
+		if(type == "4") {
+			p = new Player(i+1, playername, 4, armystrength);
+			cout << "NEUTRAL PLAYER CREATED." << endl;
+
+		}
+		Hand* h = new Hand();
+		p->setPlayerHand(h);
+		allPlayers.push_back(p);
 	}
+	return allPlayers;
 }
 
 // create vector of cards and set deck pointer to it
