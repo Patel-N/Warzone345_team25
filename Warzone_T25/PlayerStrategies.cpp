@@ -347,16 +347,26 @@ void HumanPlayerStrategy::issueOrder() {
                          Player* playerIDtonegociatePointer = NULL;
                          cout << "enter the playerID of the player you wish to negociate with" << endl;
                          cin >> playerIDtonegociate;
-
+                         vector<Territory*>  currentPlayerTerritoryPointer1 = this->strategyExecuter->toAttack();// list of players current territories
+                         for (int i = 0; i < currentPlayerTerritoryPointer1.size(); i++) {//this chunck looks for the territory by ID
+                             if (currentPlayerTerritoryPointer1.at(i)->getTerritoryOccupant()->getPlayerId() == playerIDtonegociate) {//this  looks for the territory by ID
+                                 playerIDtonegociatePointer = currentPlayerTerritoryPointer1.at(i)->getTerritoryOccupant();
+                                 break;
+                             }
+                         }
+                           Order* DiplomacyOrder = new Negotiate(strategyExecuter,currentPlayerTerritoryPointer1.at(i)->getTerritoryOccupant());
+                           strategyExecuter->getOrderList()->add(DiplomacyOrder);
+                           //removing card from hand
+                           strategyExecuter->getPlayerHand()->play(4, Player::common_deck);
                      }
                      if (type == 5) {
                          cout << "REINFORCEMENT CARD" << endl;
    
                          Player *tempPointer = strategyExecuter;
-                       //  Order* ReinforcementOrder = new Airlift(tempPointer);
-                        // strategyExecuter->getOrderList()->add(ReinforcementOrder);
+                         Order* ReinforcementOrder = new Reinforcement(strategyExecuter);
+                         strategyExecuter->getOrderList()->add(ReinforcementOrder);
                          //removing card from hand
-                         strategyExecuter->getPlayerHand()->play(1, Player::common_deck);
+                         strategyExecuter->getPlayerHand()->play(5, Player::common_deck);
                      }
 
 
