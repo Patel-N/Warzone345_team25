@@ -262,7 +262,7 @@ void HumanPlayerStrategy::issueOrder() {
 
 
                  for (int i = 0; i < parseInput.size(); i++) {//for the size of user input
-                     int type =strategyExecuter->getPlayerHand()->getCardsInHand().at(i)->get_type();
+                     int type =strategyExecuter->getPlayerHand()->getCardsInHand().at(parseInput.at(i))->get_type();
 
                      if (type == 1) {
                          cout << "AIRLIFT CARD" << endl;

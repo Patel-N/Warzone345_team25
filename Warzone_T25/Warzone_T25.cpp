@@ -47,6 +47,7 @@ int main()
 	player2->setPlayerHand(hand_p2);
 	Card* card = new Card(1);
 	player1->getPlayerHand()->addCardToHand(card3);
+	player1->getPlayerHand()->addCardToHand(card1);
 	player3->setPlayerHand(hand_p3);
 	player4->setPlayerHand(hand_p4);
 	engine->addPlayer(player1);
