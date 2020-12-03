@@ -7,6 +7,7 @@ class Player;
 
 class PlayerStrategies {
 public:
+
 	virtual ~PlayerStrategies(){ }
 	PlayerStrategies(){}
 	virtual void  issueOrder() = 0;
@@ -17,7 +18,7 @@ private:
 
 };
 
-class HumanPlayerStrategy: public PlayerStrategies {
+class HumanPlayerStrategy : public PlayerStrategies {
 public:
 	HumanPlayerStrategy(Player*);
 	void issueOrder();
@@ -30,18 +31,22 @@ private:
 class AggressivePlayerStrategy : public PlayerStrategies {
 public:
 	AggressivePlayerStrategy(Player*);
+
 	AggressivePlayerStrategy(const AggressivePlayerStrategy&);
 	~AggressivePlayerStrategy();
+
 	void issueOrder();
 	vector<Territory*> toDefend();
 	vector<Territory*> toAttack();
 	//getters
-	inline Player*  getStrategyExecuter() { return strategyExecuter; }
+	inline Player* getStrategyExecuter() { return strategyExecuter; }
+
 	//other helper methods
 	bool deployStrategy(Territory*);
 	bool movingFriendlyTroopsAroundStrategy(Territory*);
 	bool attackStrategy(Territory*);
 	bool playCardsStrategy(Territory*);
+
 	AggressivePlayerStrategy& operator= (const AggressivePlayerStrategy&);
 	friend ostream& operator<<(ostream& outs, const AggressivePlayerStrategy& theObject);
 private:
@@ -50,12 +55,24 @@ private:
 
 class BenevolentPlayerStrategy : public PlayerStrategies {
 public:
+	// Constructors and Destructor
 	BenevolentPlayerStrategy(Player*);
+	~BenevolentPlayerStrategy();
+	BenevolentPlayerStrategy(const BenevolentPlayerStrategy&);
+
 	void issueOrder();
 	vector<Territory*> toDefend();
 	vector<Territory*> toAttack();
 	//getters
 	inline Player* getStrategyExecuter() { return strategyExecuter; }
+	// Assignment operator
+	BenevolentPlayerStrategy& operator= (const BenevolentPlayerStrategy&);
+	// Insertion stream operator
+	friend ostream& operator<<(ostream& outs, const BenevolentPlayerStrategy& theObject);
+	// Helper function
+	bool playCardsStrategy(Territory*);
+
+
 private:
 	Player* strategyExecuter;
 };
@@ -73,6 +90,6 @@ public:
 	NeutralPlayerStrategy& operator= (const NeutralPlayerStrategy&);
 	friend ostream& operator<<(ostream& outs, const NeutralPlayerStrategy& theObject);
 private:
-	 Player* strategyExecuter;
+	Player* strategyExecuter;
 };
 

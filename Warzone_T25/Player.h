@@ -34,7 +34,9 @@ private:
 public:
 	PlayerStrategies *playerStrategy;
 	void assignStrategy(int strategy);
+
 	void setStrategy(int strategy);
+
 
 	static Deck* common_deck;//static because the deck is a shared object among all players in game
 

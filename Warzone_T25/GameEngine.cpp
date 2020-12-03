@@ -212,7 +212,7 @@ void GameEngine::reinforcementPhase()
 void GameEngine::issueOrdersPhase(){
 	cout << endl << "ISSUE ORDER PHASE:" << endl << endl;
 	phaseID = 2;
-	pName = players[0]->getPlayerName(); // IMPLEMENT WHEN YOU GET THE CODE
+	pName = players[0]->getPlayerName(); 
 	Notify(true);
 
 	//Update nonCommitedArmies count for all players;

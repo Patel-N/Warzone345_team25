@@ -45,10 +45,12 @@ public:
 	Territory& operator= (const Territory& territory);
 	void addAdjacentTerritory(Territory*);
 	static bool compByArmyCount(Territory* a, Territory* b);
+	static bool compByincomingArmies(Territory* a, Territory* b);
 	static bool compById(Territory* a, Territory* b);
 	inline void incNonCommitedArmies(int count) { nonComittedArmies += count; }
 	inline void decNonCommitedArmies(int count) { nonComittedArmies -= count; }
 
+	int incomingArmies;
 private:
 	int territoryId;
 	Player* player;

@@ -49,6 +49,8 @@ Player::Player(int id, string name, vector<Territory*> ownedT, Hand* h, vector<O
     assignStrategy(strategy);
 }
 
+
+
 void Player::setStrategy(int strategy) {
     assignStrategy(strategy);
 }
