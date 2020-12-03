@@ -217,7 +217,6 @@ void HumanPlayerStrategy::issueOrder() {
     strategyExecuter->addToArmiesToBePlaced(-this->strategyExecuter->getArmyToBePlaced());//sets army to be placed to 0
 
 
-
     //play card step------------------------------
     if (strategyExecuter->getPlayerHand()->getCardsInHand().size() > 0) {// if player has atleast a card prompt him
        
@@ -244,10 +243,29 @@ void HumanPlayerStrategy::issueOrder() {
                 }
                 cout << "card ID : "<<i <<" : "<< cardTypeString << endl;
             }
-            cout << "please enter the ID of the card you wish to play"<<endl;
+            cout << "please enter the ID of the cards you wish to play using this format: 2,3,5,1"<<endl;
             cout << "if you wish to play no cards type: no card" << endl;
              cin >> UserInput;
-            //TODO: card play for each type
+             if (UserInput.compare("no card") != 0) {// user dint type no card continue to parse input, else just move to move troops
+                 std::string s = UserInput;//this chunck parses UserInput input
+                 std::string delimiter = ",";
+                 size_t pos = 0;
+                 std::string token;
+                 vector<int> parseInput ;
+                 while ((pos = s.find(delimiter)) != std::string::npos) {
+                     
+                     token = s.substr(0, pos);
+                     parseInput.push_back( stoi(token));
+                     s.erase(0, pos + delimiter.length());
+                 }        
+                 parseInput.push_back(stoi(s));
+                 for (int i = 0; i < parseInput.size(); i++) {//for the size of user input
+                     //strategyExecuter->getPlayerHand()->getCardsInHand().at(parseInput.at(i))->play();// plat the card user inputed
+                     
+                 }
+                 
+             }
+
         }
     }
 
@@ -285,7 +303,68 @@ void HumanPlayerStrategy::issueOrder() {
         cout << "move 8 armies from territory 5 to territory 10" << endl;
         cout << "move 2 armies from territory 4 to territory 7" << endl;
         cin >> UserInput;
-        //TODO: parse user input to move armies around
+        //parsing userInput and placing armies
+        std::string s = UserInput;//temp variables for parsin
+        std::string delimiter = "),";
+        size_t pos = 0;
+        vector<string> vectorOfUserInput;
+        std::string token;
+        while ((pos = s.find(delimiter)) != std::string::npos) {
+            token = s.substr(0, pos + 1);
+            vectorOfUserInput.push_back(token);
+            s.erase(0, pos + delimiter.length());
+        }
+        vectorOfUserInput.push_back(s);//user input parsed into this vector
+        for (int i = 0; i < vectorOfUserInput.size(); i++) {
+            int armyToMove = 0;//num army player wants to move
+            int territoryIDfrom = 0;//ID player input
+            int territoryIDto = 0;//ID player input2
+            Territory* territoryPointerFROM = NULL;//the pointer to the actual territory player wants to move army from
+            Territory* territoryPointerTO = NULL;//the pointer to the actual territory player wants to deploy army to
+
+            std::string s = vectorOfUserInput.at(i).substr(1, vectorOfUserInput.at(i).size() - 2);//this chunck parses (1,2,5) input format     
+            std::string delimiter = ",";
+            size_t pos = 0;
+            std::string token;
+            while ((pos = s.find(delimiter)) != std::string::npos) {
+                token = s.substr(0, pos);
+     
+                armyToMove = stoi(token);
+                s.erase(0, pos + delimiter.length());
+
+                token = s.substr(0, pos);
+        
+                territoryIDfrom = stoi(token);
+                s.erase(0, pos + delimiter.length());
+
+            }
+            territoryIDto = stoi(s);
+
+            vector<Territory*> currentPlayerTerritoryPointer = this->strategyExecuter->toDefend();// list of players current territories
+            for (int i = 0; i < currentPlayerTerritoryPointer.size(); i++) {//this chunck looks for the territory by ID
+                if (currentPlayerTerritoryPointer.at(i)->getTerritoryID() == territoryIDfrom) {
+                    territoryPointerFROM = currentPlayerTerritoryPointer.at(i);
+                    break;
+                }
+            }
+            vector<Territory*> searchTerritoryfromtoDefend = this->strategyExecuter->toDefend();// list of players current territories
+            for (int i = 0; i < searchTerritoryfromtoDefend.size(); i++) {//this chunck looks for the territory by ID
+                if (searchTerritoryfromtoDefend.at(i)->getTerritoryID() == territoryIDto) {
+                    territoryPointerTO = searchTerritoryfromtoDefend.at(i);
+                    break;
+                }
+            }
+            vector<Territory*> searchTerritoryfromtoAttack = this->strategyExecuter->toAttack();// list of players current territories
+            for (int i = 0; i < searchTerritoryfromtoAttack.size(); i++) {//this chunck looks for the territory by ID
+                if (searchTerritoryfromtoAttack.at(i)->getTerritoryID() == territoryIDto) {
+                    territoryPointerTO = searchTerritoryfromtoAttack.at(i);
+                    break;
+                }
+            }
+            Order* advanceOrder = new Advance(armyToMove, territoryPointerFROM, territoryPointerTO, strategyExecuter);//advance order
+            strategyExecuter->getOrderList()->add(advanceOrder);
+            cout << "you sent " << armyToMove << " armie(s) from territoryID: " << territoryPointerFROM->getTerritoryID() << " to territoryID: " << territoryPointerTO->getTerritoryID() << endl;
+        }
     }
     cout <<endl<< "this is the end of your turn, press any key to continue, Goodluck " << strategyExecuter->getPlayerName()<<"!!!"<< endl;
     cin >> UserInput;
