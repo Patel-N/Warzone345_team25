@@ -103,6 +103,7 @@ public:
 	vector<Territory*> getAdjacentTerritoriesToAttack(Territory* playerTerritory);
 	vector<Territory*> getNonAdjacentTerritoriesToAttack(Territory* playerTerritory);
 
+
 	void assignTerritoryToPlayer(Territory* newTerritory);
 	vector<Territory*> allTerritoryVectorBuilder(Territory* origin);
 	void issueOrder();

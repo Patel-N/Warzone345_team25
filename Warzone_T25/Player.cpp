@@ -289,6 +289,7 @@ vector<Territory*> Player::getNonAdjacentTerritoriesOfPlayer(Territory* playerTe
     }
     return nonAdjacentTerritoriesOfPlayer;
 }
+
 vector<Territory*> Player::getAdjacentTerritoriesToAttack(Territory* playerTerritory)
 {
     vector<Territory*> adjTerritoriesToAttack;

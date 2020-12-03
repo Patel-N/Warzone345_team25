@@ -5,7 +5,7 @@ using namespace std;
 
 class Player;
 
-class PlayerStrategies {
+class PlayerStrategies { //abstract class
 public:
 
 	virtual ~PlayerStrategies(){ }
@@ -39,6 +39,7 @@ public:
 	vector<Territory*> toDefend();
 	vector<Territory*> toAttack();
 	//getters
+
 	inline Player* getStrategyExecuter() { return strategyExecuter; }
 
 	//other helper methods

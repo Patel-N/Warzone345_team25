@@ -12,7 +12,8 @@
 
 int main()
 {
-	
+
+
 
 		part_1::start();
 
