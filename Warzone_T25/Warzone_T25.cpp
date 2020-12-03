@@ -111,6 +111,7 @@ int main()
 	//player4->issueOrder();
 	engine->issueOrdersPhase();
 	engine->executeOrdersPhase();
+
 	engine->issueOrdersPhase();
 	engine->executeOrdersPhase();
 	//Player* player2 = new Player(2, "Neil");

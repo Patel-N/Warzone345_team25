@@ -366,7 +366,7 @@ void BenevolentPlayerStrategy::issueOrder()
         int pool = this->strategyExecuter->getArmyToBePlaced();
         int armiesPerTerr = pool / numWeakTerrs;
 
-        if (pool == 1) {
+        if (pool == 1 || pool < armiesPerTerr) {
             cout << endl << "POOL EQUALS 1" << endl;
             Deploy* d = new Deploy(pool, playerTerritoriesToDefend[0], strategyExecuter);
             deployCreated = true;
@@ -391,11 +391,6 @@ void BenevolentPlayerStrategy::issueOrder()
            
         }
 
-        // Teritories of player after deploy order.
-        cout << endl << "AFTER BENEVOLANT DEPLOY" << endl;
-        for (int i = 0; i < playerTerritoriesToDefend.size(); i++) {
-            cout << *playerTerritoriesToDefend[i] << endl;
-        }
     }
 
     // If no armies in pool continue to advance order.
