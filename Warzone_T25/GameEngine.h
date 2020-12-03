@@ -3,6 +3,7 @@
 #include"Player.h"
 #include"Map.h"
 #include "GameObservers.h"
+#include "Part1GameEngine.h"
 
 using namespace std;
 class GameEngine : public Subject {
@@ -15,6 +16,7 @@ public:
 
 	//Setters
 	void setGameMap(Map* map);
+	inline void setPlayers(vector<Player*> allP) { players = allP; };
 
 
 
@@ -23,7 +25,7 @@ public:
 	void issueOrdersPhase();
 	void executeOrdersPhase();
 	void addPlayer(Player*);
-  void startUpPhase();// PART2 assign players territories in round robin, and give them armies in  int armyToBePlaced in player class
+	void startUpPhase();// PART2 assign players territories in round robin, and give them armies in  int armyToBePlaced in player class
 	friend ostream& operator<<(ostream& outs, const GameEngine& theObject);
 	GameEngine& operator= (const GameEngine& engine);
 
