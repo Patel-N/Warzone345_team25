@@ -244,9 +244,9 @@ void HumanPlayerStrategy::issueOrder() {
                 cout << "card ID : "<<i <<" : "<< cardTypeString << endl;
             }
             cout << "please enter the ID of the cards you wish to play using this format: 2,3,5,1"<<endl;
-            cout << "if you wish to play no cards type: no card" << endl;
+            
              cin >> UserInput;
-             if (UserInput.compare("no card") != 0) {// user dint type no card continue to parse input, else just move to move troops
+             if (UserInput.compare("no card") != 0) {
                  std::string s = UserInput;//this chunck parses UserInput input
                  std::string delimiter = ",";
                  size_t pos = 0;
@@ -260,11 +260,13 @@ void HumanPlayerStrategy::issueOrder() {
                  }        
                  parseInput.push_back(stoi(s));
                  for (int i = 0; i < parseInput.size(); i++) {//for the size of user input
-                     //strategyExecuter->getPlayerHand()->getCardsInHand().at(parseInput.at(i))->play();// plat the card user inputed
+                    // strategyExecuter->getPlayerHand()->getCardsInHand().at(parseInput.at(i))->play();// plat the card user inputed
                      
                  }
+             
                  
              }
+            
 
         }
     }
@@ -280,8 +282,13 @@ void HumanPlayerStrategy::issueOrder() {
         cout << "-----------------------you own territories: -------------------------------"<< endl << endl;
         vector<Territory*> toDefendTerr = this->strategyExecuter->toDefend();
         for (int i = 0; i < toDefendTerr.size(); i++) {// 1.display all territory user has
-            cout << *toDefendTerr[i] << endl;
-            //TODO: show territories next to this one example: adjacent territory id: 2,5,7,8
+            cout << *toDefendTerr[i];
+            vector<Territory*>tempADJTerritory = toDefendTerr[i]->getAdjacentTerritories();
+            cout << "adjacent territory ID:";
+            for (int j = 0; j < tempADJTerritory.size(); j++) {
+                cout << tempADJTerritory.at(j)->getTerritoryID()<<",";
+            }
+            cout << endl<<endl;
             Sleep(100);
         }
         cout << "to show enemy territories info that can be attacked this turn type: show" << endl << endl;
@@ -290,7 +297,13 @@ void HumanPlayerStrategy::issueOrder() {
             cout << "-------------here is the information of the territories you can attack:------------------------" << endl << endl;
             vector<Territory*> territoriesAvailableToBeAttacked = this->strategyExecuter->toAttack();
             for (int i = 0; i < territoriesAvailableToBeAttacked.size(); i++) {// 1.display all territory to  available to attack
-                cout << *territoriesAvailableToBeAttacked[i] << endl;
+                cout << *territoriesAvailableToBeAttacked[i] ;
+                vector<Territory*>tempADJTerritory = territoriesAvailableToBeAttacked[i]->getAdjacentTerritories();
+                cout << "adjacent territory ID:";
+                for (int j = 0; j < tempADJTerritory.size(); j++) {
+                    cout << tempADJTerritory.at(j)->getTerritoryID() << ",";
+                }
+                cout << endl << endl;
                 Sleep(70);
             }
         }
