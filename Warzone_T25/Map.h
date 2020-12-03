@@ -35,7 +35,7 @@ public:
 	void setTerritoryName(std::string name);
 	void setNumArmies(int num);
 	inline void setIsVisited(bool v) { isVisited = v; }
-	inline void setNonCommitedArmies(int count) { nonComittedArmies += count; }
+	inline void setNonCommitedArmies(int count) { nonComittedArmies = count; }
 	inline void setWasAdvanced(bool adv) { wasAdvanced = adv; }
 	inline void setIsAttacked(bool b) { isAttacked = b; }
 
@@ -96,6 +96,7 @@ public:
 	//getters
 	int getSize();
 	std::vector<Continent*> getContinents();
+	vector<std::vector<Territory*>> getMap() { return map; }
 	Territory* getTerritory(int);
 	Territory* getTerritory(string tName);
 	bool validate();

@@ -139,6 +139,7 @@ Continent::Continent(const Continent& continent) {
 }
 
 Continent::~Continent() {
+	cout << endl << "Continent deleted" << endl;
 }
 
 int Continent::getContinentID() {

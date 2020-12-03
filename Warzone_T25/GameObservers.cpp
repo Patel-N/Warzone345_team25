@@ -77,7 +77,7 @@ Subject::Subject(const Subject& s) {
 		this->stats_observers[i] = s.stats_observers[i];
 	}
 
-	}
+}
 
 // CHECK IF THIS IS RIGHT
 // Overloaded Assignment Operator- deep copy
@@ -96,7 +96,7 @@ Subject& Subject::operator=(const Subject& s) {
 // Insertion Stream Operator
 ostream& operator<<(ostream& outs, const Subject& obj) {
 
-return outs << "Subject stream insertion operaotr has been called." << endl;
+	return outs << "Subject stream insertion operaotr has been called." << endl;
 
 }
 
@@ -108,14 +108,14 @@ PhaseObserver::PhaseObserver() {
 
 // Constructor sets argument to this GameEngine object.
 PhaseObserver::PhaseObserver(GameEngine* s) {
-	
+
 	_subject = s;
 
 };
 
 // Destructor removes observer from list.
 PhaseObserver::~PhaseObserver() {
-	_subject->Detach(true,this);
+	_subject->Detach(true, this);
 };
 
 // CHECK IF THIS IS RIGHT
@@ -165,53 +165,53 @@ void PhaseObserver::display() {
 	vector<Player*> players = _subject->getPlayers();
 
 	// Displays info of phase depending on the phase ID. Using window library to use sleep method and delay output.
-	switch(id) {
-		case 0:
-			/*Sleep(1500);
-			system("cls");*/
+	switch (id) {
+	case 0:
+		/*Sleep(1500);
+		system("cls");*/
 
-			cout << "STARTUP PHASE\n" << endl;
-			for (int i = 0; i < players.size(); i++) {
-				name = players.at(i)->getPlayerName();
+		cout << "STARTUP PHASE\n" << endl;
+		for (int i = 0; i < players.size(); i++) {
+			name = players.at(i)->getPlayerName();
 
-				// Displays player, their reinforcement pool and their territories.
-				cout << name << " owns: " << endl;
-				cout << "  reinforcement pool: " << players.at(i)->getArmyToBePlaced() << endl;
-				for (int j = 0; j < players.at(i)->getPlayerTerritories().size(); j++) {
-					cout << "  " <<players.at(i)->getPlayerTerritories().at(j)->getName() << endl;
-				}
-				cout << endl;
+			// Displays player, their reinforcement pool and their territories.
+			cout << name << " owns: " << endl;
+			cout << "  reinforcement pool: " << players.at(i)->getArmyToBePlaced() << endl;
+			for (int j = 0; j < players.at(i)->getPlayerTerritories().size(); j++) {
+				cout << "  " << players.at(i)->getPlayerTerritories().at(j)->getName() << endl;
 			}
-			break;
+			cout << endl;
+		}
+		break;
 
-		case 1:
+	case 1:
 		/*	Sleep(1500);
 			system("cls");*/
 
-			cout << name << ": " << "REINFORCEMENT PHASE\n" << endl;
-			break;
+		cout << name << ": " << "REINFORCEMENT PHASE\n" << endl;
+		break;
 
-		case 2:
-	/*		Sleep(1500);
-			system("cls");*/
+	case 2:
+		/*		Sleep(1500);
+				system("cls");*/
 
-			cout << name << ": " << "ISSUE ORDERS PHASE\n" << endl;
-			break;
+		cout << name << ": " << "ISSUE ORDERS PHASE\n" << endl;
+		break;
 
-		case 3:
+	case 3:
 		/*	Sleep(1500);
 			system("cls");*/
 
 			// Loops the number of payers and displays the player and their order being executed.
-			cout << name << ": " << "EXECUTION ORDERS PHASE\n" << endl;
-			for (int i = 0; i < players.size(); i++) {
-				// WAIT FOR ISSUE ORDERS BEFORE UNCOMMENTING
-				if(players[i]->getOrderList()->numSize != 0 ) {
-					cout << players[i]->getPlayerName() << " executes " << players[i]->getNextOrder()->getorderName() << endl << endl;
-				}
+		cout << name << ": " << "EXECUTION ORDERS PHASE\n" << endl;
+		for (int i = 0; i < players.size(); i++) {
+			// WAIT FOR ISSUE ORDERS BEFORE UNCOMMENTING
+			if (players[i]->getOrderList()->numSize != 0) {
+				cout << players[i]->getPlayerName() << " executes " << players[i]->getNextOrder()->getorderName() << endl << endl;
 			}
-			
-			break;
+		}
+
+		break;
 
 	}
 };
@@ -231,7 +231,7 @@ StatsObserver::StatsObserver(GameEngine* s) {
 // StatsObserver Destructor removes observer from list.
 StatsObserver::~StatsObserver() {
 
-	_subject->Detach(false,this);
+	_subject->Detach(false, this);
 };
 
 // CHECK IF THIS IS RIGHT
@@ -280,10 +280,10 @@ void StatsObserver::display() {
 
 	// Gets the number of territories of each player and divides it by the total number of territories and
 	//multiplies by 100 to get the percentage.
-	  for (int i = 0; i < players.size(); i++) {
-		  cout << players[i]->getPlayerName() << " controls " <<
-			  (players[i]->getPlayerTerritories().size())/mapSize * 100 << "% of the map." << endl;
-		 
+	for (int i = 0; i < players.size(); i++) {
+		cout << players[i]->getPlayerName() << " controls " <<
+			(players[i]->getPlayerTerritories().size()) / mapSize * 100 << "% of the map." << endl;
+
 	}
 
 
