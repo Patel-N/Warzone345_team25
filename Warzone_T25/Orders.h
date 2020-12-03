@@ -24,7 +24,7 @@ public:
 	//Constructor
 	Order();
 	//Deconstructor
-	virtual ~Order() { cout << "Order Deconstructed " << endl; };
+	virtual ~Order() {};
 	//Copy Constructor
 	Order(const Order& order);
 	//Overloaded Assignment Operator

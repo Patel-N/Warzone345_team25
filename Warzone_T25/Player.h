@@ -35,6 +35,9 @@ public:
 	PlayerStrategies *playerStrategy;
 	void assignStrategy(int strategy);
 
+	void setStrategy(int strategy);
+
+
 	static Deck* common_deck;//static because the deck is a shared object among all players in game
 
 	void issueOrder(Order* order) ;
@@ -97,6 +100,9 @@ public:
 	vector<Territory*> toAttack();// returns list of territory pointers to defend
 	vector<Territory*> getAdjacentTerritoriesOfPlayer(Territory* playerTerritory);
 	vector<Territory*> getNonAdjacentTerritoriesOfPlayer(Territory* playerTerritory);
+	vector<Territory*> getAdjacentTerritoriesToAttack(Territory* playerTerritory);
+	vector<Territory*> getNonAdjacentTerritoriesToAttack(Territory* playerTerritory);
+
 
 	void assignTerritoryToPlayer(Territory* newTerritory);
 	vector<Territory*> allTerritoryVectorBuilder(Territory* origin);

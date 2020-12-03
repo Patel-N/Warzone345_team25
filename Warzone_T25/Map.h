@@ -35,7 +35,7 @@ public:
 	void setTerritoryName(std::string name);
 	void setNumArmies(int num);
 	inline void setIsVisited(bool v) { isVisited = v; }
-	inline void setNonCommitedArmies(int count) { nonComittedArmies += count; }
+	inline void setNonCommitedArmies(int count) { nonComittedArmies = count; }
 	inline void setWasAdvanced(bool adv) { wasAdvanced = adv; }
 	inline void setIsAttacked(bool b) { isAttacked = b; }
 
@@ -45,10 +45,12 @@ public:
 	Territory& operator= (const Territory& territory);
 	void addAdjacentTerritory(Territory*);
 	static bool compByArmyCount(Territory* a, Territory* b);
+	static bool compByincomingArmies(Territory* a, Territory* b);
 	static bool compById(Territory* a, Territory* b);
 	inline void incNonCommitedArmies(int count) { nonComittedArmies += count; }
 	inline void decNonCommitedArmies(int count) { nonComittedArmies -= count; }
 
+	int incomingArmies;
 private:
 	int territoryId;
 	Player* player;
@@ -98,6 +100,7 @@ public:
 	std::vector<Continent*> getContinents();
 	vector<std::vector<Territory*>> getMap() { return map; }
 	Territory* getTerritory(int);
+	Territory* getTerritory(string tName);
 	bool validate();
 
 	//methods
