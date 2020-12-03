@@ -98,6 +98,7 @@ public:
 	std::vector<Continent*> getContinents();
 	vector<std::vector<Territory*>> getMap() { return map; }
 	Territory* getTerritory(int);
+	Territory* getTerritory(string tName);
 	bool validate();
 
 	//methods

@@ -12,6 +12,11 @@
 
 int main()
 {
+<<<<<<< HEAD
+	
+	part_1::start();  
+
+=======
 	//creating game engine, creating map, loading canada map
 	MapLoader* loader = new MapLoader();
 	Map* map = (loader->generateMap("./MapFiles/canada.map"));
@@ -44,6 +49,6 @@ int main()
 	engine->mainGameLoop();
 	delete engine;
 	delete deck;
+>>>>>>> fb28c175df3a98a352fb142f2801dfcc0852de2d
 	return 0;
 }
-

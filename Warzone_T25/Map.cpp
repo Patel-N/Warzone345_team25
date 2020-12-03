@@ -338,9 +338,6 @@ void Map::addTerritory(int id, std::string name,int continentID) {
 		continents[continentID - 1]->addTerritoryToContinent(newTerritory);
 	}
 	std::vector<Territory*> temp;
-	if (id == 9) {
-		
-	}
 	temp.push_back(newTerritory);
 	if (map.size() == 0) { 
 		map.push_back(temp); 
@@ -369,6 +366,15 @@ void Map::addTerritory(int id, std::string name,int continentID) {
 }
 Territory* Map::getTerritory(int id) {
 	return map[id - 1][0];
+}
+
+Territory* Map::getTerritory(string tName)
+{
+	for (int i = 0; i < map.size(); i++) {
+		if (map[i][0]->getName() == tName) {
+			return map[i][0];
+		}
+	}
 }
 
 
