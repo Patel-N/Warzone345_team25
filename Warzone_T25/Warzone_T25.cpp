@@ -44,12 +44,18 @@ int main()
 	Hand* hand_p2 = new Hand();
 	Hand* hand_p3 = new Hand();
 	Hand* hand_p4 = new Hand();
+
+	Card* card1 = new Card(3);
+	Card* card2 = new Card(4);
+	hand_p3->addCardToHand(card1);
+	hand_p3->addCardToHand(card2);
+
 	//setting player's hand
 	player1->setPlayerHand(hand_p1);
 	player2->setPlayerHand(hand_p2);
 	player3->setPlayerHand(hand_p3);
 	player4->setPlayerHand(hand_p4);
-
+	
 	engine->addPlayer(player1);
 	engine->addPlayer(player2);
 	engine->addPlayer(player3);
@@ -97,12 +103,14 @@ int main()
 	//setting initial army pool.
 	player1->setArmyToBePlaced(10);
 	player2->setArmyToBePlaced(10);
-	player3->setArmyToBePlaced(10);//set to 5 to demonstrate failed deploy due to not enough armies
+	player3->setArmyToBePlaced(30);//set to 5 to demonstrate failed deploy due to not enough armies
 	player4->setArmyToBePlaced(10);
 	//player1->issueOrder();
 	//player2->issueOrder();
 	//player3->issueOrder();
 	//player4->issueOrder();
+	engine->issueOrdersPhase();
+	engine->executeOrdersPhase();
 	engine->issueOrdersPhase();
 	engine->executeOrdersPhase();
 	//Player* player2 = new Player(2, "Neil");

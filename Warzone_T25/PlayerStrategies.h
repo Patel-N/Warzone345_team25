@@ -50,6 +50,7 @@ private:
 
 class BenevolentPlayerStrategy : public PlayerStrategies {
 public:
+	// Constructors and Destructor
 	BenevolentPlayerStrategy(Player*);
 	~BenevolentPlayerStrategy();
 	BenevolentPlayerStrategy(const BenevolentPlayerStrategy&);
@@ -59,7 +60,13 @@ public:
 	vector<Territory*> toAttack();
 	//getters
 	inline Player* getStrategyExecuter() { return strategyExecuter; }
+	// Assignment operator
 	BenevolentPlayerStrategy& operator= (const BenevolentPlayerStrategy&);
+	// Insertion stream operator
+	friend ostream& operator<<(ostream& outs, const BenevolentPlayerStrategy& theObject);
+	// Helper function
+	bool playCardsStrategy(Territory*);
+
 
 private:
 	Player* strategyExecuter;
