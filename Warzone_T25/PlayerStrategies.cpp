@@ -535,7 +535,8 @@ void HumanPlayerStrategy::issueOrder() {
             cout << "-----------------------you own territories: -------------------------------" << endl << endl;
             vector<Territory*> toDefendTerr = this->strategyExecuter->toDefend();
             for (int i = 0; i < toDefendTerr.size(); i++) {// 1.display all territory user has
-                cout << *toDefendTerr[i];
+                
+                    cout << *toDefendTerr[i];
                 vector<Territory*>tempADJTerritory = toDefendTerr[i]->getAdjacentTerritories();
                 cout << "adjacent territory ID:";
                 for (int j = 0; j < tempADJTerritory.size(); j++) {
@@ -545,6 +546,7 @@ void HumanPlayerStrategy::issueOrder() {
                 Sleep(100);
             }
             cout << "to show enemy territories info that can be attacked this turn type: show" << endl << endl;
+            cout << "else type: no " << endl << endl;
             cin >> UserInput;
             if (UserInput.compare("show") == 0) {//2.display enemy territory user can attack
                 cout << "-------------here is the information of the territories you can attack/defend:--------------------" << endl << endl;
@@ -568,7 +570,11 @@ void HumanPlayerStrategy::issueOrder() {
             cout << "move 2 armies from territory 3 to territory 4" << endl;
             cout << "move 8 armies from territory 5 to territory 10" << endl;
             cout << "move 2 armies from territory 4 to territory 7" << endl;
+            cout << "if you decided not to attack type: no "<<endl;     
             cin >> UserInput;
+            if (UserInput.compare("no") == 0){
+                goto OUT1;
+            }
             //parsing userInput and placing armies
             std::string s = UserInput;//temp variables for parsin
             std::string delimiter = "),";
@@ -605,7 +611,7 @@ void HumanPlayerStrategy::issueOrder() {
 
                 }
                 territoryIDto = stoi(s);
-
+                cout << "debug: " << " "<< armyToMove <<" "<< territoryIDfrom <<" "<< territoryIDto << endl;
                 vector<Territory*> currentPlayerTerritoryPointer = this->strategyExecuter->toDefend();// list of players current territories
                 for (int i = 0; i < currentPlayerTerritoryPointer.size(); i++) {//this chunck looks for the territory by ID
                     if (currentPlayerTerritoryPointer.at(i)->getTerritoryID() == territoryIDfrom) {
@@ -632,7 +638,9 @@ void HumanPlayerStrategy::issueOrder() {
                 cout << "you sent " << armyToMove << " armie(s) from territoryID: " << territoryPointerFROM->getTerritoryID() << " to territoryID: " << territoryPointerTO->getTerritoryID() << endl;
             }
         }
-        cout << endl << "this is the end of your turn, press any key to continue, Goodluck " << strategyExecuter->getPlayerName() << "!!!" << endl;
+        OUT1:
+        cout << endl << "this is the end of your turn, type: ok"<<endl;
+        cout<<" Goodluck " << strategyExecuter->getPlayerName() << "!!!" << endl;
         strategyExecuter->setAttackApplied(true);// this says, ok the play has attacked/defended this turn, the game engin will not promp player anymore to attack/defend
         cin >> UserInput;
     }
