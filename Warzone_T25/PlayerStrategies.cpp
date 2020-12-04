@@ -664,7 +664,8 @@ vector<Territory*> HumanPlayerStrategy::toDefend()
 vector<Territory*> HumanPlayerStrategy::toAttack()
 {
 
-    //Build a vector of source territory attacking a target territory
+//Build a vector of source territory attacking a target territory
+
     vector<Territory*> attackableTerritories;
     vector<Territory*> allTerritories = strategyExecuter->allTerritoryVectorBuilder(strategyExecuter->getPlayerTerritories()[0]);
     //Remove territories that already belong to the players from the appropriate vector
@@ -747,8 +748,7 @@ void BenevolentPlayerStrategy::issueOrder()
         int pool = this->strategyExecuter->getArmyToBePlaced();
         int armiesPerTerr = pool / numWeakTerrs;
 
-        if (pool == 1 || pool < armiesPerTerr) {
-            cout << endl << "POOL EQUALS 1" << endl;
+        if (armiesPerTerr == 0) {
             Deploy* d = new Deploy(pool, playerTerritoriesToDefend[0], strategyExecuter);
             deployCreated = true;
             playerTerritoriesToDefend[0]->incomingArmies = armiesPerTerr + playerTerritoriesToDefend[0]->getNumArmies();

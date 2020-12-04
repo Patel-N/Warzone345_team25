@@ -32,7 +32,7 @@ public:
 	void setMap();
 
 	// loadmap to map pointer until a validated map is selected by user
-	void loadmap();
+	Map* loadmap();
 
 	// getter
 	string getSelectedMap();
@@ -78,7 +78,7 @@ public:
 	void setnumPlayers();
 
 	// create players with names and place them in vector
-	void createPlayers();
+	vector<Player*> createPlayers();
 
 	// create vector of cards and set deck pointer to it
 	void createDeck();
