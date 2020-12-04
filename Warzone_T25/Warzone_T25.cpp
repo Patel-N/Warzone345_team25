@@ -43,7 +43,9 @@ int main()
 		card->set_type(rand() % 5 + 1);
 		deck->addCardToDeck(card);
 	}
+
 	
+
 	engine->startUpPhase();
 	engine->mainGameLoop();
 	delete engine;
