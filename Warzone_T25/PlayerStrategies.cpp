@@ -284,11 +284,14 @@ void HumanPlayerStrategy::issueOrder() {
     // this function is in 4 steps: deploy army, play cards, move troops (attack/defend). marked with --------
     // for every of these steps the user will get prompted and will insert a value
     // at the end of function commit object is added to order list, indicating that player has finish issuing orders
-
+     
     if (strategyExecuter->getIsCommited() == true) {// if the player has already commited, dont even go through the code
         return;
     }
+
     string UserInput;// variable used to store user input
+
+
 
     bool hasDeployed=false;// these bools is for the round robin for each of the 3 steps.
     bool hasPlayedCard=false;
@@ -296,6 +299,11 @@ void HumanPlayerStrategy::issueOrder() {
 
     if (strategyExecuter->getArmyToBePlaced() == 0) {//this says, if player does not have army to deploy, then he deployed already
         hasDeployed = true;
+    }
+    else {
+        cout << endl << "---Hello " << strategyExecuter->getPlayerName() << "!---" << endl;
+        cout << endl << "this is your turn to play, to continue type: ok" << endl;
+        cin >> UserInput;
     }
     if (hasDeployed == false) {
         //deploy army step------------------------------
@@ -308,7 +316,18 @@ void HumanPlayerStrategy::issueOrder() {
         for (int i = 0; i < toDefendTerr.size(); i++) {// display all territory user has
             cout << *toDefendTerr[i] << endl;
         }
-
+        cout << "all ID's:";
+        for (int i = 0; i < toDefendTerr.size(); i++) {// display all territory user has. only ID
+            cout << toDefendTerr[i]->getTerritoryID()<<",";
+        }
+        cout << endl;
+        cout << "all ID's of armyless territory: ";
+        for (int i = 0; i < toDefendTerr.size(); i++) {// display all territory user has. only ID
+            if (toDefendTerr[i]->getNumArmies()==0) {
+                cout << toDefendTerr[i]->getTerritoryID() << ",";
+            }
+        }
+        cout << endl << endl;;
         cout << "you have : * " << strategyExecuter->getArmyToBePlaced() << " * armies to place" << endl;
         cout << "to deploy your army, use the following format: (1,2),(5,6),(10,3)" << endl;
         cout << "meaning: place 1 army to territory of ID 2, 5 army to territory of ID 6, and 10 army to territory ID 3" << endl;
@@ -545,6 +564,11 @@ void HumanPlayerStrategy::issueOrder() {
                 cout << endl << endl;
                 Sleep(100);
             }
+            cout << "your territories: ID's:";
+            for (int i = 0; i < toDefendTerr.size(); i++) {// display all territory user has. only ID
+                cout << toDefendTerr[i]->getTerritoryID() << ",";
+            }
+            cout << endl << endl;
             cout << "to show enemy territories info that can be attacked this turn type: show" << endl << endl;
             cout << "else type: no " << endl << endl;
             cin >> UserInput;
@@ -562,6 +586,25 @@ void HumanPlayerStrategy::issueOrder() {
                     Sleep(70);
                 }
             }
+            cout << "your territories: ID's:";
+            for (int i = 0; i < toDefendTerr.size(); i++) {// display all territory user has. only ID
+                cout << toDefendTerr[i]->getTerritoryID() << ",";
+            }
+            cout << endl;
+            cout << "your territories with army:";
+            for (int i = 0; i < toDefendTerr.size(); i++) {// display all territory user has. only ID
+                if (toDefendTerr[i]->getNumArmies() > 0) {
+                    cout << toDefendTerr[i]->getTerritoryID() <<":"<< toDefendTerr[i]->getNumArmies()<< ", ";
+                }
+            }
+            cout << endl << endl;
+            cout <<"your armyless territories: "<< endl;
+            for (int i = 0; i < toDefendTerr.size(); i++) {// display all territory user has. only ID
+                if (toDefendTerr[i]->getNumArmies() == 0) {
+                    cout << toDefendTerr[i]->getTerritoryID() <<  ",";
+                }
+            }
+            cout << endl;
             //3.prompt user to show wich territory to attack, and parse the input and turn it into orders
             cout << endl << endl << "Now please indicate where do you want to move your armies using ID's" << endl;
             cout << "if you move armies into enemy territory, it will be considered as an attack!" << endl;
